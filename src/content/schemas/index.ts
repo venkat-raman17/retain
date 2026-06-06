@@ -39,3 +39,15 @@ export {
 export type { SafetyDisclaimer, SafetyResources, SafetyContent } from './safety.schema';
 export { onboardingStepSchema, onboardingSchema } from './onboarding.schema';
 export type { OnboardingStep } from './onboarding.schema';
+export {
+  dailyPathContentSchema as _dailyPathContentSchema,
+  SECRET_CONTENT_TYPES,
+  secretContentTypeSchema,
+  CONTENT_STATUSES,
+  contentStatusSchema,
+} from './daily-path.schema';
+export type { SecretContentType, ContentStatus } from './daily-path.schema';
+export { arcSchema, arcsSchema } from './arc.schema';
+export type { Arc } from './arc.schema';
+export { crownCodexItemSchema, crownCodexSchema, CROWN_CODEX_CATEGORIES } from './crown-codex.schema';
+export type { CrownCodexItem, CrownCodexCategory } from './crown-codex.schema';

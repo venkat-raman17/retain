@@ -1,5 +1,7 @@
 import { archetypeProfiles as archetypeData } from './bundled/archetypes';
+import { arcs as arcsData } from './bundled/arcs';
 import { codexDays as codexData } from './bundled/codex';
+import { crownCodex as crownCodexData } from './bundled/crown-codex';
 import { dailyPathContent as dailyPathData } from './bundled/daily-path';
 import { onboardingSteps as onboardingData } from './bundled/onboarding';
 import { principles as principlesData } from './bundled/principles';
@@ -10,7 +12,9 @@ import { safetyContent as safetyData } from './bundled/safety';
 import { studies as studiesData } from './bundled/studies';
 import {
   archetypeProfilesSchema,
+  arcsSchema,
   codexSchema,
+  crownCodexSchema,
   dailyPathContentsSchema,
   journalPromptsSchema,
   onboardingSchema,
@@ -19,8 +23,10 @@ import {
   ritualsSchema,
   safetyContentSchema,
   studiesSchema,
+  type Arc,
   type ArchetypeProfile,
   type CodexDay,
+  type CrownCodexItem,
   type DailyPathContent,
   type JournalPrompt,
   type OnboardingStep,
@@ -44,6 +50,8 @@ export const archetypeProfiles: readonly ArchetypeProfile[] =
   archetypeProfilesSchema.parse(archetypeData);
 export const codexDays: readonly CodexDay[] = codexSchema.parse(codexData);
 export const dailyPath: readonly DailyPathContent[] = dailyPathContentsSchema.parse(dailyPathData);
+export const arcs: readonly Arc[] = arcsSchema.parse(arcsData);
+export const crownCodex: readonly CrownCodexItem[] = crownCodexSchema.parse(crownCodexData);
 export const studies: readonly Study[] = studiesSchema.parse(studiesData);
 export const rituals: readonly Ritual[] = ritualsSchema.parse(ritualsData);
 export const journalPrompts: readonly JournalPrompt[] = journalPromptsSchema.parse(promptsData);
@@ -51,7 +59,7 @@ export const rites: readonly Rite[] = ritesSchema.parse(ritesData);
 export const onboardingSteps: readonly OnboardingStep[] = onboardingSchema.parse(onboardingData);
 const safety = safetyContentSchema.parse(safetyData);
 
-// --- Loaders (the bundled-content API) ---
+// --- Daily path loaders ---
 
 export function getPrinciples(): readonly Principle[] {
   return principles;
@@ -69,10 +77,19 @@ export function getDailyPathContent(dayNumber: number): DailyPathContent | undef
   return dailyPath.find((day) => day.dayNumber === dayNumber);
 }
 
-/** Returns all daily content for a given path season. */
 export function getDailyPathForSeason(season: PathSeason): readonly DailyPathContent[] {
   return dailyPath.filter((day) => day.season === season);
 }
+
+export function getArcForDay(dayNumber: number): Arc | undefined {
+  return arcs.find((a) => dayNumber >= a.dayStart && dayNumber <= a.dayEnd);
+}
+
+export function getArcByNumber(arcNumber: number): Arc | undefined {
+  return arcs.find((a) => a.arcNumber === arcNumber);
+}
+
+// --- Codex loaders ---
 
 export function getAllCodexDays(): readonly CodexDay[] {
   return codexDays;
@@ -118,13 +135,28 @@ export function getSafetyResources(): SafetyResources {
   return safety.resources;
 }
 
+// --- Crown Codex loaders ---
+
+export function getAllCrownCodex(): readonly CrownCodexItem[] {
+  return crownCodex;
+}
+
+export function getCrownCodexById(id: string): CrownCodexItem | undefined {
+  return crownCodex.find((item) => item.id === id);
+}
+
 export { copy } from './bundled/copy';
 export type { Copy } from './bundled/copy';
 export type {
+  Arc,
   Archetype,
   ArchetypeProfile,
+  ContentStatus,
+  CrownCodexCategory,
+  CrownCodexItem,
   DailyPathContent,
   PathSeason,
+  SecretContentType,
   Principle,
   CodexDay,
   Study,

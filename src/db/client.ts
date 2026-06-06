@@ -58,28 +58,29 @@ export interface InitializedDatabase {
   repositories: Repositories;
 }
 
-let instance: InitializedDatabase | null = null;
+let initPromise: Promise<InitializedDatabase> | null = null;
 
 /**
  * Open the database, run migrations, seed singleton rows, and build the
- * repositories. Cached so repeated calls return the same instance.
+ * repositories. Caches the Promise so concurrent callers share one
+ * initialization (important on web where OPFS allows only one access handle).
  */
-export async function initializeRetainDatabase(): Promise<InitializedDatabase> {
-  if (instance) return instance;
+export function initializeRetainDatabase(): Promise<InitializedDatabase> {
+  initPromise ??= (async () => {
+    const sqlite = await SQLite.openDatabaseAsync(DB_NAME);
+    await sqlite.execAsync('PRAGMA journal_mode = WAL;');
+    await sqlite.execAsync('PRAGMA foreign_keys = ON;');
 
-  const sqlite = await SQLite.openDatabaseAsync(DB_NAME);
-  await sqlite.execAsync('PRAGMA journal_mode = WAL;');
-  await sqlite.execAsync('PRAGMA foreign_keys = ON;');
+    const db = new SqliteAppDatabase(sqlite);
+    await runMigrations(db);
 
-  const db = new SqliteAppDatabase(sqlite);
-  await runMigrations(db);
+    const repositories = createRepositories(db);
+    await seedDefaults(repositories);
 
-  const repositories = createRepositories(db);
-  await seedDefaults(repositories);
-
-  log.info('database ready');
-  instance = { db, repositories };
-  return instance;
+    log.info('database ready');
+    return { db, repositories };
+  })();
+  return initPromise;
 }
 
 /**
@@ -96,7 +97,7 @@ export async function resetLocalDataForTestingOnly(): Promise<void> {
   log.warn('local data reset (testing only)');
 }
 
-/** Drop the cached instance (used by tooling/tests). */
+/** Drop the cached promise (used by tooling/tests). */
 export function clearDatabaseInstanceForTesting(): void {
-  instance = null;
+  initPromise = null;
 }

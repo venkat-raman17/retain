@@ -13,6 +13,7 @@ export const JOURNAL_TYPES = [
   'evening',
   'urge',
   'lapse',
+  'return',
   'freeform',
   'study_reflection',
 ] as const;

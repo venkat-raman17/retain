@@ -67,8 +67,15 @@ export function SettingsScreen() {
         </AppCard>
 
         <AppButton
-          label={copy.actions.viewSafety}
+          label="Guard the gates"
           variant="secondary"
+          fullWidth
+          onPress={() => router.push(Routes.boundaries)}
+        />
+
+        <AppButton
+          label={copy.actions.viewSafety}
+          variant="ghost"
           fullWidth
           onPress={() => router.push(Routes.safety)}
         />

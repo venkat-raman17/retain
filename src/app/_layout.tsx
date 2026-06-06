@@ -26,6 +26,11 @@ export default function RootLayout() {
             }}
           >
             <Stack.Screen name="pause" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="lapse" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="boundaries" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="chamber" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="path-map" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="crown" options={{ presentation: 'modal' }} />
             <Stack.Screen name="safety" options={{ presentation: 'modal' }} />
           </Stack>
         </AppDataProvider>

@@ -8,6 +8,10 @@ export const PATH_EVENT_TYPES = [
   'lapse_recorded',
   'return_recorded',
   'milestone_reached',
+  'crown_unlocked',
+  'crown_received',
+  'long_path_started',
+  'path_rewalk_started',
 ] as const;
 export const pathEventTypeSchema = z.enum(PATH_EVENT_TYPES);
 export type PathEventType = z.infer<typeof pathEventTypeSchema>;

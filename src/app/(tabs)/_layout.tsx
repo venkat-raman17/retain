@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { StyleSheet, View, type ColorValue } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { TAB_ORDER } from '@/navigation';
 import { theme } from '@/shared/design';
@@ -14,14 +15,28 @@ function TabGlyph({ color, focused }: { color: ColorValue; focused: boolean }) {
 }
 
 export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: true,
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.textMuted,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: [
+          styles.tabBar,
+          {
+            // Height holds glyph + label with room to breathe; paddingBottom clears
+            // the home indicator so descenders (Journal, Progress) never clip.
+            height: 64 + insets.bottom,
+            paddingBottom: insets.bottom + theme.spacing.md,
+            paddingTop: theme.spacing.sm,
+          },
+        ],
         tabBarLabelStyle: styles.tabLabel,
+        tabBarIconStyle: styles.tabIcon,
+        tabBarItemStyle: styles.tabItem,
       }}
     >
       {TAB_ORDER.map((tab) => (
@@ -43,6 +58,10 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     borderTopColor: theme.colors.border,
   },
-  tabLabel: { fontSize: theme.typography.size.caption },
-  glyph: { width: 16, height: 16, borderRadius: 5, borderWidth: 2 },
+  // lineHeight > fontSize gives descenders their room; marginTop sets a tidy,
+  // even gap under the glyph so the label isn't floating near the bottom edge.
+  tabLabel: { fontSize: 11, lineHeight: 15, letterSpacing: 0.3, marginTop: 4 },
+  tabIcon: { marginTop: 2 },
+  tabItem: { paddingVertical: 4 },
+  glyph: { width: 18, height: 18, borderRadius: 5, borderWidth: 2 },
 });

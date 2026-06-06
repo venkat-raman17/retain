@@ -20,23 +20,38 @@ export interface AppButtonProps extends Omit<PressableProps, 'style' | 'children
   size?: ButtonSize;
   loading?: boolean;
   fullWidth?: boolean;
+  style?: ViewStyle;
 }
 
+/**
+ * Buttons read like carved stone / forged metal, not app-store candy:
+ *   primary   → struck aged gold with a darker gold seam, dark engraved label.
+ *   secondary → an iron-edged stone slab with a gilded label.
+ *   ghost     → bare stone (text only).
+ *   support   → a banked ember panel for pause/urge moments.
+ */
 const containerVariant: Record<ButtonVariant, ViewStyle> = {
-  primary: { backgroundColor: theme.colors.primary },
+  primary: { backgroundColor: theme.colors.primary, borderColor: theme.colors.borderGold },
   secondary: {
     backgroundColor: theme.colors.surfaceOverlay,
     borderColor: theme.colors.borderStrong,
   },
-  ghost: { backgroundColor: 'transparent' },
+  ghost: { backgroundColor: 'transparent', borderColor: 'transparent' },
   support: { backgroundColor: theme.colors.supportSoft, borderColor: theme.colors.support },
 };
 
 const labelColor: Record<ButtonVariant, TextColor> = {
   primary: 'onPrimary',
-  secondary: 'primary',
+  secondary: 'energy', // gilded label on the stone slab
   ghost: 'secondary',
   support: 'support',
+};
+
+const spinnerColor: Record<ButtonVariant, string> = {
+  primary: theme.colors.onPrimary,
+  secondary: theme.colors.primary,
+  ghost: theme.colors.textSecondary,
+  support: theme.colors.support,
 };
 
 export function AppButton({
@@ -46,6 +61,7 @@ export function AppButton({
   loading = false,
   fullWidth = false,
   disabled,
+  style: styleProp,
   ...rest
 }: AppButtonProps) {
   const isDisabled = disabled === true || loading;
@@ -60,6 +76,7 @@ export function AppButton({
         size === 'lg' ? styles.lg : styles.md,
         containerVariant[variant],
         fullWidth ? styles.fullWidth : null,
+        styleProp ?? null,
         pressed ? styles.pressed : null,
         isDisabled ? styles.disabled : null,
       ]}
@@ -67,9 +84,9 @@ export function AppButton({
     >
       <View style={styles.content}>
         {loading ? (
-          <ActivityIndicator color={theme.colors.textPrimary} />
+          <ActivityIndicator color={spinnerColor[variant]} />
         ) : (
-          <AppText variant="label" weight="semibold" color={labelColor[variant]}>
+          <AppText variant="label" weight="semibold" color={labelColor[variant]} uppercase>
             {label}
           </AppText>
         )}

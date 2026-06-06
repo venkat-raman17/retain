@@ -7,6 +7,8 @@ export const CONTENT_TYPES = [
   'rite',
   'principle',
   'archetype',
+  'daily_path',
+  'crown_codex',
 ] as const;
 export const contentTypeSchema = z.enum(CONTENT_TYPES);
 export type ContentType = z.infer<typeof contentTypeSchema>;

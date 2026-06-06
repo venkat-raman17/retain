@@ -6,3 +6,5 @@ export {
   CHECKIN_STATUSES,
 } from './domain/boundary-checkin';
 export type { BoundaryCheckin, CheckinStatus } from './domain/boundary-checkin';
+export { BoundaryService } from './services/boundary-service';
+export { BoundariesScreen } from './screens/boundaries-screen';

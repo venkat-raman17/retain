@@ -22,6 +22,8 @@ export interface SettingsRepository {
 const readBit = (value: string | null, fallback: boolean): boolean =>
   value === null ? fallback : value === '1';
 const writeBit = (value: boolean): string => (value ? '1' : '0');
+const readStr = (value: string | null): string | null =>
+  value === null || value === '' ? null : value;
 
 export class SqliteSettingsRepository implements SettingsRepository {
   constructor(private readonly db: AppDatabase) {}
@@ -43,15 +45,19 @@ export class SqliteSettingsRepository implements SettingsRepository {
   }
 
   async getPreferences(): Promise<AppPreferences> {
-    const [haptics, reminders, safety] = await Promise.all([
+    const [haptics, reminders, safety, intention, forgeCategory] = await Promise.all([
       this.get(SETTING_KEYS.hapticsEnabled),
       this.get(SETTING_KEYS.remindersEnabled),
       this.get(SETTING_KEYS.safetyAcknowledged),
+      this.get(SETTING_KEYS.primaryIntention),
+      this.get(SETTING_KEYS.preferredForgeCategory),
     ]);
     return appPreferencesSchema.parse({
       hapticsEnabled: readBit(haptics, DEFAULT_PREFERENCES.hapticsEnabled),
       remindersEnabled: readBit(reminders, DEFAULT_PREFERENCES.remindersEnabled),
       safetyAcknowledged: readBit(safety, DEFAULT_PREFERENCES.safetyAcknowledged),
+      primaryIntention: readStr(intention),
+      preferredForgeCategory: readStr(forgeCategory),
     });
   }
 
@@ -64,6 +70,12 @@ export class SqliteSettingsRepository implements SettingsRepository {
     }
     if (patch.safetyAcknowledged !== undefined) {
       await this.set(SETTING_KEYS.safetyAcknowledged, writeBit(patch.safetyAcknowledged));
+    }
+    if (patch.primaryIntention !== undefined) {
+      await this.set(SETTING_KEYS.primaryIntention, patch.primaryIntention ?? '');
+    }
+    if (patch.preferredForgeCategory !== undefined) {
+      await this.set(SETTING_KEYS.preferredForgeCategory, patch.preferredForgeCategory ?? '');
     }
     return this.getPreferences();
   }

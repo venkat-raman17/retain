@@ -1,8 +1,10 @@
 /**
- * Aggregator for the design tokens. Tokens are defined in focused files
+ * Aggregator for the raw design tokens. Each is defined in a focused file
  * (`colors`, `spacing`, `radius`, `typography`, `shadows`, `motion`) and
- * re-exported here for convenience. Components consume the semantic `theme`,
- * not these raw tokens directly.
+ * re-exported here so `theme.ts` can assemble the semantic layer from one import.
+ *
+ * Layering: raw tokens (here) → semantic `theme` → `useTheme()` → components.
+ * Components consume the semantic `theme`, never these raw values directly.
  */
 export { palette } from './colors';
 export { spacing } from './spacing';

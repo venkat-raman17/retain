@@ -52,7 +52,7 @@ export const principles: readonly Principle[] = [
   },
   {
     id: 'pause-is-where-manhood-begins',
-    title: 'The pause is where manhood begins.',
+    title: 'The pause is where command begins.',
     body: 'You are not the urge. You are the one who chooses. In the gap between impulse and action, a man is made.',
   },
 ] as const;

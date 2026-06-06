@@ -12,6 +12,11 @@ export const Routes = {
   codex: '/codex',
   progress: '/progress',
   pause: '/pause',
+  lapse: '/lapse',
+  chamber: '/chamber',
+  pathMap: '/path-map',
+  crown: '/crown',
+  boundaries: '/boundaries',
   settings: '/settings',
   safety: '/safety',
 } as const;

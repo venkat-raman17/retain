@@ -33,20 +33,53 @@ export function seasonForDay(day: number): PathSeason {
   return 'the_integrated_man';
 }
 
+export const SECRET_CONTENT_TYPES = [
+  'hidden_teaching',
+  'ancient_key',
+  'archetype_trial',
+  'forge_assignment',
+  'night_warning',
+  'lapse_medicine',
+  'crown_fragment',
+] as const;
+export const secretContentTypeSchema = z.enum(SECRET_CONTENT_TYPES);
+export type SecretContentType = z.infer<typeof secretContentTypeSchema>;
+
+export const CONTENT_STATUSES = ['final', 'draft'] as const;
+export const contentStatusSchema = z.enum(CONTENT_STATUSES);
+export type ContentStatus = z.infer<typeof contentStatusSchema>;
+
+/**
+ * One day's complete formation unit. Every day unlocks like a sealed chamber:
+ * the teaching, command, and practice are visible; the secret is revealed on
+ * the day itself; future days show only their title and arc (locked silhouette).
+ */
 export const dailyPathContentSchema = z.object({
   id: z.string().min(1),
   dayNumber: z.number().int().min(1).max(90),
   title: z.string().min(1),
   season: pathSeasonSchema,
+  /** 1–9, matching the nine 10-day arcs. */
+  arcNumber: z.number().int().min(1).max(9).default(1),
+  arcTitle: z.string().default(''),
+  theme: z.string().default(''),
   archetype: archetypeSchema,
   openingLine: z.string().min(1),
   teachingBody: z.string().min(1),
+  /** The secret revealed only on the day. */
+  secretContentType: secretContentTypeSchema.default('hidden_teaching'),
+  secretTitle: z.string().default(''),
+  secretBody: z.string().default(''),
   command: z.string().min(1),
   practice: z.string().min(1),
   forgeChallenge: z.string().min(1),
   journalPrompt: z.string().min(1),
   eveningAccount: z.string().min(1),
   seal: z.string().min(1),
+  /** A phrase or concept added to the user's Codex on completion. */
+  crownFragment: z.string().nullable().default(null),
+  /** 'draft' entries are structural placeholders awaiting full writing. */
+  contentStatus: contentStatusSchema.default('final'),
   relatedStudyIds: z.array(z.string()).default([]),
   relatedPrincipleIds: z.array(z.string()).default([]),
   milestoneRiteId: z.string().nullable().default(null),

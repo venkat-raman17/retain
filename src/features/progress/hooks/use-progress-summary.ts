@@ -3,10 +3,15 @@ import { useEffect, useMemo, useState } from 'react';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
-import { ProgressService, type ProgressSummary } from '../services/progress-service';
+import {
+  ProgressService,
+  type ProgressSummary,
+  type WeeklySummary,
+} from '../services/progress-service';
 
 export interface UseProgressSummary {
   summary: ProgressSummary | null;
+  weekSummary: WeeklySummary | null;
   loading: boolean;
 }
 
@@ -15,15 +20,16 @@ export function useProgressSummary(): UseProgressSummary {
   const service = useMemo(() => new ProgressService(repositories, systemClock), [repositories]);
 
   const [summary, setSummary] = useState<ProgressSummary | null>(null);
+  const [weekSummary, setWeekSummary] = useState<WeeklySummary | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
-    service
-      .getSummary()
-      .then((value) => {
+    Promise.all([service.getSummary(), service.getWeeklySummary()])
+      .then(([s, w]) => {
         if (!active) return;
-        setSummary(value);
+        setSummary(s);
+        setWeekSummary(w);
         setLoading(false);
       })
       .catch(() => {
@@ -34,5 +40,5 @@ export function useProgressSummary(): UseProgressSummary {
     };
   }, [service]);
 
-  return { summary, loading };
+  return { summary, weekSummary, loading };
 }

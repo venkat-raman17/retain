@@ -55,7 +55,11 @@ export function AppScreen({
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: theme.colors.background },
   flex: { flex: 1 },
-  padded: { paddingHorizontal: theme.spacing.lg, paddingVertical: theme.spacing.lg },
+  padded: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.xxl,
+    paddingBottom: theme.spacing.lg,
+  },
   scrollContent: { flexGrow: 1 },
   footerPadded: {
     paddingHorizontal: theme.spacing.lg,

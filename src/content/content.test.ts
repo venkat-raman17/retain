@@ -2,8 +2,10 @@ import { scanForUnsafeLanguage } from '@/testing/content-safety';
 
 import {
   archetypeProfiles,
+  arcs,
   codexDays,
   copy,
+  crownCodex,
   dailyPath,
   getAllStudies,
   getArchetypeProfile,
@@ -37,7 +39,7 @@ describe('bundled content — basic counts', () => {
     expect(principles).toHaveLength(10);
     expect(archetypeProfiles).toHaveLength(12);
     expect(codexDays).toHaveLength(7);
-    expect(dailyPath.length).toBeGreaterThanOrEqual(30);
+    expect(dailyPath.length).toBe(90);
     expect(studies).toHaveLength(3);
     expect(rituals).toHaveLength(3);
     expect(journalPrompts.length).toBeGreaterThanOrEqual(12);
@@ -46,10 +48,27 @@ describe('bundled content — basic counts', () => {
     expect(getSafetyResources().items.length).toBeGreaterThan(0);
   });
 
+  it('has 9 arcs covering days 1-90', () => {
+    expect(arcs).toHaveLength(9);
+    expect(arcs[0]?.dayStart).toBe(1);
+    expect(arcs[8]?.dayEnd).toBe(90);
+  });
+
+  it('has Crown Codex content', () => {
+    expect(crownCodex.length).toBeGreaterThanOrEqual(5);
+  });
+
   it('has unique day numbers in the daily path', () => {
     const dayNumbers = dailyPath.map((day) => day.dayNumber);
     const unique = new Set(dayNumbers);
     expect(unique.size).toBe(dayNumbers.length);
+  });
+
+  it('daily path covers days 1-90 without gaps', () => {
+    const dayNumbers = new Set(dailyPath.map((d) => d.dayNumber));
+    for (let d = 1; d <= 90; d++) {
+      expect(dayNumbers.has(d)).toBe(true);
+    }
   });
 });
 
@@ -57,7 +76,8 @@ describe('bundled content — loaders', () => {
   it('getDailyPathContent returns the right day', () => {
     expect(getDailyPathContent(1)?.dayNumber).toBe(1);
     expect(getDailyPathContent(30)?.dayNumber).toBe(30);
-    expect(getDailyPathContent(99)).toBeUndefined();
+    expect(getDailyPathContent(90)?.dayNumber).toBe(90);
+    expect(getDailyPathContent(91)).toBeUndefined();
   });
 
   it('getDailyCodexDay returns the right day', () => {
@@ -118,6 +138,35 @@ describe('bundled content — structural integrity', () => {
     }
   });
 
+  it('every daily path entry has an arc number 1-9', () => {
+    for (const day of dailyPath) {
+      expect(day.arcNumber).toBeGreaterThanOrEqual(1);
+      expect(day.arcNumber).toBeLessThanOrEqual(9);
+    }
+  });
+
+  it('final days have crown fragment', () => {
+    const day1 = getDailyPathContent(1);
+    expect(day1?.crownFragment).toBeTruthy();
+    const day90 = getDailyPathContent(90);
+    expect(day90?.crownFragment).toBeTruthy();
+  });
+
+  it('all 9 arcs have required fields', () => {
+    for (const arc of arcs) {
+      expect(arc.centralQuestion.length).toBeGreaterThan(0);
+      expect(arc.completionCopy.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('Crown Codex entries have required fields', () => {
+    for (const item of crownCodex) {
+      expect(item.body.length).toBeGreaterThan(0);
+      expect(item.reflectionPrompt.length).toBeGreaterThan(0);
+      expect(item.seal.length).toBeGreaterThan(0);
+    }
+  });
+
   it('every study has a non-empty guardrail', () => {
     for (const study of studies) {
       expect(study.guardrail.trim().length).toBeGreaterThan(0);
@@ -157,6 +206,8 @@ describe('bundled content — safety scan', () => {
       ],
       strings,
     );
+
+    collectStrings([arcs, crownCodex], strings);
 
     const offenders = strings.flatMap((text) =>
       scanForUnsafeLanguage(text).map((term) => `"${term}" found in: ${text.slice(0, 80)}`),

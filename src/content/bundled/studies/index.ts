@@ -16,7 +16,7 @@ export const studies: readonly Study[] = [
     retainPrinciple:
       'The energy is the ally. Conserve attention so you have something to direct — toward the body, the work, and the people you love.',
     practice:
-      'Pick one "gate" today — a feed, a habit, an hour — and consciously decline to feed it. Notice the energy that stays with you.',
+      'Pick one gate today — a feed, a habit, an hour — and do not feed it. Notice the energy that remains.',
     reflectionPrompt: 'Where did my attention want to leak today, and what did I do with it instead?',
     guardrail:
       'This is philosophical inspiration, not medical advice. Retain does not teach religious authority or esoteric sexual technique.',

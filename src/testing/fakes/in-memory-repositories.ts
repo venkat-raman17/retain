@@ -260,26 +260,38 @@ class InMemorySettingsRepository implements SettingsRepository {
     this.kv.set(key, value);
   }
   async getPreferences(): Promise<AppPreferences> {
-    const read = (key: string, fallback: boolean): boolean => {
+    const readBit = (key: string, fallback: boolean): boolean => {
       const value = this.kv.get(key);
       return value === undefined ? fallback : value === '1';
     };
+    const readStr = (key: string): string | null => {
+      const value = this.kv.get(key);
+      return value === undefined || value === '' ? null : value;
+    };
     return appPreferencesSchema.parse({
-      hapticsEnabled: read(SETTING_KEYS.hapticsEnabled, DEFAULT_PREFERENCES.hapticsEnabled),
-      remindersEnabled: read(SETTING_KEYS.remindersEnabled, DEFAULT_PREFERENCES.remindersEnabled),
-      safetyAcknowledged: read(SETTING_KEYS.safetyAcknowledged, DEFAULT_PREFERENCES.safetyAcknowledged),
+      hapticsEnabled: readBit(SETTING_KEYS.hapticsEnabled, DEFAULT_PREFERENCES.hapticsEnabled),
+      remindersEnabled: readBit(SETTING_KEYS.remindersEnabled, DEFAULT_PREFERENCES.remindersEnabled),
+      safetyAcknowledged: readBit(SETTING_KEYS.safetyAcknowledged, DEFAULT_PREFERENCES.safetyAcknowledged),
+      primaryIntention: readStr(SETTING_KEYS.primaryIntention),
+      preferredForgeCategory: readStr(SETTING_KEYS.preferredForgeCategory),
     });
   }
   async updatePreferences(patch: AppPreferencesPatch): Promise<AppPreferences> {
-    const write = (value: boolean): string => (value ? '1' : '0');
+    const writeBit = (value: boolean): string => (value ? '1' : '0');
     if (patch.hapticsEnabled !== undefined) {
-      this.kv.set(SETTING_KEYS.hapticsEnabled, write(patch.hapticsEnabled));
+      this.kv.set(SETTING_KEYS.hapticsEnabled, writeBit(patch.hapticsEnabled));
     }
     if (patch.remindersEnabled !== undefined) {
-      this.kv.set(SETTING_KEYS.remindersEnabled, write(patch.remindersEnabled));
+      this.kv.set(SETTING_KEYS.remindersEnabled, writeBit(patch.remindersEnabled));
     }
     if (patch.safetyAcknowledged !== undefined) {
-      this.kv.set(SETTING_KEYS.safetyAcknowledged, write(patch.safetyAcknowledged));
+      this.kv.set(SETTING_KEYS.safetyAcknowledged, writeBit(patch.safetyAcknowledged));
+    }
+    if (patch.primaryIntention !== undefined) {
+      this.kv.set(SETTING_KEYS.primaryIntention, patch.primaryIntention ?? '');
+    }
+    if (patch.preferredForgeCategory !== undefined) {
+      this.kv.set(SETTING_KEYS.preferredForgeCategory, patch.preferredForgeCategory ?? '');
     }
     return this.getPreferences();
   }

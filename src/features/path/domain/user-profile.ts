@@ -13,6 +13,10 @@ export const NOTIFICATION_STYLES = ['off', 'minimal', 'stern', 'gentle', 'mystic
 export const notificationStyleSchema = z.enum(NOTIFICATION_STYLES);
 export type NotificationStyle = z.infer<typeof notificationStyleSchema>;
 
+export const PATH_PHASES = ['initiation_90', 'crowned_long_path'] as const;
+export const pathPhaseSchema = z.enum(PATH_PHASES);
+export type PathPhase = z.infer<typeof pathPhaseSchema>;
+
 export const userProfileSchema = z.object({
   onboardingCompleted: z.boolean(),
   selectedVow: z.string().min(1).nullable(),
@@ -25,6 +29,12 @@ export const userProfileSchema = z.object({
   preferredTeachingTone: teachingToneSchema,
   notificationStyle: notificationStyleSchema,
   appLockEnabled: z.boolean(),
+  /** Phase of the rite: first 90 days vs. crowned long path. */
+  currentPathPhase: pathPhaseSchema.default('initiation_90'),
+  /** When the Crown was received; null until Day 90 is completed. */
+  crownReceivedAt: z.string().datetime().nullable().default(null),
+  /** When the Long Path began; null until Crown received. */
+  longPathStartedAt: z.string().datetime().nullable().default(null),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
@@ -42,6 +52,9 @@ export const DEFAULT_PROFILE: Omit<UserProfile, 'createdAt' | 'updatedAt'> = {
   preferredTeachingTone: 'gentle',
   notificationStyle: 'off',
   appLockEnabled: false,
+  currentPathPhase: 'initiation_90',
+  crownReceivedAt: null,
+  longPathStartedAt: null,
 };
 
 /** Preset vows offered in onboarding (Prompt 6). Stored by id; custom in customVow. */
