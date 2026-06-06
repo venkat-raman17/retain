@@ -157,25 +157,19 @@ pnpm run build:preview:ios
 
 ✅ **After this:** Manual build triggers available in GitHub Actions
 
-### Phase 6: TestFlight Submission (Optional, 5 min)
+### Phase 6: iOS TestFlight Distribution (Automatic)
 
-To submit iOS builds to TestFlight after workflow completes:
+iOS builds are **automatically submitted to TestFlight** in the workflow:
 
-1. Download IPA artifact from workflow run
-2. Submit locally:
-```bash
-eas submit --platform ios --latest
-```
+1. Build completes (~15 min)
+2. Workflow auto-submits to TestFlight (~5 min)
+3. Apple processes build (~1 hour) → appears in TestFlight
+4. Go to App Store Connect → TestFlight → Builds
+5. Add internal/external testers
+6. Send TestFlight invite links via email
+7. Testers install via TestFlight app (no developer mode needed)
 
-Or add submit step to iOS workflow in `.github/workflows/eas-build-preview-ios.yml`:
-```yaml
-      - name: Submit to TestFlight
-        run: eas submit --platform ios --latest
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-```
-
-✅ **After this:** iOS builds submitted to TestFlight testers
+✅ **After this:** iOS builds in TestFlight ready for testing
 
 ## From Expo Portal Perspective
 

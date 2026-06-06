@@ -17,7 +17,7 @@
       },
       "ios": {
         "credentialsSource": "remote",
-        "distribution": "internal"
+        "distribution": "store"
       }
     },
     "production": {

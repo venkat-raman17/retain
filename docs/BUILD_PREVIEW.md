@@ -12,13 +12,14 @@ pnpm run build:preview:android
 - Download link appears in terminal
 - Install on Android device: `adb install -r retain.apk`
 
-### Local iOS IPA Build
+### Local iOS Build (TestFlight)
 ```bash
 pnpm run build:preview:ios
 ```
 - Builds IPA via EAS cloud
-- Download link appears in terminal
-- Install on iOS device via TestFlight or Xcode
+- Auto-submits to TestFlight
+- Appears in App Store Connect → TestFlight → Builds
+- Install on iOS device via TestFlight app (~1 hour processing)
 
 ### Build Both Platforms
 ```bash
@@ -95,10 +96,12 @@ pnpm run build:preview
 pnpm run build:preview:android
 ```
 
-**In GitHub Actions:**
-- Push to main automatically triggers build
-- APK available in Actions artifacts tab
-- Share download link with testers
+**Via GitHub Actions:**
+1. Go to Actions → "EAS Build Preview Android"
+2. Click "Run workflow"
+3. Build completes (~15 min)
+4. Download APK from artifacts
+5. Share with testers
 
 **Distribution:**
 - Direct APK link from EAS dashboard
@@ -111,21 +114,23 @@ pnpm run build:preview:android
 ```bash
 pnpm run build:preview:ios
 ```
+- Builds IPA for App Store distribution
+- Auto-submits to TestFlight
+- Takes ~1 hour to process in App Store Connect
+- Then appears in TestFlight → Builds
 
-**Auto-submit to TestFlight (optional):**
-```bash
-eas submit --platform ios --latest
-```
+**Via GitHub Actions:**
+1. Go to Actions → "EAS Build Preview iOS"
+2. Click "Run workflow"
+3. Build completes (~15 min)
+4. Auto-submitted to TestFlight (~1 hour processing)
+5. Build appears in App Store Connect → TestFlight
 
-**In GitHub Actions:**
-- Push to main automatically triggers build
-- Manually submit from Actions workflow (future enhancement)
-- Or configure auto-submit in eas.json
-
-**Distribution:**
-- TestFlight link in App Store Connect
-- Send to testers via email
-- Testers install via TestFlight app on iOS device
+**Distribution to Testers:**
+- Go to App Store Connect → TestFlight → Builds
+- Select build and add internal/external testers
+- Send TestFlight link via email
+- Testers install via TestFlight app on iOS device (no developer mode needed)
 
 ## Monitoring Builds
 
@@ -206,26 +211,42 @@ Error: INSTALL_FAILED_INVALID_APK
 
 ### Running Builds via GitHub Actions
 
+**Android:**
 1. Go to your repo → Actions tab
-2. Select workflow:
-   - "EAS Build Preview Android" — builds APK
-   - "EAS Build Preview iOS" — builds IPA
+2. Select "EAS Build Preview Android"
 3. Click "Run workflow" button
-4. Wait for build to complete (10-20 minutes typical)
-5. Download artifact from build summary
+4. Wait 10-15 minutes for build
+5. Download APK from artifacts
 
-### Each Workflow Steps
+**iOS (TestFlight):**
+1. Go to your repo → Actions tab
+2. Select "EAS Build Preview iOS"
+3. Click "Run workflow" button
+4. Wait 15-20 minutes for build + auto-submission to TestFlight
+5. Go to App Store Connect → TestFlight to manage build and testers
+
+### Android Workflow Steps
 1. Checkout code
 2. Setup Node 18 + pnpm 9
 3. Install dependencies
 4. Run `pnpm run verify` (typecheck + lint + tests)
-5. Build platform-specific artifact (APK or IPA)
+5. Build Android APK
 6. Upload artifact
+
+### iOS Workflow Steps
+1. Checkout code
+2. Setup Node 18 + pnpm 9
+3. Install dependencies
+4. Run `pnpm run verify` (typecheck + lint + tests)
+5. Build iOS IPA (App Store distribution)
+6. **Auto-submit to TestFlight**
+7. Upload artifact
 
 **Access Results:**
 - Go to Actions tab → Select workflow run
 - View build logs in real-time
-- Download artifact (APK or IPA) from summary
+- Download artifact from summary
+- For iOS: Check App Store Connect → TestFlight for submission status
 
 ### Customizing Triggers
 
