@@ -6,12 +6,14 @@ import { useRepositories } from '@/shared/storage';
 import {
   ProgressService,
   type ProgressSummary,
+  type RecordData,
   type WeeklySummary,
 } from '../services/progress-service';
 
 export interface UseProgressSummary {
   summary: ProgressSummary | null;
   weekSummary: WeeklySummary | null;
+  record: RecordData | null;
   loading: boolean;
 }
 
@@ -21,6 +23,7 @@ export function useProgressSummary(): UseProgressSummary {
 
   const [summary, setSummary] = useState<ProgressSummary | null>(null);
   const [weekSummary, setWeekSummary] = useState<WeeklySummary | null>(null);
+  const [record, setRecord] = useState<RecordData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,9 +33,17 @@ export function useProgressSummary(): UseProgressSummary {
         if (!active) return;
         setSummary(s);
         setWeekSummary(w);
-        setLoading(false);
       })
-      .catch(() => {
+      .catch(() => undefined);
+
+    service
+      .getRecord()
+      .then((r) => {
+        if (!active) return;
+        setRecord(r);
+      })
+      .catch(() => undefined)
+      .finally(() => {
         if (active) setLoading(false);
       });
     return () => {
@@ -40,5 +51,5 @@ export function useProgressSummary(): UseProgressSummary {
     };
   }, [service]);
 
-  return { summary, weekSummary, loading };
+  return { summary, weekSummary, record, loading };
 }

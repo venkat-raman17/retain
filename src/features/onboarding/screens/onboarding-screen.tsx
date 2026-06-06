@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
@@ -14,9 +14,7 @@ import {
   type SelectOption,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { systemClock } from '@/shared/lib';
 import { Routes } from '@/navigation';
-import { useRepositories } from '@/shared/storage';
 import { VOW_PRESETS } from '@/features/path/domain/user-profile';
 
 import {
@@ -30,7 +28,7 @@ import {
   type OnboardingDraft,
   type OnboardingStep,
 } from '../domain/onboarding';
-import { OnboardingService } from '../services/onboarding-service';
+import { useOnboarding } from '../hooks/use-onboarding';
 
 const CUSTOM_VOW_ID = 'custom';
 
@@ -61,6 +59,15 @@ const BOUNDARY_OPTIONS: SelectOption<string>[] = [
   { value: BOUNDARY_SKIP, label: 'Skip for now.' },
 ];
 
+const PATH_START_OPTIONS: SelectOption<string>[] = [
+  { value: 'today', label: 'Starting today.', description: 'Begin fresh. Day 1 starts now.' },
+  {
+    value: 'existing',
+    label: "I'm already on a path.",
+    description: 'Tell the app which day you are on.',
+  },
+];
+
 /** A consistent top mark on every screen so the flow has one rhythm. */
 const STEP_EYEBROW: Record<OnboardingStep, string> = {
   welcome: 'Before the path begins',
@@ -71,23 +78,13 @@ const STEP_EYEBROW: Record<OnboardingStep, string> = {
   forge: 'Step 3 of 4',
   boundary: 'Step 4 of 4',
   disclaimer: 'Before you begin',
+  path_start: 'Your path',
   begin: 'The threshold',
 };
 
 export function OnboardingScreen() {
   const router = useRouter();
-  const repos = useRepositories();
-  const service = useMemo(
-    () =>
-      new OnboardingService(
-        repos.profile,
-        repos.path,
-        repos.boundary,
-        repos.settings,
-        systemClock,
-      ),
-    [repos],
-  );
+  const { complete: completeOnboarding } = useOnboarding();
 
   const [stepIndex, setStepIndex] = useState(0);
   const [finishing, setFinishing] = useState(false);
@@ -99,6 +96,8 @@ export function OnboardingScreen() {
   const [forgeCategory, setForgeCategory] = useState<string | null>(null);
   const [boundaryChoice, setBoundaryChoice] = useState<string | null>(DEFAULT_BOUNDARY);
   const [customBoundary, setCustomBoundary] = useState('');
+  const [pathStartMode, setPathStartMode] = useState<string | null>('today');
+  const [existingDaysText, setExistingDaysText] = useState('');
 
   const currentStep = ONBOARDING_STEPS[stepIndex] as OnboardingStep;
 
@@ -115,6 +114,13 @@ export function OnboardingScreen() {
       case 'boundary':
         if (boundaryChoice === BOUNDARY_CUSTOM) return customBoundary.trim().length > 0;
         return true;
+      case 'path_start': {
+        if (pathStartMode === 'existing') {
+          const n = parseInt(existingDaysText, 10);
+          return !isNaN(n) && n >= 1 && n <= 3650;
+        }
+        return pathStartMode !== null;
+      }
       case 'disclaimer':
       case 'begin':
       case 'welcome':
@@ -138,6 +144,9 @@ export function OnboardingScreen() {
     if (!intention || !forgeCategory) return;
     setFinishing(true);
     try {
+      const existingDay =
+        pathStartMode === 'existing' ? parseInt(existingDaysText, 10) : 1;
+      const offsetDays = !isNaN(existingDay) && existingDay > 1 ? existingDay - 1 : 0;
       const draft: OnboardingDraft = {
         vowPresetId: vowPresetId === CUSTOM_VOW_ID ? 'custom' : vowPresetId,
         customVow: vowPresetId === CUSTOM_VOW_ID ? customVow.trim() : null,
@@ -145,8 +154,9 @@ export function OnboardingScreen() {
         forgeCategory,
         boundaryChoice,
         customBoundaryTitle: customBoundary.trim() || null,
+        offsetDays,
       };
-      await service.complete(draft);
+      await completeOnboarding(draft);
       router.replace(Routes.path);
     } finally {
       setFinishing(false);
@@ -264,6 +274,31 @@ export function OnboardingScreen() {
         )}
 
         {currentStep === 'disclaimer' && <StepDisclaimer />}
+
+        {currentStep === 'path_start' && (
+          <>
+            <AppHeader
+              title="Where are you?"
+              subtitle="Honor the work you have already done."
+            />
+            <AppSelectList
+              options={PATH_START_OPTIONS}
+              value={pathStartMode}
+              onChange={setPathStartMode}
+            />
+            {pathStartMode === 'existing' && (
+              <AppTextInput
+                label="What day are you on?"
+                placeholder="e.g. 14"
+                value={existingDaysText}
+                onChangeText={setExistingDaysText}
+                keyboardType="numeric"
+                maxLength={4}
+                autoFocus
+              />
+            )}
+          </>
+        )}
 
         {currentStep === 'begin' && (
           <StepBegin

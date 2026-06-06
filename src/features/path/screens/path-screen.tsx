@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
@@ -13,25 +12,19 @@ import {
   AppText,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { systemClock } from '@/shared/lib';
 import { Routes } from '@/navigation';
-import { useRepositories } from '@/shared/storage';
 
 import { usePath } from '../hooks/use-path';
 import { usePathProgress } from '../hooks/use-path-progress';
-import { DailyPathService } from '../services/daily-path-service';
+import { useDailyPath } from '../hooks/use-daily-path';
 
 export function PathScreen() {
   const router = useRouter();
-  const repos = useRepositories();
   const { currentDay, isRunning, vow, loading, beginPath, profile } = usePath();
   const { summary } = usePathProgress();
+  const { isCrownUnlocked: checkCrownUnlocked } = useDailyPath();
 
-  const dailyPathService = useMemo(
-    () => new DailyPathService(repos.profile, repos.path, repos.contentProgress, systemClock),
-    [repos],
-  );
-  const isCrownUnlocked = profile ? dailyPathService.isCrownUnlocked(profile, currentDay) : false;
+  const isCrownUnlocked = profile ? checkCrownUnlocked(profile, currentDay) : false;
 
   const day = currentDay > 0 ? currentDay : 1;
   const todaysContent = getDailyPathContent(day);
@@ -153,7 +146,7 @@ export function PathScreen() {
 
             {/* Record a lapse — quiet, never shaming */}
             <AppButton
-              label="Record a lapse and return"
+              label="Lapse and return"
               variant="ghost"
               fullWidth
               onPress={() => router.push(Routes.lapse)}

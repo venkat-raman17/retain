@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { getDailyPathContent, getMilestoneRiteById, getArchetypeProfile } from '@/content';
+import { copy, getDailyPathContent, getMilestoneRiteById, getArchetypeProfile } from '@/content';
 import {
   AppButton,
   AppCard,
@@ -13,61 +13,45 @@ import {
   AppText,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { systemClock } from '@/shared/lib';
 import { Routes } from '@/navigation';
-import { useRepositories } from '@/shared/storage';
 
-import { DailyPathService } from '../services/daily-path-service';
-
-const SECRET_LABELS: Record<string, string> = {
-  hidden_teaching: 'Hidden Teaching',
-  ancient_key: 'Ancient Key',
-  archetype_trial: 'Trial',
-  forge_assignment: 'Forge Assignment',
-  night_warning: 'Night Warning',
-  lapse_medicine: 'Lapse Medicine',
-  crown_fragment: 'Crown Fragment',
-};
+import { useDailyPath } from '../hooks/use-daily-path';
 
 export function DailyChamberScreen() {
   const router = useRouter();
-  const repos = useRepositories();
   const params = useLocalSearchParams<{ day?: string }>();
   const dayNumber = params.day ? parseInt(params.day, 10) : 1;
 
-  const service = useMemo(
-    () => new DailyPathService(repos.profile, repos.path, repos.contentProgress, systemClock),
-    [repos],
-  );
+  const { markDayOpened, markDayCompleted } = useDailyPath();
 
   const [secretRevealed, setSecretRevealed] = useState(false);
   const [completed, setCompleted] = useState(false);
 
   useEffect(() => {
-    void service.markDayOpened(dayNumber);
-  }, [service, dayNumber]);
+    void markDayOpened(dayNumber);
+  }, [markDayOpened, dayNumber]);
 
   const content = getDailyPathContent(dayNumber);
   const archetype = content?.archetype ? getArchetypeProfile(content.archetype) : null;
   const milestoneRite = content?.milestoneRiteId ? getMilestoneRiteById(content.milestoneRiteId) : null;
 
   const completeDay = useCallback(async () => {
-    await service.markDayCompleted(dayNumber);
+    await markDayCompleted(dayNumber);
     setCompleted(true);
     setTimeout(() => router.back(), 400);
-  }, [service, dayNumber, router]);
+  }, [markDayCompleted, dayNumber, router]);
 
   if (!content) {
     return (
       <AppScreen scroll>
         <View style={styles.container}>
           <AppText variant="title" align="center">
-            This chamber is not yet open.
+            {copy.chamber.locked.title}
           </AppText>
           <AppText variant="body" color="secondary" align="center">
-            {"Walk today's fire first."}
+            {copy.chamber.locked.body}
           </AppText>
-          <AppButton label="Return" variant="ghost" onPress={() => router.back()} />
+          <AppButton label={copy.chamber.return} variant="ghost" onPress={() => router.back()} />
         </View>
       </AppScreen>
     );
@@ -89,7 +73,7 @@ export function DailyChamberScreen() {
 
         {/* Teaching */}
         <AppCard>
-          <AppText variant="caption" color="muted" uppercase>Teaching</AppText>
+          <AppText variant="caption" color="muted" uppercase>{copy.chamber.labels.teaching}</AppText>
           <AppText variant="body" color="secondary" style={styles.body}>
             {content.teachingBody}
           </AppText>
@@ -103,8 +87,9 @@ export function DailyChamberScreen() {
         >
           <AppText variant="caption" color="energy" uppercase>
             {secretRevealed
-              ? (SECRET_LABELS[content.secretContentType] ?? 'Secret')
-              : 'Reveal the secret'}
+              ? (copy.chamber.secret.types[content.secretContentType] ??
+                copy.chamber.secret.defaultLabel)
+              : copy.chamber.secret.defaultLabel}
           </AppText>
           {secretRevealed ? (
             <AppText variant="body" color="secondary" style={styles.body}>
@@ -112,37 +97,42 @@ export function DailyChamberScreen() {
             </AppText>
           ) : (
             <AppText variant="caption" color="muted">
-              {"Tap to open this day's hidden instruction."}
+              {copy.chamber.secret.lockedHint}
             </AppText>
           )}
         </AppCard>
 
         {/* Command */}
         <AppCard tone="raised">
-          <AppText variant="caption" color="accent" uppercase>{"Today's command"}</AppText>
+          <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.command}</AppText>
           <AppText variant="subheading" style={styles.body}>{content.command}</AppText>
         </AppCard>
 
         {/* Practice + Forge row */}
         <View style={styles.row}>
           <AppCard tone="overlay" style={styles.halfCard}>
-            <AppText variant="caption" color="accent" uppercase>Practice</AppText>
+            <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.practice}</AppText>
             <AppText variant="body" color="secondary">{content.practice}</AppText>
           </AppCard>
           <AppCard tone="overlay" style={styles.halfCard}>
-            <AppText variant="caption" color="energy" uppercase>Forge</AppText>
+            <AppText variant="caption" color="energy" uppercase>{copy.chamber.labels.forge}</AppText>
             <AppText variant="body" color="secondary">{content.forgeChallenge}</AppText>
           </AppCard>
         </View>
 
         {/* Journal prompt */}
         <AppCard>
-          <AppText variant="caption" color="accent" uppercase>Journal prompt</AppText>
+          <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.journalPrompt}</AppText>
           <AppText variant="body" color="secondary">{content.journalPrompt}</AppText>
           <AppButton
-            label="Open journal"
+            label={copy.chamber.labels.openJournal}
             variant="ghost"
-            onPress={() => router.push(Routes.journal)}
+            onPress={() =>
+              router.push({
+                pathname: Routes.journal,
+                params: { initialType: 'morning', initialPrompt: content.journalPrompt },
+              })
+            }
           />
         </AppCard>
 
@@ -159,47 +149,53 @@ export function DailyChamberScreen() {
         {/* Milestone rite */}
         {milestoneRite ? (
           <AppCard tone="raised" border="gold">
-            <AppText variant="caption" color="energy" uppercase>Milestone rite</AppText>
+            <AppText variant="caption" color="energy" uppercase>{copy.chamber.labels.milestoneRite}</AppText>
             <AppText variant="subheading">{milestoneRite.title}</AppText>
             <AppText variant="body" color="secondary" style={styles.body}>
               {milestoneRite.ceremonialPassage}
             </AppText>
             <AppDivider />
-            <AppText variant="caption" color="energy" uppercase>Vow renewal</AppText>
+            <AppText variant="caption" color="energy" uppercase>{copy.chamber.labels.vowRenewal}</AppText>
             <AppText variant="body" color="calm" style={styles.body}>{milestoneRite.vowRenewal}</AppText>
           </AppCard>
         ) : null}
 
         {/* Evening account */}
         <AppCard tone="overlay">
-          <AppText variant="caption" color="muted" uppercase>Evening account</AppText>
+          <AppText variant="caption" color="muted" uppercase>{copy.chamber.labels.eveningAccount}</AppText>
           <AppText variant="body" color="secondary">{content.eveningAccount}</AppText>
         </AppCard>
 
         {/* Crown fragment */}
         {content.crownFragment ? (
           <AppCard tone="raised" border="gold">
-            <AppText variant="caption" color="energy" uppercase>Key earned</AppText>
+            <AppText variant="caption" color="energy" uppercase>{copy.chamber.labels.keyEarned}</AppText>
             <AppQuoteBlock quote={content.crownFragment} attribution={`Day ${dayNumber}`} />
           </AppCard>
         ) : null}
 
         <AppQuoteBlock quote={content.seal} attribution={`Day ${dayNumber}`} />
 
-        {/* Complete button */}
+        {/* Complete button — gated: user must open the hidden instruction first */}
         {completed ? (
           <AppText variant="body" color="calm" align="center">
-            {"Day recorded. Well walked."}
+            {copy.chamber.complete.done}
           </AppText>
-        ) : (
+        ) : secretRevealed ? (
           <AppButton
             label={`Complete Day ${dayNumber}`}
             fullWidth
             onPress={() => void completeDay()}
           />
+        ) : (
+          <AppCard tone="overlay">
+            <AppText variant="caption" color="muted" align="center">
+              {copy.chamber.complete.gate}
+            </AppText>
+          </AppCard>
         )}
 
-        <AppButton label="Return" variant="ghost" fullWidth onPress={() => router.back()} />
+        <AppButton label={copy.chamber.return} variant="ghost" fullWidth onPress={() => router.back()} />
       </View>
     </AppScreen>
   );

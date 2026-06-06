@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -11,11 +11,9 @@ import {
   AppText,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { systemClock } from '@/shared/lib';
-import { useRepositories } from '@/shared/storage';
 
+import { useDailyPath } from '../hooks/use-daily-path';
 import type { DayStatus } from '../services/daily-path-service';
-import { DailyPathService } from '../services/daily-path-service';
 
 function DayDot({ status, onPress }: { status: DayStatus; onPress: () => void }) {
   const locked = status.unlockState === 'locked';
@@ -35,8 +33,9 @@ function DayDot({ status, onPress }: { status: DayStatus; onPress: () => void })
     >
       <AppText
         variant="caption"
-        color={today ? 'energy' : locked ? 'muted' : 'secondary'}
+        color={today ? 'energy' : 'secondary'}
         numberOfLines={1}
+        style={locked ? styles.dotLockedText : undefined}
       >
         {status.dayNumber}
       </AppText>
@@ -46,19 +45,14 @@ function DayDot({ status, onPress }: { status: DayStatus; onPress: () => void })
 
 export function PathMapScreen() {
   const router = useRouter();
-  const repos = useRepositories();
-  const service = useMemo(
-    () => new DailyPathService(repos.profile, repos.path, repos.contentProgress, systemClock),
-    [repos],
-  );
+  const { getDayStatusList } = useDailyPath();
 
   const [dayStatuses, setDayStatuses] = useState<DayStatus[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
-    service
-      .getDayStatusList()
+    getDayStatusList()
       .then((list) => {
         if (active) {
           setDayStatuses(list);
@@ -71,7 +65,7 @@ export function PathMapScreen() {
     return () => {
       active = false;
     };
-  }, [service]);
+  }, [getDayStatusList]);
 
   const openDay = (day: number) =>
     router.push({ pathname: '/chamber', params: { day: day.toString() } });
@@ -163,7 +157,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: StyleSheet.hairlineWidth,
   },
+  dotLockedText: { color: theme.colors.textMuted },
   dotOpen: { backgroundColor: theme.colors.surfaceRaised, borderColor: theme.colors.border },
-  dotLocked: { backgroundColor: theme.colors.surfaceOverlay, borderColor: theme.colors.border, opacity: 0.5 },
-  dotToday: { borderColor: theme.colors.primary, borderWidth: 1.5 },
+  dotLocked: { backgroundColor: theme.colors.backgroundRaised, borderColor: theme.colors.border },
+  dotToday: { backgroundColor: theme.colors.primarySurface, borderColor: theme.colors.primary, borderWidth: 2 },
 });

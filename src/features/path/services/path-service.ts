@@ -1,5 +1,6 @@
 import type { PathRepository, UserProfileRepository } from '@/db';
 import type { Clock } from '@/shared/lib';
+import { addDays } from '@/shared/utils';
 
 import { createPathEvent } from '../domain/path-event';
 import { currentPathDay, isPathRunning } from '../domain/practice';
@@ -25,13 +26,15 @@ export class PathService {
     return isPathRunning(profile);
   }
 
-  /** Start (or restart) the path now. Records the first-ever start if unset. */
-  async startPath(): Promise<UserProfile> {
+  /** Start (or restart) the path. Pass offsetDays > 0 to backdate (e.g. Day 14 → offsetDays=13). */
+  async startPath(offsetDays = 0): Promise<UserProfile> {
     const profile = await this.profiles.get();
-    const now = this.clock.now().toISOString();
+    const base = this.clock.now();
+    const startedAt = offsetDays > 0 ? addDays(base, -offsetDays) : base;
+    const isoStart = startedAt.toISOString();
     const next = await this.profiles.update({
-      currentPathStartedAt: now,
-      pathStartedAt: profile.pathStartedAt ?? now,
+      currentPathStartedAt: isoStart,
+      pathStartedAt: profile.pathStartedAt ?? isoStart,
     });
     await this.path.addEvent(createPathEvent('path_started', this.clock));
     return next;

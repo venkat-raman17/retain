@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
@@ -12,37 +12,31 @@ import {
   AppText,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { systemClock } from '@/shared/lib';
 import { Routes } from '@/navigation';
-import { useRepositories } from '@/shared/storage';
 
-import { DailyPathService } from '../services/daily-path-service';
+import { useDailyPath } from '../hooks/use-daily-path';
 
 export function CrownCelebrationScreen() {
   const router = useRouter();
-  const repos = useRepositories();
-  const service = useMemo(
-    () => new DailyPathService(repos.profile, repos.path, repos.contentProgress, systemClock),
-    [repos],
-  );
+  const { getCollectedCrownFragments, receiveCrown: commitCrown } = useDailyPath();
 
   const [fragments, setFragments] = useState<string[]>([]);
   const [receiving, setReceiving] = useState(false);
   const [received, setReceived] = useState(false);
 
   useEffect(() => {
-    void service.getCollectedCrownFragments().then(setFragments);
-  }, [service]);
+    void getCollectedCrownFragments().then(setFragments);
+  }, [getCollectedCrownFragments]);
 
   const receiveCrown = useCallback(async () => {
     setReceiving(true);
     try {
-      await service.receiveCrown();
+      await commitCrown();
       setReceived(true);
     } finally {
       setReceiving(false);
     }
-  }, [service]);
+  }, [commitCrown]);
 
   return (
     <AppScreen scroll>

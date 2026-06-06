@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
 
 import {
   archetypeProfiles,
-  dailyPath,
+  arcs,
   getPrinciples,
   rites,
   studies,
 } from '@/content';
-import type { Study } from '@/content/schemas/study.schema';
+import type { Rite, Study } from '@/content';
 import {
   AppButton,
   AppCard,
@@ -20,6 +21,7 @@ import {
   AppText,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { Routes } from '@/navigation';
 
 type CodexTab = 'path' | 'principles' | 'archetypes' | 'studies' | 'rites';
 
@@ -32,52 +34,34 @@ const TABS: { id: CodexTab; label: string }[] = [
 ];
 
 // ── Tab: Daily Path ───────────────────────────────────────────────────────────
+// Shows the nine-arc structure. The full 90-day grid lives in the Path Map.
 
 function DailyPathTab() {
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const router = useRouter();
   return (
     <View style={styles.list}>
-      {dailyPath.map((day) => {
-        const isOpen = expanded === day.id;
-        return (
-          <AppCard
-            key={day.id}
-            tone={isOpen ? 'raised' : 'overlay'}
-            onPress={() => setExpanded(isOpen ? null : day.id)}
-          >
-            <AppText variant="caption" color="muted" uppercase>
-              {`Day ${day.dayNumber} · ${day.season.replace(/_/g, ' ')}`}
-            </AppText>
-            <AppText variant="label" color="primary">
-              {day.title}
-            </AppText>
-            {isOpen ? (
-              <>
-                <AppText variant="body" color="secondary" style={styles.body}>
-                  {day.openingLine}
-                </AppText>
-                <AppDivider />
-                <AppText variant="caption" color="accent" uppercase>
-                  Command
-                </AppText>
-                <AppText variant="body" color="primary">
-                  {day.command}
-                </AppText>
-                <AppText variant="caption" color="muted" uppercase style={styles.spacing}>
-                  Practice
-                </AppText>
-                <AppText variant="body" color="secondary">
-                  {day.practice}
-                </AppText>
-              </>
-            ) : (
-              <AppText variant="caption" color="muted" numberOfLines={2}>
-                {day.openingLine}
-              </AppText>
-            )}
-          </AppCard>
-        );
-      })}
+      <AppText variant="body" color="secondary">
+        Nine arcs. Ninety chambers. One opens each day.
+      </AppText>
+      {arcs.map((arc) => (
+        <AppCard key={arc.id} tone="overlay">
+          <AppText variant="caption" color="muted" uppercase>
+            {`Arc ${arc.arcNumber} · Days ${arc.dayStart}–${arc.dayEnd}`}
+          </AppText>
+          <AppText variant="label" color="primary" style={styles.body}>
+            {arc.title}
+          </AppText>
+          <AppText variant="caption" color="secondary" numberOfLines={2} style={styles.body}>
+            {arc.description}
+          </AppText>
+        </AppCard>
+      ))}
+      <AppButton
+        label="View the Path Map"
+        variant="secondary"
+        fullWidth
+        onPress={() => router.push(Routes.pathMap)}
+      />
     </View>
   );
 }
@@ -85,12 +69,30 @@ function DailyPathTab() {
 // ── Tab: Principles ───────────────────────────────────────────────────────────
 
 function PrinciplesTab() {
-  const principles = getPrinciples();
+  const all = getPrinciples();
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  const featured = all[0];
+  const rest = all.slice(1);
+
+  if (!featured) return null;
 
   return (
     <View style={styles.list}>
-      {principles.map((principle) => {
+      {/* First principle is always featured and expanded */}
+      <AppCard tone="raised" border="ember">
+        <AppText variant="caption" color="accent" uppercase>
+          Featured Principle
+        </AppText>
+        <AppText variant="label" color="accent" style={styles.body}>
+          {featured.title}
+        </AppText>
+        <AppText variant="body" color="secondary" style={styles.body}>
+          {featured.body}
+        </AppText>
+      </AppCard>
+
+      {rest.map((principle) => {
         const isOpen = expanded === principle.id;
         return (
           <AppCard
@@ -114,6 +116,7 @@ function PrinciplesTab() {
 }
 
 // ── Tab: Archetypes ───────────────────────────────────────────────────────────
+// Compact list: name, essence, daily command. Full detail expands on tap.
 
 function ArchetypesTab() {
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -128,7 +131,7 @@ function ArchetypesTab() {
             onPress={() => setExpanded(isOpen ? null : archetype.id)}
           >
             <AppText variant="subheading">{archetype.name}</AppText>
-            <AppText variant="caption" color="secondary">
+            <AppText variant="caption" color="secondary" style={styles.body}>
               {archetype.essence}
             </AppText>
             {isOpen ? (
@@ -163,8 +166,8 @@ function ArchetypesTab() {
                 </AppText>
               </>
             ) : (
-              <AppText variant="caption" color="energy" style={styles.body}>
-                {archetype.retainLine}
+              <AppText variant="caption" color="accent" style={styles.body}>
+                {`Command: ${archetype.dailyCommand}`}
               </AppText>
             )}
           </AppCard>
@@ -188,11 +191,7 @@ function StudiesTab() {
           onPress={() => setSelected(null)}
         />
         <AppCard tone="raised">
-          <AppChip
-            label={selected.lineage.replace(/_/g, ' ')}
-            tone="accent"
-            selected
-          />
+          <AppChip label={selected.lineage.replace(/_/g, ' ')} tone="accent" selected />
           <AppText variant="title" style={styles.body}>
             {selected.title}
           </AppText>
@@ -228,12 +227,9 @@ function StudiesTab() {
           </AppText>
         </AppCard>
 
-        <AppQuoteBlock
-          quote={selected.reflectionPrompt}
-          attribution="Reflection"
-        />
+        <AppQuoteBlock quote={selected.reflectionPrompt} attribution="Reflection" />
 
-        <AppCard tone="overlay" border="subtle">
+        <AppCard tone="overlay">
           <AppText variant="caption" color="muted">
             {selected.guardrail}
           </AppText>
@@ -245,11 +241,7 @@ function StudiesTab() {
   return (
     <View style={styles.list}>
       {studies.map((study) => (
-        <AppCard
-          key={study.id}
-          tone="overlay"
-          onPress={() => setSelected(study)}
-        >
+        <AppCard key={study.id} tone="overlay" onPress={() => setSelected(study)}>
           <AppChip label={study.lineage.replace(/_/g, ' ')} tone="accent" />
           <AppText variant="subheading" style={styles.body}>
             {study.title}
@@ -257,8 +249,77 @@ function StudiesTab() {
           <AppText variant="body" color="secondary">
             {study.summary}
           </AppText>
-          <AppText variant="caption" color="muted" style={styles.spacing}>
-            {study.guardrail}
+        </AppCard>
+      ))}
+      <AppText variant="caption" color="muted" align="center" style={styles.disclaimer}>
+        Studies are philosophical inspiration, not medical advice, religious authority, or sexual
+        technique.
+      </AppText>
+    </View>
+  );
+}
+
+// ── Tab: Rites ────────────────────────────────────────────────────────────────
+// Compact list; full ceremonial detail opens on tap.
+
+function RitesTab() {
+  const [selected, setSelected] = useState<Rite | null>(null);
+
+  if (selected) {
+    return (
+      <View style={styles.list}>
+        <AppButton
+          label="Back to Rites"
+          variant="ghost"
+          onPress={() => setSelected(null)}
+        />
+        <AppCard tone="raised">
+          <AppChip label={`Day ${selected.milestoneDay}`} tone="energy" selected />
+          <AppText variant="title" style={styles.body}>
+            {selected.title}
+          </AppText>
+          <AppText variant="body" color="secondary" style={styles.body}>
+            {selected.ceremonialPassage}
+          </AppText>
+        </AppCard>
+
+        <AppCard tone="overlay">
+          <AppText variant="caption" color="energy" uppercase>
+            Vow renewal
+          </AppText>
+          <AppText variant="body" color="calm" style={styles.body}>
+            {selected.vowRenewal}
+          </AppText>
+        </AppCard>
+
+        <AppCard>
+          <AppText variant="caption" color="muted" uppercase>
+            Forge challenge
+          </AppText>
+          <AppText variant="body" color="secondary" style={styles.body}>
+            {selected.forgeChallenge}
+          </AppText>
+        </AppCard>
+
+        <AppCard tone="overlay">
+          <AppText variant="seal" color="muted">
+            {selected.seal}
+          </AppText>
+        </AppCard>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.list}>
+      {rites.map((rite) => (
+        <AppCard key={rite.id} tone="overlay" onPress={() => setSelected(rite)}>
+          <AppChip label={`Day ${rite.milestoneDay}`} tone="energy" selected />
+          <AppText variant="subheading" style={styles.body}>
+            {rite.title}
+          </AppText>
+          <AppText variant="caption" color="muted" style={styles.body}>
+            {rite.seal}
           </AppText>
         </AppCard>
       ))}
@@ -266,66 +327,10 @@ function StudiesTab() {
   );
 }
 
-// ── Tab: Rites ────────────────────────────────────────────────────────────────
-
-function RitesTab() {
-  const [expanded, setExpanded] = useState<string | null>(null);
-  return (
-    <View style={styles.list}>
-      {rites.map((rite) => {
-        const isOpen = expanded === rite.id;
-        return (
-          <AppCard
-            key={rite.id}
-            tone={isOpen ? 'raised' : 'overlay'}
-            onPress={() => setExpanded(isOpen ? null : rite.id)}
-          >
-            <AppChip label={`Day ${rite.milestoneDay}`} tone="energy" selected />
-            <AppText variant="subheading" style={styles.body}>
-              {rite.title}
-            </AppText>
-            {isOpen ? (
-              <>
-                <AppText variant="body" color="secondary" style={styles.body}>
-                  {rite.ceremonialPassage}
-                </AppText>
-                <AppDivider />
-                <AppText variant="caption" color="energy" uppercase>
-                  Vow renewal
-                </AppText>
-                <AppText variant="body" color="calm" style={styles.body}>
-                  {rite.vowRenewal}
-                </AppText>
-                {rite.forgeChallenge ? (
-                  <>
-                    <AppText variant="caption" color="muted" uppercase style={styles.spacing}>
-                      Forge challenge
-                    </AppText>
-                    <AppText variant="body" color="secondary">
-                      {rite.forgeChallenge}
-                    </AppText>
-                  </>
-                ) : null}
-                <AppText variant="caption" color="muted" style={styles.spacing}>
-                  {rite.seal}
-                </AppText>
-              </>
-            ) : (
-              <AppText variant="caption" color="muted">
-                {rite.ceremonialPassage.split('\n\n')[0]}
-              </AppText>
-            )}
-          </AppCard>
-        );
-      })}
-    </View>
-  );
-}
-
 // ── Main screen ───────────────────────────────────────────────────────────────
 
 const SECTION_META: Record<CodexTab, { title: string; count: number; unit: string }> = {
-  path: { title: 'Daily Path', count: dailyPath.length, unit: 'chambers' },
+  path: { title: 'Daily Path', count: arcs.length, unit: 'arcs' },
   principles: { title: 'Principles', count: getPrinciples().length, unit: 'entries' },
   archetypes: { title: 'Archetypes', count: archetypeProfiles.length, unit: 'archetypes' },
   studies: { title: 'Studies', count: studies.length, unit: 'studies' },
@@ -357,7 +362,6 @@ export function CodexScreen() {
           ))}
         </View>
 
-        {/* One clear section header instead of a row of competing chips */}
         <View style={styles.sectionHeader}>
           <AppText variant="subheading">{section.title}</AppText>
           <AppText variant="caption" color="muted" uppercase>
@@ -386,4 +390,5 @@ const styles = StyleSheet.create({
   list: { gap: theme.spacing.md },
   body: { marginTop: theme.spacing.xs },
   spacing: { marginTop: theme.spacing.sm },
+  disclaimer: { marginTop: theme.spacing.xs },
 });

@@ -5,19 +5,31 @@ import { createId, type Clock } from '@/shared/lib';
 /** Shared across urge logs and lapse records. */
 export const TRIGGER_TYPES = [
   'lust',
+  'loneliness',
   'boredom',
   'stress',
-  'loneliness',
-  'anger',
   'fatigue',
   'habit',
   'escapism',
+  'anger',
   'unknown',
 ] as const;
 export const triggerTypeSchema = z.enum(TRIGGER_TYPES);
 export type TriggerType = z.infer<typeof triggerTypeSchema>;
 
-const intensity = z.number().int().min(1).max(10);
+export const TRIGGER_LABELS: Record<TriggerType, string> = {
+  lust: 'Lust',
+  loneliness: 'Loneliness',
+  boredom: 'Boredom',
+  stress: 'Stress',
+  fatigue: 'Fatigue',
+  habit: 'Habit',
+  escapism: 'Escapism',
+  anger: 'Anger',
+  unknown: "I don't know yet",
+};
+
+const intensity = z.number().int().min(1).max(5);
 
 export const urgeLogSchema = z.object({
   id: z.string().min(1),

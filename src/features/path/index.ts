@@ -7,6 +7,8 @@ export { DailyPathService } from './services/daily-path-service';
 export type { UnlockState, DayStatus } from './services/daily-path-service';
 export { usePath } from './hooks/use-path';
 export type { UsePath } from './hooks/use-path';
+export { useDailyPath } from './hooks/use-daily-path';
+export type { UseDailyPath } from './hooks/use-daily-path';
 export { PathService } from './services/path-service';
 export { LapseRecoveryService } from './services/lapse-recovery-service';
 export { currentPathDay, daysSince, isPathRunning } from './domain/practice';

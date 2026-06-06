@@ -2,9 +2,9 @@ import type { Arc } from '../../schemas/arc.schema';
 
 export const arcs: readonly Arc[] = [
   {
-    id: 'arc-1-the-vow',
+    id: 'arc-1-the-gate',
     arcNumber: 1,
-    title: 'The Vow',
+    title: 'The Gate',
     dayStart: 1,
     dayEnd: 10,
     centralQuestion: 'Who am I when the urge rises?',
@@ -28,7 +28,7 @@ export const arcs: readonly Arc[] = [
   {
     id: 'arc-3-the-body',
     arcNumber: 3,
-    title: 'The Body Must Be Included',
+    title: 'The Body Returns',
     dayStart: 21,
     dayEnd: 30,
     centralQuestion: 'Is my body trained enough to carry my vow?',

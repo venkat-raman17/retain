@@ -66,6 +66,6 @@ export class OnboardingService {
       }
     }
 
-    await this.pathService.startPath();
+    await this.pathService.startPath(draft.offsetDays);
   }
 }

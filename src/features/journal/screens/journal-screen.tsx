@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 
-import { getPromptByType } from '@/content';
-import type { PromptType } from '@/content/schemas/prompt.schema';
 import {
   AppButton,
   AppCard,
@@ -11,10 +10,8 @@ import {
   AppEmptyState,
   AppHeader,
   AppScreen,
-  AppSelectList,
   AppText,
   AppTextInput,
-  type SelectOption,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
 
@@ -37,22 +34,27 @@ const TYPE_LABELS: Record<JournalType, string> = {
   study_reflection: 'Study',
 };
 
-/** Journal types that have bundled prompts (a subset of all journal types). */
-const PROMPT_TYPES_WITH_CONTENT = new Set<JournalType>([
-  'morning',
-  'evening',
-  'urge',
-  'lapse',
-  'study_reflection',
-  'freeform',
-]);
+const CARD_TYPE_LABELS: Record<JournalType, string> = {
+  morning: 'MORNING',
+  evening: 'EVENING',
+  urge: 'URGE OBSERVED',
+  lapse: 'LAPSE STUDIED',
+  return: 'RETURN',
+  freeform: 'FREEFORM',
+  study_reflection: 'STUDY',
+};
 
-const TYPE_OPTIONS: SelectOption<JournalType>[] = JOURNAL_TYPES.map((t) => ({
-  value: t,
-  label: TYPE_LABELS[t],
-}));
+const TYPE_PROMPTS: Record<JournalType, string> = {
+  morning: 'What must I remember before the day begins?',
+  evening: 'Did I live today from intention or from habit?',
+  urge: 'What triggered this — and what am I actually seeking?',
+  lapse: 'What pattern led here, and what will I change now?',
+  return: 'What did I learn, and what is my next right action?',
+  freeform: 'What is true right now?',
+  study_reflection: 'What principle do I need to live, not merely understand?',
+};
 
-const TYPE_FILTER_OPTIONS: SelectOption<JournalType | 'all'>[] = [
+const FILTER_OPTIONS: { value: JournalType | 'all'; label: string }[] = [
   { value: 'all', label: 'All' },
   ...JOURNAL_TYPES.map((t) => ({ value: t as JournalType | 'all', label: TYPE_LABELS[t] })),
 ];
@@ -62,21 +64,92 @@ function formatDate(iso: string): string {
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function TypeGrid({
+  value,
+  onChange,
+}: {
+  value: JournalType | null;
+  onChange: (t: JournalType) => void;
+}) {
+  return (
+    <View style={gridStyles.grid}>
+      {JOURNAL_TYPES.map((t) => {
+        const selected = t === value;
+        return (
+          <Pressable
+            key={t}
+            onPress={() => onChange(t)}
+            accessibilityRole="radio"
+            accessibilityState={{ selected }}
+            style={[gridStyles.cell, selected && gridStyles.cellSelected]}
+          >
+            <AppText variant="label" color={selected ? 'energy' : 'secondary'}>
+              {TYPE_LABELS[t]}
+            </AppText>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
+const gridStyles = StyleSheet.create({
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.sm,
+  },
+  cell: {
+    width: '47%',
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.sm,
+    borderRadius: theme.radii.md,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colors.border,
+    alignItems: 'center',
+  },
+  cellSelected: {
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.primarySoft,
+  },
+});
+
 export function JournalScreen() {
   const { entries, loading, addEntry, deleteEntry, error } = useJournal();
+  const { initialType, initialPrompt } = useLocalSearchParams<{
+    initialType?: string;
+    initialPrompt?: string;
+  }>();
 
   const [mode, setMode] = useState<ViewMode>('list');
   const [selected, setSelected] = useState<JournalEntry | null>(null);
   const [filter, setFilter] = useState<JournalType | 'all'>('all');
 
-  // New entry form state
   const [entryType, setEntryType] = useState<JournalType | null>(null);
+  const [customPrompt, setCustomPrompt] = useState<string | null>(null);
   const [body, setBody] = useState('');
   const [saving, setSaving] = useState(false);
+
+  // Track the last-consumed initialType so repeated navigations with the same
+  // type don't re-open the form once the user has cancelled/saved.
+  const paramsConsumedRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!initialType) return;
+    if (!(JOURNAL_TYPES as readonly string[]).includes(initialType)) return;
+    if (paramsConsumedRef.current === initialType) return;
+    paramsConsumedRef.current = initialType;
+    setEntryType(initialType as JournalType);
+    setCustomPrompt(initialPrompt ?? null);
+    setMode('new_entry');
+  }, [initialType, initialPrompt]);
 
   const resetForm = () => {
     setEntryType(null);
     setBody('');
+    setCustomPrompt(null);
+    // Reset so the next navigation with the same type re-opens the form.
+    paramsConsumedRef.current = null;
   };
 
   const submitEntry = async () => {
@@ -91,75 +164,54 @@ export function JournalScreen() {
   };
 
   const confirmDelete = (entry: JournalEntry) => {
-    Alert.alert(
-      'Delete entry?',
-      'This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            void deleteEntry(entry.id);
-            if (selected?.id === entry.id) {
-              setSelected(null);
-              setMode('list');
-            }
-          },
+    Alert.alert('Delete entry?', 'This cannot be undone.', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          void deleteEntry(entry.id);
+          if (selected?.id === entry.id) {
+            setSelected(null);
+            setMode('list');
+          }
         },
-      ],
-    );
+      },
+    ]);
   };
 
-  const filteredEntries = filter === 'all'
-    ? entries
-    : entries.filter((e) => e.type === filter);
+  const filteredEntries =
+    filter === 'all' ? entries : entries.filter((e) => e.type === filter);
 
-  // Stable seed for prompt selection — initialized once on mount via lazy useState,
-  // never re-computed during re-renders. This keeps prompt selection deterministic.
-  const [promptSeed] = useState(() => Math.floor(Math.random() * 997));
-  const prompt = useMemo(() => {
-    if (!entryType || !PROMPT_TYPES_WITH_CONTENT.has(entryType)) return null;
-    const prompts = getPromptByType(entryType as PromptType);
-    if (prompts.length === 0) return null;
-    return prompts[promptSeed % prompts.length] ?? null;
-  }, [entryType, promptSeed]);
+  const displayedPrompt = customPrompt ?? (entryType ? TYPE_PROMPTS[entryType] : null);
 
   if (mode === 'new_entry') {
-
     return (
       <AppScreen scroll>
         <View style={styles.container}>
-          <AppHeader
-            title="New entry."
-            subtitle="Write without judgment."
-          />
+          <AppHeader title="New entry." subtitle="Write without judgment." />
 
           <AppCard>
             <AppText variant="caption" color="muted" uppercase>
               Entry type
             </AppText>
-            <AppSelectList
-              options={TYPE_OPTIONS}
-              value={entryType}
-              onChange={setEntryType}
-            />
+            <TypeGrid value={entryType} onChange={setEntryType} />
           </AppCard>
 
-          {entryType && prompt ? (
+          {displayedPrompt ? (
             <AppCard tone="overlay">
               <AppText variant="caption" color="accent" uppercase>
                 Prompt
               </AppText>
               <AppText variant="body" color="secondary">
-                {prompt.text}
+                {displayedPrompt}
               </AppText>
             </AppCard>
           ) : null}
 
           <AppTextInput
-            label="Your reflection"
-            placeholder="Write here..."
+            label="Reflection"
+            placeholder="Write what is true..."
             value={body}
             onChangeText={setBody}
             multiline
@@ -184,7 +236,10 @@ export function JournalScreen() {
               label="Cancel"
               variant="ghost"
               fullWidth
-              onPress={() => { resetForm(); setMode('list'); }}
+              onPress={() => {
+                resetForm();
+                setMode('list');
+              }}
             />
           </View>
         </View>
@@ -197,7 +252,9 @@ export function JournalScreen() {
       <AppScreen scroll>
         <View style={styles.container}>
           <View style={styles.detailHeader}>
-            <AppChip label={TYPE_LABELS[selected.type]} tone="accent" selected />
+            <AppText variant="caption" color="energy" uppercase>
+              {CARD_TYPE_LABELS[selected.type]}
+            </AppText>
             <AppText variant="caption" color="muted">
               {formatDate(selected.createdAt)}
             </AppText>
@@ -232,9 +289,8 @@ export function JournalScreen() {
 
         <AppButton label="New entry" fullWidth onPress={() => setMode('new_entry')} />
 
-        {/* Type filter */}
         <View style={styles.chips}>
-          {TYPE_FILTER_OPTIONS.map((opt) => (
+          {FILTER_OPTIONS.map((opt) => (
             <AppChip
               key={opt.value}
               label={opt.label}
@@ -253,8 +309,8 @@ export function JournalScreen() {
           </AppCard>
         ) : filteredEntries.length === 0 ? (
           <AppEmptyState
-            title="No entries yet."
-            message="Begin with a morning reflection or write freely."
+            title="No record yet."
+            message="Write what is true. One line is enough."
             actionLabel="New entry"
             onAction={() => setMode('new_entry')}
           />
@@ -264,13 +320,15 @@ export function JournalScreen() {
               <View key={entry.id}>
                 <AppCard
                   tone="overlay"
-                  onPress={() => { setSelected(entry); setMode('detail'); }}
+                  onPress={() => {
+                    setSelected(entry);
+                    setMode('detail');
+                  }}
                 >
                   <View style={styles.entryRow}>
-                    <AppChip
-                      label={TYPE_LABELS[entry.type]}
-                      tone="accent"
-                    />
+                    <AppText variant="caption" color="energy" uppercase>
+                      {CARD_TYPE_LABELS[entry.type]}
+                    </AppText>
                     <AppText variant="caption" color="muted">
                       {formatDate(entry.createdAt)}
                     </AppText>
@@ -278,7 +336,7 @@ export function JournalScreen() {
                   <AppText
                     variant="body"
                     color="secondary"
-                    numberOfLines={2}
+                    numberOfLines={3}
                     style={styles.preview}
                   >
                     {entry.body}
@@ -299,7 +357,15 @@ const styles = StyleSheet.create({
   nav: { gap: theme.spacing.sm },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm },
   list: { gap: theme.spacing.xs },
-  entryRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  entryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   preview: { marginTop: theme.spacing.xs },
-  detailHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  detailHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 });

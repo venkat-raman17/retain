@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
@@ -14,35 +14,22 @@ import {
   type SelectOption,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { systemClock } from '@/shared/lib';
 import { Routes } from '@/navigation';
-import { useRepositories } from '@/shared/storage';
-import { TRIGGER_TYPES, type TriggerType } from '@/features/pause/domain/urge-log';
+import { TRIGGER_LABELS, TRIGGER_TYPES, type TriggerType } from '@/features/pause/domain/urge-log';
 
 import type { LapseRecordDraft } from '../domain/lapse-record';
-import { resolveVowText } from '../domain/user-profile';
-import { LapseRecoveryService } from '../services/lapse-recovery-service';
-import { PathService } from '../services/path-service';
+import { usePath } from '../hooks/use-path';
 
 type LapseStep = 'entry' | 'understand' | 'learn' | 'return';
 
 const TRIGGER_OPTIONS: SelectOption<TriggerType>[] = TRIGGER_TYPES.map((t) => ({
   value: t,
-  label: t.charAt(0).toUpperCase() + t.slice(1),
+  label: TRIGGER_LABELS[t],
 }));
 
 export function LapseScreen() {
   const router = useRouter();
-  const repos = useRepositories();
-
-  const recovery = useMemo(
-    () => new LapseRecoveryService(repos.profile, repos.path, repos.lapse, systemClock),
-    [repos],
-  );
-  const pathService = useMemo(
-    () => new PathService(repos.profile, repos.path, systemClock),
-    [repos],
-  );
+  const { vow, recordLapse, recordReturn } = usePath();
 
   const [step, setStep] = useState<LapseStep>('entry');
   const [triggerType, setTriggerType] = useState<TriggerType | null>(null);
@@ -51,18 +38,9 @@ export function LapseScreen() {
   const [nextCleanAction, setNextCleanAction] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [submittedMode, setSubmittedMode] = useState<'lapse' | 'return' | null>(null);
 
-  const [vow, setVow] = useState<string | null>(null);
-
-  const loadVow = async () => {
-    const profile = await pathService.getProfile();
-    setVow(resolveVowText(profile));
-  };
-
-  const goToReturn = async () => {
-    await void loadVow();
-    setStep('return');
-  };
+  const goToReturn = () => setStep('return');
 
   const submitLapse = async (andReturn: boolean) => {
     setSaving(true);
@@ -75,12 +53,14 @@ export function LapseScreen() {
         shameSpiralInterrupted: true,
         note: null,
       };
-      await recovery.recordLapse(draft);
-      setSaved(true);
+      await recordLapse(draft);
       if (andReturn) {
-        await recovery.recordReturn();
+        await recordReturn();
+        setSubmittedMode('return');
+      } else {
+        setSubmittedMode('lapse');
       }
-      router.replace(Routes.path);
+      setSaved(true);
     } finally {
       setSaving(false);
     }
@@ -97,10 +77,10 @@ export function LapseScreen() {
             />
             <AppCard tone="overlay">
               <AppText variant="body" color="secondary">
-                {'Do not dramatize it. Do not hide from it. Learn and return.'}
+                {'Do not dramatize it. Do not hide it.'}
               </AppText>
               <AppText variant="body" color="secondary" style={styles.spacing}>
-                {'Stand up. Clean the wound. Continue.'}
+                {'Name what happened. Learn the pattern. Return.'}
               </AppText>
             </AppCard>
             <AppCard>
@@ -115,7 +95,7 @@ export function LapseScreen() {
                 onPress={() => setStep('understand')}
               />
               <AppButton
-                label="Skip reflection — just record and return"
+                label="Just record and return"
                 variant="ghost"
                 fullWidth
                 onPress={() => void goToReturn()}
@@ -227,27 +207,46 @@ export function LapseScreen() {
               attribution="Retain principle"
             />
 
-            {saved ? (
-              <AppText variant="caption" color="muted" align="center">
-                Lapse recorded.
-              </AppText>
-            ) : null}
-
-            <View style={styles.nav}>
-              <AppButton
-                label="Return to the Path"
-                fullWidth
-                loading={saving}
-                onPress={() => void submitLapse(true)}
-              />
-              <AppButton
-                label="Record lapse — rest before returning"
-                variant="ghost"
-                fullWidth
-                loading={saving}
-                onPress={() => void submitLapse(false)}
-              />
-            </View>
+            {saved && submittedMode ? (
+              <View style={styles.nav}>
+                <AppButton
+                  label={
+                    submittedMode === 'return'
+                      ? 'Journal this return'
+                      : 'Journal this lapse'
+                  }
+                  variant="ghost"
+                  fullWidth
+                  onPress={() =>
+                    router.push({
+                      pathname: Routes.journal,
+                      params: { initialType: submittedMode },
+                    })
+                  }
+                />
+                <AppButton
+                  label="Continue to the Path"
+                  fullWidth
+                  onPress={() => router.replace(Routes.path)}
+                />
+              </View>
+            ) : (
+              <View style={styles.nav}>
+                <AppButton
+                  label="Return to the Path"
+                  fullWidth
+                  loading={saving}
+                  onPress={() => void submitLapse(true)}
+                />
+                <AppButton
+                  label="Record lapse — rest before returning"
+                  variant="ghost"
+                  fullWidth
+                  loading={saving}
+                  onPress={() => void submitLapse(false)}
+                />
+              </View>
+            )}
           </>
         )}
       </View>

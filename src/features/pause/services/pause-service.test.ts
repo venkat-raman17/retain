@@ -12,16 +12,16 @@ describe('PauseService', () => {
 
     const log = await service.recordUrge({
       triggerType: 'boredom',
-      intensityBefore: 7,
-      intensityAfter: 3,
+      intensityBefore: 4,
+      intensityAfter: 2,
       completedPauseTimerSeconds: 180,
       selectedResponse: '20 push-ups',
       note: null,
     });
 
     expect(log.triggerType).toBe('boredom');
-    expect(log.intensityBefore).toBe(7);
-    expect(log.intensityAfter).toBe(3);
+    expect(log.intensityBefore).toBe(4);
+    expect(log.intensityAfter).toBe(2);
     expect(log.completedPauseTimerSeconds).toBe(180);
     expect(log.selectedResponse).toBe('20 push-ups');
   });
@@ -42,7 +42,7 @@ describe('PauseService', () => {
     const service = new PauseService(repos.urge, CLOCK);
 
     await service.recordUrge({ intensityBefore: 4, triggerType: 'lust' });
-    await service.recordUrge({ intensityBefore: 6, triggerType: 'loneliness' });
+    await service.recordUrge({ intensityBefore: 3, triggerType: 'loneliness' });
 
     const logs = await service.listRecent(10);
     expect(logs).toHaveLength(2);
@@ -54,7 +54,7 @@ describe('PauseService', () => {
 
     const log = await service.recordUrge({
       triggerType: 'habit',
-      intensityBefore: 8,
+      intensityBefore: 5,
       intensityAfter: null,
     });
 

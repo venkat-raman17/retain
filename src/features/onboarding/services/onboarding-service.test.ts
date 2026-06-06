@@ -25,6 +25,7 @@ const BASE_DRAFT: OnboardingDraft = {
   forgeCategory: 'mind',
   boundaryChoice: 'No phone in bed.',
   customBoundaryTitle: null,
+  offsetDays: 0,
 };
 
 describe('OnboardingService', () => {
@@ -110,6 +111,14 @@ describe('OnboardingService', () => {
     const profile = await repos.profile.get();
     expect(profile.currentPathStartedAt).not.toBeNull();
     expect(profile.pathStartedAt).not.toBeNull();
+  });
+
+  it('backdates the path start when offsetDays is set', async () => {
+    const { repos, service } = makeService();
+    await service.complete({ ...BASE_DRAFT, offsetDays: 13 });
+    const profile = await repos.profile.get();
+    // Clock is 2024-01-15; 13 days back = 2024-01-02
+    expect(profile.currentPathStartedAt).toContain('2024-01-02');
   });
 
   it('emits a path_started event', async () => {

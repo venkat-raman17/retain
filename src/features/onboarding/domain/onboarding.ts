@@ -12,6 +12,7 @@ export const ONBOARDING_STEPS = [
   'forge',
   'boundary',
   'disclaimer',
+  'path_start',
   'begin',
 ] as const;
 
@@ -98,4 +99,6 @@ export interface OnboardingDraft {
    */
   boundaryChoice: string | null;
   customBoundaryTitle: string | null;
+  /** Days already completed before install (0 = starting fresh today). */
+  offsetDays: number;
 }

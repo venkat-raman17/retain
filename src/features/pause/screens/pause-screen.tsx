@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Animated, Easing, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -12,13 +12,11 @@ import {
   AppSelectList,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { systemClock } from '@/shared/lib';
 import { Routes } from '@/navigation';
-import { useRepositories } from '@/shared/storage';
 
 import { PAUSE_COMMANDS, TIMER_OPTIONS } from '../domain/commands';
-import { TRIGGER_TYPES, type TriggerType } from '../domain/urge-log';
-import { PauseService } from '../services/pause-service';
+import { TRIGGER_LABELS, TRIGGER_TYPES, type TriggerType } from '../domain/urge-log';
+import { usePause } from '../hooks/use-pause';
 import { usePauseSession } from '../store/pause-session';
 
 type PauseStep =
@@ -33,8 +31,16 @@ type PauseStep =
 
 const TRIGGER_OPTIONS: SelectOption<TriggerType>[] = TRIGGER_TYPES.map((t) => ({
   value: t,
-  label: t.charAt(0).toUpperCase() + t.slice(1),
+  label: TRIGGER_LABELS[t],
 }));
+
+const INTENSITY_LEVELS = [
+  { value: 1, label: 'Calm' },
+  { value: 2, label: 'Noticeable' },
+  { value: 3, label: 'Strong' },
+  { value: 4, label: 'Heavy' },
+  { value: 5, label: 'Overwhelming' },
+] as const;
 
 const COMMAND_OPTIONS: SelectOption<string>[] = PAUSE_COMMANDS.map((c) => ({
   value: c,
@@ -51,8 +57,7 @@ function formatTime(seconds: number): string {
 
 export function PauseScreen() {
   const router = useRouter();
-  const { urge: urgeRepo } = useRepositories();
-  const pauseService = useMemo(() => new PauseService(urgeRepo, systemClock), [urgeRepo]);
+  const { recordUrge } = usePause();
   const { phase, cycles, start, stop, setPhase, completeCycle } = usePauseSession();
   const [scale] = useState(() => new Animated.Value(0.6));
 
@@ -122,7 +127,7 @@ export function PauseScreen() {
     if (!triggerType || !intensityBefore) return;
     setSaving(true);
     try {
-      const log = await pauseService.recordUrge({
+      const log = await recordUrge({
         triggerType,
         intensityBefore,
         intensityAfter,
@@ -175,7 +180,7 @@ export function PauseScreen() {
           <StepTimerSelect
             value={timerSeconds}
             onChange={setTimerSeconds}
-            onContinue={() => setStep('breathing')}
+            onContinue={() => { setTimeLeft(timerSeconds); setStep('breathing'); }}
             onBack={() => setStep('intensity_before')}
           />
         )}
@@ -221,6 +226,12 @@ export function PauseScreen() {
               router.back();
               router.push(Routes.forge);
             }}
+            onJournal={() =>
+              router.push({
+                pathname: Routes.journal,
+                params: { initialType: 'urge' },
+              })
+            }
           />
         )}
       </ScrollView>
@@ -249,7 +260,7 @@ function StepEntry({ onContinue, onDismiss }: { onContinue: () => void; onDismis
       </AppCard>
       <View style={styles.nav}>
         <AppButton label="Enter the pause" fullWidth onPress={onContinue} />
-        <AppButton label="I already rode it out" variant="ghost" fullWidth onPress={onDismiss} />
+        <AppButton label="I rode it out" variant="ghost" fullWidth onPress={onDismiss} />
       </View>
     </View>
   );
@@ -334,7 +345,10 @@ function StepTimerSelect({
     <View style={styles.step}>
       <AppText variant="title">Choose the duration.</AppText>
       <AppText variant="body" color="secondary">
-        {'Breathe until the body remembers who leads.'}
+        {'Breathe until the body remembers command.'}
+      </AppText>
+      <AppText variant="caption" color="muted">
+        {'You can end the pause at any time.'}
       </AppText>
       <View style={styles.timerRow}>
         {TIMER_OPTIONS.map((opt) => (
@@ -432,10 +446,12 @@ function StepComplete({
   urgeId,
   onDone,
   onForge,
+  onJournal,
 }: {
   urgeId: string | null;
   onDone: () => void;
   onForge: () => void;
+  onJournal: () => void;
 }) {
   return (
     <View style={styles.step}>
@@ -463,6 +479,7 @@ function StepComplete({
             fullWidth
             onPress={onForge}
           />
+          <AppButton label="Record in journal" variant="ghost" fullWidth onPress={onJournal} />
           <AppButton label="Done" variant="ghost" fullWidth onPress={onDone} />
         </View>
       ) : (
@@ -480,23 +497,17 @@ function IntensityPicker({
   onChange: (n: number) => void;
 }) {
   return (
-    <View>
-      <View style={styles.intensityRow}>
-        {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-          <AppChip
-            key={n}
-            label={n.toString()}
-            tone="support"
-            selected={value === n}
-            onPress={() => onChange(n)}
-            style={styles.intensityChip}
-          />
-        ))}
-      </View>
-      <View style={styles.intensityLabels}>
-        <AppText variant="caption" color="muted">Mild</AppText>
-        <AppText variant="caption" color="muted">Overwhelming</AppText>
-      </View>
+    <View style={styles.intensityColumn}>
+      {INTENSITY_LEVELS.map((level) => (
+        <AppChip
+          key={level.value}
+          label={level.label}
+          tone="support"
+          selected={value === level.value}
+          onPress={() => onChange(level.value)}
+          style={styles.intensityChip}
+        />
+      ))}
     </View>
   );
 }
@@ -520,16 +531,6 @@ const styles = StyleSheet.create({
   breathLabel: { textAlign: 'center' },
   timerRow: { flexDirection: 'row', gap: theme.spacing.md },
   timerChip: { flex: 1, alignSelf: 'auto', alignItems: 'center' },
-  intensityRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-    justifyContent: 'center',
-  },
-  intensityChip: { minWidth: 44, alignItems: 'center', alignSelf: 'auto', flex: undefined },
-  intensityLabels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: theme.spacing.xs,
-  },
+  intensityColumn: { gap: theme.spacing.sm },
+  intensityChip: { alignSelf: 'stretch' },
 });

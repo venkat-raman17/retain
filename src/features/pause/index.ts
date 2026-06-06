@@ -1,4 +1,6 @@
 export { PauseScreen } from './screens/pause-screen';
+export { usePause } from './hooks/use-pause';
+export type { UsePause } from './hooks/use-pause';
 export { usePauseSession } from './store/pause-session';
 export type { BreathPhase } from './store/pause-session';
 export { PauseService } from './services/pause-service';

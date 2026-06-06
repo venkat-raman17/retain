@@ -2,6 +2,10 @@
  * Centralized user-facing copy. All durable UI strings live here so the voice
  * stays consistent and is reviewable in one place against the content rules in
  * CLAUDE.md. Screens import from here rather than hardcoding text.
+ *
+ * Dynamic per-day content (teachings, commands, seals) is NOT here — it lives in
+ * bundled content (`src/content/bundled/daily-path`, archetypes, rites, …) and is
+ * read through the content loaders. This file holds the app's *chrome* copy.
  */
 export const copy = {
   app: {
@@ -13,7 +17,7 @@ export const copy = {
     forge: 'Forge',
     journal: 'Journal',
     codex: 'Codex',
-    progress: 'Progress',
+    progress: 'Record',
   },
   actions: {
     begin: 'Begin',
@@ -26,76 +30,167 @@ export const copy = {
     openSettings: 'Settings',
     viewSafety: 'Safety & disclaimer',
   },
+
+  onboarding: {
+    eyebrow: {
+      intro: 'Before the path begins',
+      disclaimer: 'Before you begin',
+      pathStart: 'Your path',
+      threshold: 'The threshold',
+    },
+    actions: {
+      continue: 'Continue',
+      acknowledge: 'I acknowledge',
+      begin: 'Begin the practice',
+      back: 'Back',
+    },
+    welcome: {
+      title: 'Welcome to Retain.',
+      subtitle: 'A private practice of pause, command, and transmutation.',
+      quote: '"When the fire rises, what will you remember?"',
+      body: 'Retain is a practice, not a promise. It does not ask you to be perfect. It asks you to choose — every time the fire rises — whether you will obey the compulsion or govern it.',
+    },
+    philosophy: {
+      title: 'This is not about hating desire.',
+      subtitle: 'The energy is the ally. The compulsion is the enemy. The man is never the enemy.',
+      body: [
+        'This practice does not ask you to deny your nature, shame your body, or see desire as evil.',
+        'It asks you to pause. To choose. To give the energy a worthy destination.',
+        'The same fire that pulls you toward compulsion can be turned toward discipline, creation, courage, and depth.',
+      ],
+      quote: 'Desire is not evil. The body is not dirty.',
+      quoteAttribution: 'Retain principle',
+    },
+    privacy: {
+      title: 'Your practice is private.',
+      subtitle: 'No account. No cloud. No public profile.',
+      bullets: [
+        'No account is created.',
+        'No analytics collected.',
+        'No private practice leaves your device.',
+        'Works without internet.',
+        'The vault belongs to you alone.',
+      ],
+      footer: 'What you build here is between you and your practice.',
+    },
+    intention: {
+      title: 'Why are you here?',
+      subtitle: 'Choose the reason you entered this practice.',
+    },
+    vow: {
+      title: 'Choose your vow.',
+      subtitle: 'This is the sentence you return to when the fire rises.',
+      customLabel: 'Your vow',
+      customPlaceholder: 'Write your vow in one sentence...',
+    },
+    forge: {
+      title: 'Where will you forge first?',
+      subtitle: 'Choose where your energy will be turned into action.',
+    },
+    boundary: {
+      title: 'Guard the gates.',
+      subtitle: 'A boundary is a small rule that wins before the battle begins.',
+      customLabel: 'Your boundary',
+      customPlaceholder: 'Name one rule you will keep...',
+    },
+    pathStart: {
+      title: 'Where are you?',
+      subtitle: 'Honor the work you have already done.',
+      existingLabel: 'What day are you on?',
+      existingPlaceholder: 'e.g. 14',
+      today: { label: 'Starting today.', description: 'Begin fresh. Day 1 starts now.' },
+      existing: { label: "I'm already on a path.", description: 'Tell the app which day you are on.' },
+    },
+    disclaimer: {
+      title: 'Before you begin.',
+      subtitle: 'Read and acknowledge.',
+      cardTitle: 'A note before the practice',
+      paragraphs: [
+        'Retain is a philosophical self-mastery, journaling, and discipline app. It is not medical advice, therapy, diagnosis, or a mental health service.',
+        'Retain does not diagnose, treat, cure, or prevent any condition. It makes no claims about testosterone, fertility, attraction, disease, depression, anxiety, or athletic performance.',
+        'The teaching draws from philosophical and historical traditions only. It is not religious authority, medical fact, or sexual technique.',
+        'Desire is not evil. The body is not dirty. The practice is about pause, reflection, discipline, and direction.',
+      ],
+    },
+    begin: {
+      title: 'The path begins in the pause.',
+      subtitle: 'Your practice is set. The work starts now.',
+      quote: 'The path begins in the pause.',
+      quoteAttribution: 'Retain',
+      summaryLabels: {
+        vow: 'Vow',
+        intention: 'Intention',
+        forge: 'First forge',
+        boundary: 'First boundary',
+      },
+    },
+  },
+
   path: {
-    eyebrow: 'The Path',
-    title: 'Walk today with intention',
-    description:
-      'Your daily ground. See where you stand, set the tone, and take one deliberate step.',
-    points: [
-      'Your current streak and a word of intention for today',
-      'A principle to carry with you',
-      'Quick reach for Pause, Forge, and the Journal',
-    ],
+    notStarted: {
+      eyebrow: 'The Path',
+      title: 'The Practice Begins',
+      subtitle: 'Pause. Choose. Transmute.',
+      body: 'The path begins in the pause. Begin when you are ready.',
+      begin: 'Begin the practice',
+    },
+    vowAttribution: 'Your vow',
+    stats: { day: 'Day', streak: 'Streak', urges: 'Urges', forge: 'Forge' },
+    crown: {
+      label: 'The Crown is earned',
+      body: 'Ninety days. You have been formed. Receive the Crown.',
+      action: 'Receive the Crown',
+    },
+    milestoneHint: "A milestone rite awaits within today's chamber.",
+    openChamber: "Open Today's Chamber",
+    logForge: 'Log a Forge Act',
+    journalTonight: 'Journal Tonight',
+    viewMap: 'View the Map',
+    previewCommand: "Today's command",
+    previewEvening: 'Evening account',
+    longPathComplete:
+      'The daily chambers are complete. Walk the Long Path — revisit any day from the map.',
+    recordLapse: 'Record a lapse and return',
+    feelTheFire: 'I Feel the Fire',
   },
-  forge: {
-    eyebrow: 'The Forge',
-    title: 'Transmute the current',
-    description: 'Give the energy somewhere worthy to go. Choose a direction and begin.',
-    categories: [
-      { name: 'Body', example: 'Train, walk, stretch, cold exposure, breathwork.' },
-      { name: 'Mind', example: 'Study, read, plan, solve, deep work.' },
-      { name: 'Spirit', example: 'Pray, meditate, sit in silence, gratitude.' },
-      { name: 'Order', example: 'Clean your space, prepare food, remove temptation.' },
-      { name: 'Creation', example: 'Write, build, draw, practice a skill.' },
-      { name: 'Brotherhood', example: 'Call a friend, serve someone, speak honestly.' },
-    ],
+
+  chamber: {
+    locked: {
+      title: 'This chamber is not yet open.',
+      body: "Walk today's fire first.",
+    },
+    return: 'Return',
+    labels: {
+      teaching: 'Teaching',
+      command: "Today's command",
+      practice: 'Practice',
+      forge: 'Forge',
+      journalPrompt: 'Journal prompt',
+      openJournal: 'Open journal',
+      eveningAccount: 'Evening account',
+      milestoneRite: 'Milestone rite',
+      vowRenewal: 'Vow renewal',
+      keyEarned: 'Key earned',
+    },
+    secret: {
+      defaultLabel: 'Hidden Instruction',
+      lockedHint: 'Open after reading.',
+      types: {
+        hidden_teaching: 'Hidden Teaching',
+        ancient_key: 'Ancient Key',
+        archetype_trial: 'Trial',
+        forge_assignment: 'Forge Assignment',
+        night_warning: 'Night Warning',
+        lapse_medicine: 'Lapse Medicine',
+        crown_fragment: 'Crown Fragment',
+      },
+    },
+    complete: {
+      done: 'Day recorded. Well walked.',
+      gate: 'Open the hidden instruction before completing the day.',
+    },
   },
-  journal: {
-    eyebrow: 'The Journal',
-    title: 'Reflect in private',
-    description: 'A confidential place to notice patterns, mark insights, and meet urges honestly.',
-    empty: 'Nothing here yet. Your first reflection will appear once you write it.',
-    points: [
-      'Reflections, gratitude, urge notes, and insights',
-      'Optional mood and energy markers',
-      'Stored only on this device',
-    ],
-  },
-  codex: {
-    eyebrow: 'The Codex',
-    title: 'Study the practice',
-    description: 'Teachings on transmutation, mindset, and building a life that needs no escape.',
-    points: [
-      'Short readings you can finish in a few minutes',
-      'Principle, practice, science, and mindset',
-      'Perspectives to return to, never medical claims',
-    ],
-  },
-  progress: {
-    eyebrow: 'Progress',
-    title: 'See how far you have come',
-    description: 'A private view of your streaks, recoveries, and the rhythm of your practice.',
-    points: [
-      'Current and best streak',
-      'Resets framed as learning, not as a scoreboard',
-      'Reflections logged over time',
-    ],
-  },
-  pause: {
-    eyebrow: 'Pause',
-    title: 'Ride the wave',
-    description:
-      'An urge is a wave — it rises, peaks, and passes. Breathe with it. You do not have to act.',
-    breatheIn: 'Breathe in',
-    hold: 'Hold',
-    breatheOut: 'Breathe out',
-    reassurance: 'This will pass. You are doing the work right now.',
-    points: [
-      'A guided breath to ride the urge out',
-      'A reminder of why you started',
-      'A soft landing — record it later in the Journal if you wish',
-    ],
-  },
+
   settings: {
     eyebrow: 'Settings',
     title: 'Your space',
