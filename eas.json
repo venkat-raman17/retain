@@ -1,0 +1,53 @@
+{
+  "cli": {
+    "version": ">= 10.0.0",
+    "promptToConfigurePushNotifications": false
+  },
+  "build": {
+    "dev": {
+      "android": {
+        "buildType": "apk",
+        "withoutCredentials": true
+      },
+      "ios": {
+        "buildType": "simulator"
+      }
+    },
+    "preview": {
+      "android": {
+        "buildType": "apk",
+        "credentialsSource": "remote",
+        "releaseChannel": "preview"
+      },
+      "ios": {
+        "buildType": "ipa",
+        "credentialsSource": "remote",
+        "releaseChannel": "preview",
+        "enterpriseProvisioning": "adhoc"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "aab",
+        "credentialsSource": "remote",
+        "releaseChannel": "production"
+      },
+      "ios": {
+        "buildType": "ipa",
+        "credentialsSource": "remote",
+        "releaseChannel": "production",
+        "enterpriseProvisioning": "universal"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccount": "./service-account-key.json"
+      },
+      "ios": {
+        "appleId": "your-apple-id@example.com"
+      }
+    }
+  }
+}
