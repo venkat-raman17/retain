@@ -12,7 +12,10 @@
     "ios": {
       "bundleIdentifier": "com.venkatramanks.retain",
       "icon": "./assets/expo.icon",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.venkatramanks.retain",
