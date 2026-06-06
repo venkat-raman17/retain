@@ -14,7 +14,7 @@ import { AppText, type TextColor } from './text';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'support';
 export type ButtonSize = 'md' | 'lg';
 
-export interface ButtonProps extends Omit<PressableProps, 'style' | 'children'> {
+export interface AppButtonProps extends Omit<PressableProps, 'style' | 'children'> {
   label: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -24,7 +24,10 @@ export interface ButtonProps extends Omit<PressableProps, 'style' | 'children'> 
 
 const containerVariant: Record<ButtonVariant, ViewStyle> = {
   primary: { backgroundColor: theme.colors.primary },
-  secondary: { backgroundColor: theme.colors.surfaceOverlay, borderColor: theme.colors.borderStrong },
+  secondary: {
+    backgroundColor: theme.colors.surfaceOverlay,
+    borderColor: theme.colors.borderStrong,
+  },
   ghost: { backgroundColor: 'transparent' },
   support: { backgroundColor: theme.colors.supportSoft, borderColor: theme.colors.support },
 };
@@ -36,7 +39,7 @@ const labelColor: Record<ButtonVariant, TextColor> = {
   support: 'support',
 };
 
-export function Button({
+export function AppButton({
   label,
   variant = 'primary',
   size = 'md',
@@ -44,7 +47,7 @@ export function Button({
   fullWidth = false,
   disabled,
   ...rest
-}: ButtonProps) {
+}: AppButtonProps) {
   const isDisabled = disabled === true || loading;
 
   return (

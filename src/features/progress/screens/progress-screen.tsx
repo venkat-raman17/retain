@@ -1,65 +1,51 @@
-import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { copy } from '@/content';
-import { usePracticeState } from '@/features/path';
-import { AppText, Card, Screen, ScreenHeader } from '@/shared/components';
+import { AppText, AppCard, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
-import { useRepositories } from '@/shared/storage';
+
+import { useProgressSummary } from '../hooks/use-progress-summary';
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <Card style={styles.stat}>
+    <AppCard style={styles.stat}>
       <AppText variant="display" color="energy">
         {value}
       </AppText>
       <AppText variant="caption" color="muted" uppercase>
         {label}
       </AppText>
-    </Card>
+    </AppCard>
   );
 }
 
 export function ProgressScreen() {
-  const { state, streakDays } = usePracticeState();
-  const { journal, progress } = useRepositories();
-  const [journalCount, setJournalCount] = useState(0);
-  const [recoveries, setRecoveries] = useState(0);
-
-  useEffect(() => {
-    let active = true;
-    void Promise.all([journal.count(), progress.lapseCount()]).then(([entries, lapses]) => {
-      if (!active) return;
-      setJournalCount(entries);
-      setRecoveries(lapses);
-    });
-    return () => {
-      active = false;
-    };
-  }, [journal, progress]);
+  const { summary } = useProgressSummary();
 
   return (
-    <Screen scroll>
+    <AppScreen scroll>
       <View style={styles.container}>
-        <ScreenHeader
+        <AppHeader
           eyebrow={copy.progress.eyebrow}
           title={copy.progress.title}
           subtitle={copy.progress.description}
         />
         <View style={styles.grid}>
-          <Stat label="Current streak" value={`${streakDays}d`} />
-          <Stat label="Best streak" value={`${state?.bestStreakDays ?? 0}d`} />
-          <Stat label="Recoveries" value={`${recoveries}`} />
-          <Stat label="Reflections" value={`${journalCount}`} />
+          <Stat label="Current path" value={`${summary?.currentPathDays ?? 0}d`} />
+          <Stat label="Longest path" value={`${summary?.longestPathDays ?? 0}d`} />
+          <Stat label="Total practice" value={`${summary?.totalPracticeDays ?? 0}d`} />
+          <Stat label="Urges observed" value={`${summary?.urgesObserved ?? 0}`} />
+          <Stat label="Forge acts" value={`${summary?.forgeActs ?? 0}`} />
+          <Stat label="Returns" value={`${summary?.returnsRecorded ?? 0}`} />
         </View>
-        <Card tone="overlay">
+        <AppCard tone="overlay">
           <AppText variant="body" color="calm">
-            Every reset is a recovery, not a verdict. The numbers here are for learning, never for
-            judgment.
+            Your practice is more than a streak. Command is trained in the return, and a lapse is
+            studied — never worshiped.
           </AppText>
-        </Card>
+        </AppCard>
       </View>
-    </Screen>
+    </AppScreen>
   );
 }
 

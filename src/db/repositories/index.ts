@@ -1,24 +1,56 @@
 import type { AppDatabase } from '../database';
+import { SqliteBoundaryRepository, type BoundaryRepository } from './boundary-repository';
+import {
+  SqliteContentProgressRepository,
+  type ContentProgressRepository,
+} from './content-progress-repository';
+import { SqliteForgeRepository, type ForgeRepository } from './forge-repository';
 import { SqliteJournalRepository, type JournalRepository } from './journal-repository';
-import { SqliteProgressRepository, type ProgressRepository } from './progress-repository';
+import { SqliteLapseRepository, type LapseRepository } from './lapse-repository';
+import { SqlitePathRepository, type PathRepository } from './path-repository';
 import { SqliteSettingsRepository, type SettingsRepository } from './settings-repository';
+import { SqliteUrgeRepository, type UrgeRepository } from './urge-repository';
+import { SqliteUserProfileRepository, type UserProfileRepository } from './user-profile-repository';
 
 /**
  * The repository registry passed through the app via the storage provider. Add
  * new repositories here; features consume them via `useRepositories()`.
  */
 export interface Repositories {
+  profile: UserProfileRepository;
+  path: PathRepository;
+  urge: UrgeRepository;
+  forge: ForgeRepository;
   journal: JournalRepository;
+  lapse: LapseRepository;
+  boundary: BoundaryRepository;
+  contentProgress: ContentProgressRepository;
   settings: SettingsRepository;
-  progress: ProgressRepository;
 }
 
 export function createRepositories(db: AppDatabase): Repositories {
   return {
+    profile: new SqliteUserProfileRepository(db),
+    path: new SqlitePathRepository(db),
+    urge: new SqliteUrgeRepository(db),
+    forge: new SqliteForgeRepository(db),
     journal: new SqliteJournalRepository(db),
+    lapse: new SqliteLapseRepository(db),
+    boundary: new SqliteBoundaryRepository(db),
+    contentProgress: new SqliteContentProgressRepository(db),
     settings: new SqliteSettingsRepository(db),
-    progress: new SqliteProgressRepository(db),
   };
 }
 
-export type { JournalRepository, SettingsRepository, ProgressRepository };
+export type {
+  UserProfileRepository,
+  PathRepository,
+  UrgeRepository,
+  ForgeRepository,
+  JournalRepository,
+  LapseRepository,
+  BoundaryRepository,
+  ContentProgressRepository,
+  SettingsRepository,
+};
+export type { ForgeCategoryCount } from './forge-repository';

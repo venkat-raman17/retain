@@ -10,6 +10,7 @@
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
     "allowUnreachableCode": false,
+    "types": ["jest", "node", "react"],
     "paths": {
       "@/*": [
         "./src/*"

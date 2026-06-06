@@ -10,7 +10,6 @@ export const UNSAFE_TERMS: readonly string[] = [
   'disgust',
   'disgusting',
   'filthy',
-  'dirty',
   'pathetic',
   'worthless',
   'loser',

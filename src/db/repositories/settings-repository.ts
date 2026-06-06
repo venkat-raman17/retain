@@ -1,85 +1,70 @@
 import {
-  appSettingsSchema,
-  DEFAULT_SETTINGS,
-  type AppSettings,
-  type AppSettingsPatch,
+  appPreferencesSchema,
+  DEFAULT_PREFERENCES,
+  SETTING_KEYS,
+  type AppPreferences,
+  type AppPreferencesPatch,
 } from '@/features/settings/domain/settings';
 
 import type { AppDatabase } from '../database';
 
+/**
+ * Generic key/value store plus a typed preferences facade over it. Booleans are
+ * persisted as '0'/'1' strings.
+ */
 export interface SettingsRepository {
-  /** Returns settings, materializing the default row on first read. */
-  get(): Promise<AppSettings>;
-  update(patch: AppSettingsPatch): Promise<AppSettings>;
+  get(key: string): Promise<string | null>;
+  set(key: string, value: string): Promise<void>;
+  getPreferences(): Promise<AppPreferences>;
+  updatePreferences(patch: AppPreferencesPatch): Promise<AppPreferences>;
 }
 
-interface SettingsRow {
-  onboarding_completed: number;
-  safety_acknowledged: number;
-  haptics_enabled: number;
-  reminders_enabled: number;
-  updated_at: string;
-}
-
-const bit = (value: boolean): number => (value ? 1 : 0);
-
-function toSettings(row: SettingsRow): AppSettings {
-  return appSettingsSchema.parse({
-    onboardingCompleted: row.onboarding_completed === 1,
-    safetyAcknowledged: row.safety_acknowledged === 1,
-    hapticsEnabled: row.haptics_enabled === 1,
-    remindersEnabled: row.reminders_enabled === 1,
-    updatedAt: row.updated_at,
-  });
-}
+const readBit = (value: string | null, fallback: boolean): boolean =>
+  value === null ? fallback : value === '1';
+const writeBit = (value: boolean): string => (value ? '1' : '0');
 
 export class SqliteSettingsRepository implements SettingsRepository {
   constructor(private readonly db: AppDatabase) {}
 
-  async get(): Promise<AppSettings> {
-    const row = await this.db.getFirst<SettingsRow>('SELECT * FROM settings WHERE id = 1;');
-    if (row) return toSettings(row);
-
-    const now = new Date().toISOString();
-    const seeded = appSettingsSchema.parse({ ...DEFAULT_SETTINGS, updatedAt: now });
-    await this.db.run(
-      `INSERT OR IGNORE INTO settings
-         (id, onboarding_completed, safety_acknowledged, haptics_enabled, reminders_enabled, updated_at)
-       VALUES (1, ?, ?, ?, ?, ?);`,
-      [
-        bit(seeded.onboardingCompleted),
-        bit(seeded.safetyAcknowledged),
-        bit(seeded.hapticsEnabled),
-        bit(seeded.remindersEnabled),
-        now,
-      ],
+  async get(key: string): Promise<string | null> {
+    const row = await this.db.getFirst<{ value: string }>(
+      'SELECT value FROM settings WHERE key = ?;',
+      [key],
     );
-    return seeded;
+    return row?.value ?? null;
   }
 
-  async update(patch: AppSettingsPatch): Promise<AppSettings> {
-    const current = await this.get();
-    const next = appSettingsSchema.parse({
-      ...current,
-      ...patch,
-      updatedAt: new Date().toISOString(),
-    });
+  async set(key: string, value: string): Promise<void> {
     await this.db.run(
-      `UPDATE settings SET
-         onboarding_completed = ?,
-         safety_acknowledged = ?,
-         haptics_enabled = ?,
-         reminders_enabled = ?,
-         updated_at = ?
-       WHERE id = 1;`,
-      [
-        bit(next.onboardingCompleted),
-        bit(next.safetyAcknowledged),
-        bit(next.hapticsEnabled),
-        bit(next.remindersEnabled),
-        next.updatedAt,
-      ],
+      `INSERT INTO settings (key, value, updated_at) VALUES (?, ?, ?)
+       ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at;`,
+      [key, value, new Date().toISOString()],
     );
-    return next;
+  }
+
+  async getPreferences(): Promise<AppPreferences> {
+    const [haptics, reminders, safety] = await Promise.all([
+      this.get(SETTING_KEYS.hapticsEnabled),
+      this.get(SETTING_KEYS.remindersEnabled),
+      this.get(SETTING_KEYS.safetyAcknowledged),
+    ]);
+    return appPreferencesSchema.parse({
+      hapticsEnabled: readBit(haptics, DEFAULT_PREFERENCES.hapticsEnabled),
+      remindersEnabled: readBit(reminders, DEFAULT_PREFERENCES.remindersEnabled),
+      safetyAcknowledged: readBit(safety, DEFAULT_PREFERENCES.safetyAcknowledged),
+    });
+  }
+
+  async updatePreferences(patch: AppPreferencesPatch): Promise<AppPreferences> {
+    if (patch.hapticsEnabled !== undefined) {
+      await this.set(SETTING_KEYS.hapticsEnabled, writeBit(patch.hapticsEnabled));
+    }
+    if (patch.remindersEnabled !== undefined) {
+      await this.set(SETTING_KEYS.remindersEnabled, writeBit(patch.remindersEnabled));
+    }
+    if (patch.safetyAcknowledged !== undefined) {
+      await this.set(SETTING_KEYS.safetyAcknowledged, writeBit(patch.safetyAcknowledged));
+    }
+    return this.getPreferences();
   }
 }

@@ -1,14 +1,14 @@
-import { journalEntrySchema, type JournalEntry } from '@/features/journal/domain/journal-entry';
+import {
+  journalEntrySchema,
+  type JournalEntry,
+  type JournalType,
+} from '@/features/journal/domain/journal-entry';
 
 import type { AppDatabase } from '../database';
 
-/**
- * Port: how the rest of the app reads and writes journal entries. Screens and
- * services depend on this interface; the SQLite implementation below is the only
- * code that knows about tables and SQL.
- */
 export interface JournalRepository {
   list(limit?: number): Promise<JournalEntry[]>;
+  listByType(type: JournalType, limit?: number): Promise<JournalEntry[]>;
   getById(id: string): Promise<JournalEntry | null>;
   save(entry: JournalEntry): Promise<void>;
   remove(id: string): Promise<void>;
@@ -19,11 +19,11 @@ interface JournalRow {
   id: string;
   created_at: string;
   updated_at: string;
-  kind: string;
-  mood: number | null;
-  energy: number | null;
+  type: string;
+  prompt_id: string | null;
+  title: string | null;
   body: string;
-  tags: string;
+  mood: number | null;
 }
 
 function toEntry(row: JournalRow): JournalEntry {
@@ -31,11 +31,11 @@ function toEntry(row: JournalRow): JournalEntry {
     id: row.id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
-    kind: row.kind,
-    mood: row.mood,
-    energy: row.energy,
+    type: row.type,
+    promptId: row.prompt_id,
+    title: row.title,
     body: row.body,
-    tags: JSON.parse(row.tags) as unknown,
+    mood: row.mood,
   });
 }
 
@@ -50,34 +50,37 @@ export class SqliteJournalRepository implements JournalRepository {
     return rows.map(toEntry);
   }
 
-  async getById(id: string): Promise<JournalEntry | null> {
-    const row = await this.db.getFirst<JournalRow>(
-      'SELECT * FROM journal_entries WHERE id = ?;',
-      [id],
+  async listByType(type: JournalType, limit = 100): Promise<JournalEntry[]> {
+    const rows = await this.db.getAll<JournalRow>(
+      'SELECT * FROM journal_entries WHERE type = ? ORDER BY created_at DESC LIMIT ?;',
+      [type, limit],
     );
+    return rows.map(toEntry);
+  }
+
+  async getById(id: string): Promise<JournalEntry | null> {
+    const row = await this.db.getFirst<JournalRow>('SELECT * FROM journal_entries WHERE id = ?;', [
+      id,
+    ]);
     return row ? toEntry(row) : null;
   }
 
   async save(entry: JournalEntry): Promise<void> {
     await this.db.run(
-      `INSERT INTO journal_entries (id, created_at, updated_at, kind, mood, energy, body, tags)
+      `INSERT INTO journal_entries (id, created_at, updated_at, type, prompt_id, title, body, mood)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(id) DO UPDATE SET
-         updated_at = excluded.updated_at,
-         kind = excluded.kind,
-         mood = excluded.mood,
-         energy = excluded.energy,
-         body = excluded.body,
-         tags = excluded.tags;`,
+         updated_at = excluded.updated_at, type = excluded.type, prompt_id = excluded.prompt_id,
+         title = excluded.title, body = excluded.body, mood = excluded.mood;`,
       [
         entry.id,
         entry.createdAt,
         entry.updatedAt,
-        entry.kind,
-        entry.mood,
-        entry.energy,
+        entry.type,
+        entry.promptId,
+        entry.title,
         entry.body,
-        JSON.stringify(entry.tags),
+        entry.mood,
       ],
     );
   }
@@ -87,9 +90,7 @@ export class SqliteJournalRepository implements JournalRepository {
   }
 
   async count(): Promise<number> {
-    const row = await this.db.getFirst<{ n: number }>(
-      'SELECT COUNT(*) AS n FROM journal_entries;',
-    );
+    const row = await this.db.getFirst<{ n: number }>('SELECT COUNT(*) AS n FROM journal_entries;');
     return row?.n ?? 0;
   }
 }

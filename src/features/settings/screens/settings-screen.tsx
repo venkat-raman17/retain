@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { StyleSheet, Switch, View } from 'react-native';
 
 import { copy } from '@/content';
-import { AppText, Button, Card, Divider, Screen, ScreenHeader } from '@/shared/components';
+import { AppText, AppButton, AppCard, AppDivider, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
 import { Routes } from '@/navigation';
 
@@ -39,34 +39,34 @@ function ToggleRow({
 
 export function SettingsScreen() {
   const router = useRouter();
-  const { settings, update } = useSettings();
+  const { preferences, update } = useSettings();
 
   return (
-    <Screen scroll>
+    <AppScreen scroll>
       <View style={styles.container}>
-        <ScreenHeader
+        <AppHeader
           eyebrow={copy.settings.eyebrow}
           title={copy.settings.title}
           subtitle={copy.settings.description}
         />
 
-        <Card padded={false} style={styles.group}>
+        <AppCard padded={false} style={styles.group}>
           <ToggleRow
             label="Haptics"
             description="Subtle vibration feedback"
-            value={settings?.hapticsEnabled ?? true}
+            value={preferences?.hapticsEnabled ?? true}
             onValueChange={(next) => void update({ hapticsEnabled: next })}
           />
-          <Divider inset />
+          <AppDivider inset />
           <ToggleRow
             label="Gentle reminders"
             description="Local nudges to return to the practice"
-            value={settings?.remindersEnabled ?? false}
+            value={preferences?.remindersEnabled ?? false}
             onValueChange={(next) => void update({ remindersEnabled: next })}
           />
-        </Card>
+        </AppCard>
 
-        <Button
+        <AppButton
           label={copy.actions.viewSafety}
           variant="secondary"
           fullWidth
@@ -77,7 +77,7 @@ export function SettingsScreen() {
           No account · No tracking · Fully offline · v1
         </AppText>
       </View>
-    </Screen>
+    </AppScreen>
   );
 }
 

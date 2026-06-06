@@ -3,7 +3,7 @@ import { StyleSheet, View, type ViewProps } from 'react-native';
 
 import { theme } from '@/shared/design';
 
-export interface CardProps extends ViewProps {
+export interface AppCardProps extends ViewProps {
   children: ReactNode;
   tone?: 'surface' | 'raised' | 'overlay';
   padded?: boolean;
@@ -15,10 +15,15 @@ const toneColor = {
   overlay: theme.colors.surfaceOverlay,
 } as const;
 
-export function Card({ children, tone = 'raised', padded = true, style, ...rest }: CardProps) {
+export function AppCard({ children, tone = 'raised', padded = true, style, ...rest }: AppCardProps) {
   return (
     <View
-      style={[styles.card, { backgroundColor: toneColor[tone] }, padded ? styles.padded : null, style]}
+      style={[
+        styles.card,
+        { backgroundColor: toneColor[tone] },
+        padded ? styles.padded : null,
+        style,
+      ]}
       {...rest}
     >
       {children}

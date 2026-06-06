@@ -1,11 +1,11 @@
 import { Tabs } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type ColorValue } from 'react-native';
 
 import { TAB_ORDER } from '@/navigation';
 import { theme } from '@/shared/design';
 
 /** A small geometric glyph that fills when its tab is active. */
-function TabGlyph({ color, focused }: { color: string; focused: boolean }) {
+function TabGlyph({ color, focused }: { color: ColorValue; focused: boolean }) {
   return (
     <View
       style={[styles.glyph, { borderColor: color, backgroundColor: focused ? color : 'transparent' }]}

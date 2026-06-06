@@ -2,37 +2,48 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useRepositories } from '@/shared/storage';
 
-import type { AppSettings, AppSettingsPatch } from '../domain/settings';
+import type { AppPreferences, AppPreferencesPatch } from '../domain/settings';
 
 export interface UseSettings {
-  settings: AppSettings | null;
+  preferences: AppPreferences | null;
   loading: boolean;
-  update: (patch: AppSettingsPatch) => Promise<AppSettings>;
-  refresh: () => Promise<void>;
+  update: (patch: AppPreferencesPatch) => Promise<AppPreferences>;
+  refresh: () => void;
 }
 
 export function useSettings(): UseSettings {
-  const { settings: repository } = useRepositories();
-  const [settings, setSettings] = useState<AppSettings | null>(null);
+  const { settings } = useRepositories();
+  const [preferences, setPreferences] = useState<AppPreferences | null>(null);
   const [loading, setLoading] = useState(true);
+  const [reloadToken, setReloadToken] = useState(0);
 
-  const refresh = useCallback(async () => {
-    setSettings(await repository.get());
-    setLoading(false);
-  }, [repository]);
+  const refresh = useCallback(() => setReloadToken((token) => token + 1), []);
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    let active = true;
+    settings
+      .getPreferences()
+      .then((value) => {
+        if (!active) return;
+        setPreferences(value);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [settings, reloadToken]);
 
   const update = useCallback(
-    async (patch: AppSettingsPatch) => {
-      const next = await repository.update(patch);
-      setSettings(next);
+    async (patch: AppPreferencesPatch) => {
+      const next = await settings.updatePreferences(patch);
+      setPreferences(next);
       return next;
     },
-    [repository],
+    [settings],
   );
 
-  return { settings, loading, update, refresh };
+  return { preferences, loading, update, refresh };
 }

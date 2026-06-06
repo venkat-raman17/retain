@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { initializeDatabase, type Repositories } from '@/db';
+import { initializeRetainDatabase, type Repositories } from '@/db';
 import { AppText } from '@/shared/components';
 import { theme } from '@/shared/design';
 import { createLogger } from '@/shared/lib';
@@ -23,7 +23,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let active = true;
-    initializeDatabase()
+    initializeRetainDatabase()
       .then((initialized) => {
         if (!active) return;
         setRepositories(initialized.repositories);

@@ -10,12 +10,12 @@ import { useRepositories } from '@/shared/storage';
  * time this renders (see AppDataProvider).
  */
 export default function BootRoute() {
-  const { settings } = useRepositories();
+  const { profile } = useRepositories();
   const [target, setTarget] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
-    void settings.get().then((value) => {
+    void profile.get().then((value) => {
       if (active) {
         setTarget(value.onboardingCompleted ? Routes.path : Routes.onboarding);
       }
@@ -23,7 +23,7 @@ export default function BootRoute() {
     return () => {
       active = false;
     };
-  }, [settings]);
+  }, [profile]);
 
   if (!target) return null;
   return <Redirect href={target} />;

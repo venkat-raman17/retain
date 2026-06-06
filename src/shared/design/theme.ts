@@ -2,11 +2,10 @@
  * Semantic theme — maps raw tokens to meaning. Components reference these names
  * (e.g. `colors.support`) so the palette can change without touching screens.
  *
- * Retain ships a single, intentional dark theme for v1. The shape below is built
- * to allow additional themes later without changing component code: consume the
- * theme via `useTheme()` rather than importing `theme` directly in new work.
+ * Retain ships a single, intentional dark theme for v1. Consume it via
+ * `useTheme()` in new work so a future theme context is a drop-in change.
  */
-import { durations, palette, radii, spacing, typography } from './tokens';
+import { durations, palette, radii, shadows, spacing, typography } from './tokens';
 
 export const theme = {
   colors: {
@@ -31,13 +30,19 @@ export const theme = {
     accent: palette.indigo,
     accentSoft: palette.indigoSoft,
 
-    /** Recovery, calm, integration after a lapse. */
+    /** Recovery, calm, success — integration after effort. */
     calm: palette.jade,
     calmSoft: palette.jadeSoft,
+    success: palette.jade,
+    successSoft: palette.jadeSoft,
 
     /** Urge-support moments. Supportive and steady — not an alarm, not shame. */
     support: palette.ember,
     supportSoft: palette.emberSoft,
+
+    /** Muted warning — amber, never bright failure-red. */
+    warning: palette.warning,
+    warningSoft: palette.warningSoft,
 
     focusRing: palette.indigo,
   },
@@ -45,6 +50,7 @@ export const theme = {
   radii,
   typography,
   durations,
+  shadows,
 } as const;
 
 export type AppTheme = typeof theme;

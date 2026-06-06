@@ -1,56 +1,56 @@
-# Welcome to your Expo app 👋
+# Retain
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A fully offline, local-only practice app for men working with semen retention, energy
+transmutation, discipline, and self-mastery. Philosophical and aspirational — **not medical,
+not therapy, never shaming**. No account, no sync, no analytics, no network. All content ships
+bundled; all user data stays on the device.
 
-## Get started
+> **The energy is the ally. The compulsion is the enemy. The man is never the enemy.**
 
-1. Install dependencies
+## Stack
 
-   ```bash
-   npm install
-   ```
+Expo SDK 56 · React Native 0.85 · React 19.2 · TypeScript 6 · Expo Router · SQLite
+(`expo-sqlite`) · Zod · Zustand. Package manager: **pnpm**.
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Getting started
 
 ```bash
-npm run reset-project
+pnpm install        # requires .npmrc node-linker=hoisted (already configured)
+pnpm start          # then press i / a, or open in Expo Go
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Scripts
 
-### Other setup steps
+```bash
+pnpm run typecheck   # tsc --noEmit
+pnpm run lint        # eslint .
+pnpm run format      # prettier --write .
+pnpm run test        # jest
+pnpm run verify      # typecheck + lint + test:ci
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Architecture (at a glance)
 
-## Learn more
+Feature-first, with a strict dependency direction:
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+screen → feature hook → service → repository → AppDatabase (SQLite)
+bundled content → content loaders (read-only, Zod-validated)
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+No screen/component touches SQLite directly; data flows through `useRepositories()`. Bundled
+content (`src/content`) is separate from local user data (`src/db`). See **[CLAUDE.md](CLAUDE.md)**
+for the full architecture, coding standards, and content-safety rules, and `src/` for the layout:
 
-## Join the community
+```
+src/app  src/shared  src/features  src/content  src/db  src/navigation  src/testing
+```
 
-Join our community of developers creating universal apps.
+## Project roadmap
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Built from `all-prompts.md` — a 20-prompt plan (foundation → features → release hardening).
+
+## Privacy
+
+Retain is offline by design. Your practice stays on your device. No account. No sync. No
+public profile. No telemetry.

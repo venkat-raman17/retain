@@ -40,11 +40,14 @@ export const copy = {
   forge: {
     eyebrow: 'The Forge',
     title: 'Transmute the current',
-    description: 'Give the energy somewhere worthy to go. Choose a practice and begin.',
-    points: [
-      'Breath, movement, cold, focus, and visualization practices',
-      'Short, guided, and fully offline',
-      'Built to turn restlessness into momentum',
+    description: 'Give the energy somewhere worthy to go. Choose a direction and begin.',
+    categories: [
+      { name: 'Body', example: 'Train, walk, stretch, cold exposure, breathwork.' },
+      { name: 'Mind', example: 'Study, read, plan, solve, deep work.' },
+      { name: 'Spirit', example: 'Pray, meditate, sit in silence, gratitude.' },
+      { name: 'Order', example: 'Clean your space, prepare food, remove temptation.' },
+      { name: 'Creation', example: 'Write, build, draw, practice a skill.' },
+      { name: 'Brotherhood', example: 'Call a friend, serve someone, speak honestly.' },
     ],
   },
   journal: {

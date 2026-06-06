@@ -1,41 +1,38 @@
 import { StyleSheet, View } from 'react-native';
 
-import { copy, practices } from '@/content';
-import { AppText, Card, Screen, ScreenHeader } from '@/shared/components';
+import { copy } from '@/content';
+import { AppText, AppCard, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
 
 export function ForgeScreen() {
   return (
-    <Screen scroll>
+    <AppScreen scroll>
       <View style={styles.container}>
-        <ScreenHeader
+        <AppHeader
           eyebrow={copy.forge.eyebrow}
           eyebrowColor="energy"
           title={copy.forge.title}
           subtitle={copy.forge.description}
         />
         <View style={styles.list}>
-          {practices.map((practice) => (
-            <Card key={practice.id}>
+          {copy.forge.categories.map((category) => (
+            <AppCard key={category.name}>
               <AppText variant="caption" color="energy" uppercase>
-                {`${practice.category} · ${practice.durationMinutes} min`}
+                {category.name}
               </AppText>
-              <AppText variant="subheading" style={styles.title}>
-                {practice.title}
+              <AppText variant="body" color="secondary" style={styles.example}>
+                {category.example}
               </AppText>
-              <AppText variant="body" color="secondary">
-                {practice.intention}
-              </AppText>
-            </Card>
+            </AppCard>
           ))}
         </View>
       </View>
-    </Screen>
+    </AppScreen>
   );
 }
 
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.xl },
   list: { gap: theme.spacing.md },
-  title: { marginTop: theme.spacing.xs },
+  example: { marginTop: theme.spacing.xs },
 });

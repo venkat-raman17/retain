@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 
 import { copy } from '@/content';
-import { AppText, Button, Screen } from '@/shared/components';
+import { AppText, AppButton, AppScreen } from '@/shared/components';
 import { theme } from '@/shared/design';
 
 import { usePauseSession } from '../store/pause-session';
@@ -13,7 +13,8 @@ const PHASE_MS = 4000;
 export function PauseScreen() {
   const router = useRouter();
   const { phase, cycles, start, stop, setPhase, completeCycle } = usePauseSession();
-  const scale = useRef(new Animated.Value(0.6)).current;
+  // Lazy useState keeps a single stable Animated.Value without reading a ref during render.
+  const [scale] = useState(() => new Animated.Value(0.6));
 
   // Begin a fresh session on mount; stop it on unmount.
   useEffect(() => {
@@ -54,12 +55,12 @@ export function PauseScreen() {
         : copy.pause.breatheOut;
 
   return (
-    <Screen
+    <AppScreen
       edges={['top', 'bottom']}
       footer={
         <View style={styles.footer}>
-          <Button label="I rode it out" fullWidth onPress={() => router.back()} />
-          <Button
+          <AppButton label="I rode it out" fullWidth onPress={() => router.back()} />
+          <AppButton
             label={copy.actions.done}
             variant="ghost"
             fullWidth
@@ -90,7 +91,7 @@ export function PauseScreen() {
           {`Breaths completed: ${cycles}`}
         </AppText>
       </View>
-    </Screen>
+    </AppScreen>
   );
 }
 

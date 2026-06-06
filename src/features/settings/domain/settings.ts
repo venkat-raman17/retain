@@ -1,24 +1,26 @@
 import { z } from 'zod';
 
 /**
- * Local, on-device app settings. Fully offline: there is no account and no sync.
- * `onboardingCompleted` and `safetyAcknowledged` gate the app's entry flow.
+ * Local app preferences, persisted in the key/value `settings` table. Practice
+ * identity (vow, path dates, onboarding) lives on the user profile, not here.
  */
-export const appSettingsSchema = z.object({
-  onboardingCompleted: z.boolean(),
-  safetyAcknowledged: z.boolean(),
+export const SETTING_KEYS = {
+  hapticsEnabled: 'haptics_enabled',
+  remindersEnabled: 'reminders_enabled',
+  safetyAcknowledged: 'safety_acknowledged',
+} as const;
+export type SettingKey = (typeof SETTING_KEYS)[keyof typeof SETTING_KEYS];
+
+export const appPreferencesSchema = z.object({
   hapticsEnabled: z.boolean(),
   remindersEnabled: z.boolean(),
-  updatedAt: z.string().datetime(),
+  safetyAcknowledged: z.boolean(),
 });
-export type AppSettings = z.infer<typeof appSettingsSchema>;
+export type AppPreferences = z.infer<typeof appPreferencesSchema>;
+export type AppPreferencesPatch = Partial<AppPreferences>;
 
-/** Mutable settings (everything except the managed `updatedAt`). */
-export type AppSettingsPatch = Partial<Omit<AppSettings, 'updatedAt'>>;
-
-export const DEFAULT_SETTINGS: Omit<AppSettings, 'updatedAt'> = {
-  onboardingCompleted: false,
-  safetyAcknowledged: false,
+export const DEFAULT_PREFERENCES: AppPreferences = {
   hapticsEnabled: true,
   remindersEnabled: false,
+  safetyAcknowledged: false,
 };

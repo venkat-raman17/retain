@@ -4,7 +4,7 @@ import { theme } from '@/shared/design';
 
 import { AppText, type TextColor } from './text';
 
-export interface ScreenHeaderProps {
+export interface AppHeaderProps {
   eyebrow?: string;
   eyebrowColor?: TextColor;
   title: string;
@@ -12,13 +12,13 @@ export interface ScreenHeaderProps {
   align?: 'left' | 'center';
 }
 
-export function ScreenHeader({
+export function AppHeader({
   eyebrow,
   eyebrowColor = 'accent',
   title,
   subtitle,
   align = 'left',
-}: ScreenHeaderProps) {
+}: AppHeaderProps) {
   const textAlign = align === 'center' ? 'center' : 'left';
   return (
     <View style={[styles.container, align === 'center' ? styles.center : null]}>

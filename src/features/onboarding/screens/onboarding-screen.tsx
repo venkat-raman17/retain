@@ -1,42 +1,48 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { copy, disclaimer, onboardingSteps } from '@/content';
-import { AppText, Button, Card, Screen, ScreenHeader } from '@/shared/components';
+import { copy, getSafetyDisclaimer, onboardingSteps } from '@/content';
+import { PathService } from '@/features/path';
+import { AppText, AppButton, AppCard, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { systemClock } from '@/shared/lib';
 import { Routes } from '@/navigation';
 import { useRepositories } from '@/shared/storage';
 
 export function OnboardingScreen() {
   const router = useRouter();
-  const { settings } = useRepositories();
+  const { profile, path, settings } = useRepositories();
+  const pathService = useMemo(() => new PathService(profile, path, systemClock), [profile, path]);
   const [index, setIndex] = useState(0);
   const [finishing, setFinishing] = useState(false);
 
   const step = onboardingSteps[index];
   const isLast = index === onboardingSteps.length - 1;
+  const disclaimer = getSafetyDisclaimer();
 
   const complete = async () => {
     setFinishing(true);
-    await settings.update({ onboardingCompleted: true, safetyAcknowledged: true });
+    await profile.update({ onboardingCompleted: true });
+    await settings.updatePreferences({ safetyAcknowledged: true });
+    await pathService.startPath();
     router.replace(Routes.path);
   };
 
   if (!step) return null;
 
   return (
-    <Screen
+    <AppScreen
       footer={
         <View style={styles.footer}>
-          <Button
+          <AppButton
             label={isLast ? copy.actions.acknowledge : copy.actions.continue}
             fullWidth
             loading={finishing}
             onPress={() => (isLast ? void complete() : setIndex((current) => current + 1))}
           />
           {index > 0 ? (
-            <Button
+            <AppButton
               label={copy.actions.back}
               variant="ghost"
               fullWidth
@@ -50,18 +56,18 @@ export function OnboardingScreen() {
         <AppText variant="caption" color="accent" uppercase>
           {`Step ${index + 1} of ${onboardingSteps.length}`}
         </AppText>
-        <ScreenHeader title={step.title} subtitle={step.body} />
+        <AppHeader title={step.title} subtitle={step.body} />
 
         {step.affirmation ? (
-          <Card tone="overlay">
+          <AppCard tone="overlay">
             <AppText variant="subheading" color="energy" align="center">
               {`“${step.affirmation}”`}
             </AppText>
-          </Card>
+          </AppCard>
         ) : null}
 
         {isLast ? (
-          <Card>
+          <AppCard>
             <AppText variant="label" color="secondary">
               {disclaimer.title}
             </AppText>
@@ -70,10 +76,10 @@ export function OnboardingScreen() {
                 {paragraph}
               </AppText>
             ))}
-          </Card>
+          </AppCard>
         ) : null}
       </View>
-    </Screen>
+    </AppScreen>
   );
 }
 

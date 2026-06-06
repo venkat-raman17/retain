@@ -1,12 +1,13 @@
-// Flat ESLint config (ESLint 9+) for Expo SDK 56.
+// Flat ESLint config (ESLint 9) for Expo SDK 56.
 // - eslint-config-expo provides the React Native / Expo rule baseline.
 // - eslint-config-prettier disables stylistic rules that Prettier owns.
-const { defineConfig } = require('eslint/config');
+// `[].concat(...)` normalizes eslint-config-expo's export to a flat array,
+// so this works whether it exports an array or a single config object.
 const expoConfig = require('eslint-config-expo/flat');
 const eslintConfigPrettier = require('eslint-config-prettier');
 
-module.exports = defineConfig([
-  expoConfig,
+module.exports = [
+  ...[].concat(expoConfig),
   eslintConfigPrettier,
   {
     ignores: [
@@ -28,4 +29,4 @@ module.exports = defineConfig([
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
-]);
+];

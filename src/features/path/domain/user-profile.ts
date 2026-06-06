@@ -1,0 +1,62 @@
+import { z } from 'zod';
+
+/**
+ * The single practice identity (one row). Holds the vow, the path dates, and
+ * practice preferences. No account, no PII — just the state of one man's
+ * practice on one device.
+ */
+export const TEACHING_TONES = ['plain', 'stern', 'gentle', 'mystical'] as const;
+export const teachingToneSchema = z.enum(TEACHING_TONES);
+export type TeachingTone = z.infer<typeof teachingToneSchema>;
+
+export const NOTIFICATION_STYLES = ['off', 'minimal', 'stern', 'gentle', 'mystical'] as const;
+export const notificationStyleSchema = z.enum(NOTIFICATION_STYLES);
+export type NotificationStyle = z.infer<typeof notificationStyleSchema>;
+
+export const userProfileSchema = z.object({
+  onboardingCompleted: z.boolean(),
+  selectedVow: z.string().min(1).nullable(),
+  customVow: z.string().max(280).nullable(),
+  /** First time the path was ever started; never reset by a lapse. */
+  pathStartedAt: z.string().datetime().nullable(),
+  /** Start of the current run; reset to now on a return after a lapse. */
+  currentPathStartedAt: z.string().datetime().nullable(),
+  appContentVersion: z.number().int().min(0),
+  preferredTeachingTone: teachingToneSchema,
+  notificationStyle: notificationStyleSchema,
+  appLockEnabled: z.boolean(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+export type UserProfile = z.infer<typeof userProfileSchema>;
+
+export type UserProfilePatch = Partial<Omit<UserProfile, 'createdAt' | 'updatedAt'>>;
+
+export const DEFAULT_PROFILE: Omit<UserProfile, 'createdAt' | 'updatedAt'> = {
+  onboardingCompleted: false,
+  selectedVow: null,
+  customVow: null,
+  pathStartedAt: null,
+  currentPathStartedAt: null,
+  appContentVersion: 1,
+  preferredTeachingTone: 'gentle',
+  notificationStyle: 'off',
+  appLockEnabled: false,
+};
+
+/** Preset vows offered in onboarding (Prompt 6). Stored by id; custom in customVow. */
+export const VOW_PRESETS = [
+  { id: 'pause-before-obey', text: 'I pause before I obey.' },
+  { id: 'do-not-waste-fire', text: 'I do not waste the fire.' },
+  { id: 'turn-desire-to-strength', text: 'I turn desire into strength.' },
+  { id: 'not-ruled-by-impulse', text: 'I am not ruled by impulse.' },
+  { id: 'return-without-shame', text: 'I return without shame.' },
+] as const;
+
+export function resolveVowText(
+  profile: Pick<UserProfile, 'selectedVow' | 'customVow'>,
+): string | null {
+  if (profile.customVow) return profile.customVow;
+  const preset = VOW_PRESETS.find((vow) => vow.id === profile.selectedVow);
+  return preset ? preset.text : null;
+}

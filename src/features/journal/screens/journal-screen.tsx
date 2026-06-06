@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FlatList, StyleSheet, TextInput, View } from 'react-native';
 
 import { copy } from '@/content';
-import { AppText, Button, Card, Divider, Screen, ScreenHeader } from '@/shared/components';
+import { AppText, AppButton, AppCard, AppDivider, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
 
 import type { JournalEntry } from '../domain/journal-entry';
@@ -12,7 +12,7 @@ function EntryRow({ entry }: { entry: JournalEntry }) {
   return (
     <View style={styles.row}>
       <AppText variant="caption" color="accent" uppercase>
-        {entry.kind}
+        {entry.type}
       </AppText>
       <AppText variant="body">{entry.body}</AppText>
     </View>
@@ -33,15 +33,15 @@ export function JournalScreen() {
   };
 
   return (
-    <Screen>
+    <AppScreen>
       <View style={styles.container}>
-        <ScreenHeader
+        <AppHeader
           eyebrow={copy.journal.eyebrow}
           title={copy.journal.title}
           subtitle={copy.journal.description}
         />
 
-        <Card style={styles.composer}>
+        <AppCard style={styles.composer}>
           <TextInput
             value={body}
             onChangeText={setBody}
@@ -55,19 +55,19 @@ export function JournalScreen() {
               {error}
             </AppText>
           ) : null}
-          <Button
+          <AppButton
             label={copy.actions.save}
             onPress={() => void onSave()}
             loading={saving}
             disabled={body.trim().length === 0}
           />
-        </Card>
+        </AppCard>
 
         <FlatList
           data={entries}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <EntryRow entry={item} />}
-          ItemSeparatorComponent={() => <Divider />}
+          ItemSeparatorComponent={() => <AppDivider />}
           ListEmptyComponent={
             loading ? null : (
               <AppText variant="body" color="muted">
@@ -79,7 +79,7 @@ export function JournalScreen() {
           showsVerticalScrollIndicator={false}
         />
       </View>
-    </Screen>
+    </AppScreen>
   );
 }
 

@@ -10,6 +10,20 @@ import { seedDefaults } from './seed/seed';
 const DB_NAME = 'retain.db';
 const log = createLogger('db');
 
+/** Order matters for `resetLocalDataForTestingOnly`: children before parents. */
+const ALL_TABLES = [
+  'boundary_checkins',
+  'boundaries',
+  'content_progress',
+  'forge_acts',
+  'urge_logs',
+  'journal_entries',
+  'lapse_records',
+  'path_events',
+  'settings',
+  'user_profile',
+] as const;
+
 /**
  * The one place that touches `expo-sqlite`. A thin adapter wraps the native
  * handle in the {@link AppDatabase} port so nothing else imports SQLite.
@@ -50,7 +64,7 @@ let instance: InitializedDatabase | null = null;
  * Open the database, run migrations, seed singleton rows, and build the
  * repositories. Cached so repeated calls return the same instance.
  */
-export async function initializeDatabase(): Promise<InitializedDatabase> {
+export async function initializeRetainDatabase(): Promise<InitializedDatabase> {
   if (instance) return instance;
 
   const sqlite = await SQLite.openDatabaseAsync(DB_NAME);
@@ -68,7 +82,21 @@ export async function initializeDatabase(): Promise<InitializedDatabase> {
   return instance;
 }
 
+/**
+ * DEVELOPMENT/TEST ONLY. Clears every user-data table (schema is preserved).
+ * Never wire this to a production button without an explicit, guarded flow.
+ */
+export async function resetLocalDataForTestingOnly(): Promise<void> {
+  const { db } = await initializeRetainDatabase();
+  await db.transaction(async () => {
+    for (const table of ALL_TABLES) {
+      await db.run(`DELETE FROM ${table};`);
+    }
+  });
+  log.warn('local data reset (testing only)');
+}
+
 /** Drop the cached instance (used by tooling/tests). */
-export function resetDatabaseInstanceForTesting(): void {
+export function clearDatabaseInstanceForTesting(): void {
   instance = null;
 }

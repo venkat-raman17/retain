@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { theme } from '@/shared/design';
 
-export interface ScreenProps {
+export interface AppScreenProps {
   children: ReactNode;
   /** Wrap content in a vertical ScrollView. */
   scroll?: boolean;
@@ -25,14 +25,14 @@ const DEFAULT_EDGES: readonly Edge[] = ['top'];
  * status-bar style, and consistent padding. Screens compose this rather than
  * re-implementing layout chrome.
  */
-export function Screen({
+export function AppScreen({
   children,
   scroll = false,
   padded = true,
   edges = DEFAULT_EDGES,
   footer,
   contentStyle,
-}: ScreenProps) {
+}: AppScreenProps) {
   return (
     <SafeAreaView style={styles.safeArea} edges={edges}>
       <StatusBar style="light" />
