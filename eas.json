@@ -8,45 +8,26 @@
       "android": {
         "buildType": "apk",
         "withoutCredentials": true
-      },
-      "ios": {
-        "buildType": "simulator"
       }
     },
     "preview": {
       "android": {
         "buildType": "apk",
-        "credentialsSource": "remote",
-        "releaseChannel": "preview"
+        "credentialsSource": "remote"
       },
       "ios": {
-        "buildType": "ipa",
         "credentialsSource": "remote",
-        "releaseChannel": "preview",
-        "enterpriseProvisioning": "adhoc"
+        "distribution": "internal"
       }
     },
     "production": {
       "android": {
-        "buildType": "aab",
-        "credentialsSource": "remote",
-        "releaseChannel": "production"
+        "buildType": "app-bundle",
+        "credentialsSource": "remote"
       },
       "ios": {
-        "buildType": "ipa",
         "credentialsSource": "remote",
-        "releaseChannel": "production",
-        "enterpriseProvisioning": "universal"
-      }
-    }
-  },
-  "submit": {
-    "production": {
-      "android": {
-        "serviceAccount": "./service-account-key.json"
-      },
-      "ios": {
-        "appleId": "your-apple-id@example.com"
+        "distribution": "store"
       }
     }
   }

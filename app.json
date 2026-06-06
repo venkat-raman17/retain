@@ -44,9 +44,11 @@
       "reactCompiler": true
     },
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "will-be-set-by-eas-init"
+        "projectId": "5dbb3e69-6307-47f7-925a-ccc8e2289469"
       }
-    }
+    },
+    "owner": "venkatraman17"
   }
 }
