@@ -1,4 +1,4 @@
-name: EAS Build Preview Android
+name: EAS Build Preview iOS
 
 on:
   workflow_dispatch:
@@ -26,8 +26,8 @@ jobs:
       - name: Verify build (typecheck + lint)
         run: pnpm run verify
 
-      - name: Build Android APK (preview)
-        run: eas build --platform android --profile preview --non-interactive
+      - name: Build iOS IPA (preview)
+        run: eas build --platform ios --profile preview --non-interactive
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
 
@@ -35,5 +35,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: android-apk
-          path: '*.apk'
+          name: ios-ipa
+          path: '*.ipa'
