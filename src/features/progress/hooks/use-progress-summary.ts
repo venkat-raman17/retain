@@ -1,48 +1,38 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { systemClock } from '@/shared/lib';
+import { createLogger, systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
-import {
-  ProgressService,
-  type ProgressSummary,
-  type RecordData,
-  type WeeklySummary,
-} from '../services/progress-service';
+import { ProgressService, type RecordData } from '../services/progress-service';
+
+const log = createLogger('progress');
 
 export interface UseProgressSummary {
-  summary: ProgressSummary | null;
-  weekSummary: WeeklySummary | null;
   record: RecordData | null;
   loading: boolean;
 }
 
+/**
+ * Loads the full Record view (patterns, returns, rhythm, next command) in a single
+ * service fan-out. Path Home's headline stats come from `usePathProgress`, not here.
+ */
 export function useProgressSummary(): UseProgressSummary {
   const repositories = useRepositories();
   const service = useMemo(() => new ProgressService(repositories, systemClock), [repositories]);
 
-  const [summary, setSummary] = useState<ProgressSummary | null>(null);
-  const [weekSummary, setWeekSummary] = useState<WeeklySummary | null>(null);
   const [record, setRecord] = useState<RecordData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
-    Promise.all([service.getSummary(), service.getWeeklySummary()])
-      .then(([s, w]) => {
-        if (!active) return;
-        setSummary(s);
-        setWeekSummary(w);
-      })
-      .catch(() => undefined);
-
     service
       .getRecord()
       .then((r) => {
-        if (!active) return;
-        setRecord(r);
+        if (active) setRecord(r);
       })
-      .catch(() => undefined)
+      .catch((error) => {
+        log.error('Failed to load the record', error);
+      })
       .finally(() => {
         if (active) setLoading(false);
       });
@@ -51,5 +41,5 @@ export function useProgressSummary(): UseProgressSummary {
     };
   }, [service]);
 
-  return { summary, weekSummary, record, loading };
+  return { record, loading };
 }

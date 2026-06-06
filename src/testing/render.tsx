@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import type { Repositories } from '@/db';
 import { RepositoriesProvider } from '@/shared/storage';
+import { ThemeProvider } from '@/shared/storage/theme-context';
 
 import { createFakeRepositories } from './fakes';
 
@@ -27,7 +28,9 @@ export function renderWithProviders(ui: ReactElement, options: RenderWithProvide
   function Wrapper({ children }: { children: ReactNode }) {
     return (
       <SafeAreaProvider initialMetrics={TEST_METRICS}>
-        <RepositoriesProvider repositories={repositories}>{children}</RepositoriesProvider>
+        <RepositoriesProvider repositories={repositories}>
+          <ThemeProvider>{children}</ThemeProvider>
+        </RepositoriesProvider>
       </SafeAreaProvider>
     );
   }

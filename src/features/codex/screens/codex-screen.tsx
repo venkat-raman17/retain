@@ -19,6 +19,13 @@ import {
   AppQuoteBlock,
   AppScreen,
   AppText,
+  ArcSeal,
+  ArchetypeSigil,
+  FadeInRise,
+  PillarsSigil,
+  RiteMedallion,
+  ScreenCrest,
+  symbolStroke,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
 import { Routes } from '@/navigation';
@@ -45,9 +52,12 @@ function DailyPathTab() {
       </AppText>
       {arcs.map((arc) => (
         <AppCard key={arc.id} tone="overlay">
-          <AppText variant="caption" color="muted" uppercase>
-            {`Arc ${arc.arcNumber} · Days ${arc.dayStart}–${arc.dayEnd}`}
-          </AppText>
+          <View style={styles.arcHeader}>
+            <AppText variant="caption" color="muted" uppercase style={styles.arcLabel}>
+              {`Arc ${arc.arcNumber} · Days ${arc.dayStart}–${arc.dayEnd}`}
+            </AppText>
+            <ArcSeal arcNumber={arc.arcNumber} size={32} color={theme.colors.textMuted} strokeWidth={symbolStroke(32)} />
+          </View>
           <AppText variant="label" color="primary" style={styles.body}>
             {arc.title}
           </AppText>
@@ -104,9 +114,11 @@ function PrinciplesTab() {
               {principle.title}
             </AppText>
             {isOpen ? (
-              <AppText variant="body" color="secondary" style={styles.body}>
-                {principle.body}
-              </AppText>
+              <FadeInRise>
+                <AppText variant="body" color="secondary" style={styles.body}>
+                  {principle.body}
+                </AppText>
+              </FadeInRise>
             ) : null}
           </AppCard>
         );
@@ -130,12 +142,18 @@ function ArchetypesTab() {
             tone={isOpen ? 'raised' : 'overlay'}
             onPress={() => setExpanded(isOpen ? null : archetype.id)}
           >
-            <AppText variant="subheading">{archetype.name}</AppText>
+            <View style={styles.archetypeHeader}>
+              <AppText variant="subheading" style={styles.archetypeName}>{archetype.name}</AppText>
+              <ArchetypeSigil archetype={archetype.id} size={28} color={theme.colors.textMuted} strokeWidth={symbolStroke(28)} />
+            </View>
             <AppText variant="caption" color="secondary" style={styles.body}>
               {archetype.essence}
             </AppText>
             {isOpen ? (
-              <>
+              <FadeInRise>
+                <View style={styles.archetypeGlyph}>
+                  <ArchetypeSigil archetype={archetype.id} size={80} color={theme.colors.textMuted} strokeWidth={symbolStroke(80)} />
+                </View>
                 <AppDivider />
                 <AppText variant="caption" color="muted" uppercase>
                   Light
@@ -164,7 +182,7 @@ function ArchetypesTab() {
                 <AppText variant="caption" color="energy" style={styles.spacing}>
                   {archetype.retainLine}
                 </AppText>
-              </>
+              </FadeInRise>
             ) : (
               <AppText variant="caption" color="accent" style={styles.body}>
                 {`Command: ${archetype.dailyCommand}`}
@@ -314,7 +332,10 @@ function RitesTab() {
     <View style={styles.list}>
       {rites.map((rite) => (
         <AppCard key={rite.id} tone="overlay" onPress={() => setSelected(rite)}>
-          <AppChip label={`Day ${rite.milestoneDay}`} tone="energy" selected />
+          <View style={styles.riteHeader}>
+            <AppChip label={`Day ${rite.milestoneDay}`} tone="energy" selected />
+            <RiteMedallion day={rite.milestoneDay} size={44} color={theme.colors.textMuted} strokeWidth={symbolStroke(44)} />
+          </View>
           <AppText variant="subheading" style={styles.body}>
             {rite.title}
           </AppText>
@@ -344,11 +365,16 @@ export function CodexScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <AppHeader
-          eyebrow="Codex"
-          title="The library of formation."
-          subtitle="Teachings, traditions, principles, and rites."
-        />
+        <View>
+          <ScreenCrest>
+            <PillarsSigil size={110} color={theme.colors.textMuted} strokeWidth={symbolStroke(110)} />
+          </ScreenCrest>
+          <AppHeader
+            eyebrow="Codex"
+            title="The library of formation."
+            subtitle="Teachings, traditions, principles, and rites."
+          />
+        </View>
 
         <View style={styles.tabs}>
           {TABS.map((tab) => (
@@ -391,4 +417,10 @@ const styles = StyleSheet.create({
   body: { marginTop: theme.spacing.xs },
   spacing: { marginTop: theme.spacing.sm },
   disclaimer: { marginTop: theme.spacing.xs },
+  arcHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  arcLabel: { flex: 1 },
+  archetypeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  archetypeName: { flex: 1 },
+  archetypeGlyph: { alignItems: 'center', opacity: 0.15, paddingVertical: theme.spacing.sm },
+  riteHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 });

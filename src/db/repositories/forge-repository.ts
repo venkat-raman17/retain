@@ -1,6 +1,7 @@
 import { forgeActSchema, type ForgeAct, type ForgeCategory } from '@/features/forge/domain/forge-act';
 
 import type { AppDatabase } from '../database';
+import { parseRows } from './parse-rows';
 
 export interface ForgeCategoryCount {
   category: string;
@@ -55,7 +56,7 @@ export class SqliteForgeRepository implements ForgeRepository {
       'SELECT * FROM forge_acts ORDER BY occurred_at DESC LIMIT ?;',
       [limit],
     );
-    return rows.map(toAct);
+    return parseRows('forge_acts', rows, toAct);
   }
 
   async listByCategory(category: ForgeCategory, limit = 100): Promise<ForgeAct[]> {
@@ -63,7 +64,7 @@ export class SqliteForgeRepository implements ForgeRepository {
       'SELECT * FROM forge_acts WHERE category = ? ORDER BY occurred_at DESC LIMIT ?;',
       [category, limit],
     );
-    return rows.map(toAct);
+    return parseRows('forge_acts', rows, toAct);
   }
 
   async count(): Promise<number> {

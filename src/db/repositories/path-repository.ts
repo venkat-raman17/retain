@@ -1,6 +1,7 @@
 import { pathEventSchema, type PathEvent, type PathEventType } from '@/features/path/domain/path-event';
 
 import type { AppDatabase } from '../database';
+import { parseRows } from './parse-rows';
 
 export interface PathRepository {
   addEvent(event: PathEvent): Promise<void>;
@@ -41,7 +42,7 @@ export class SqlitePathRepository implements PathRepository {
       'SELECT * FROM path_events ORDER BY occurred_at DESC LIMIT ?;',
       [limit],
     );
-    return rows.map(toEvent);
+    return parseRows('path_events', rows, toEvent);
   }
 
   async countByType(type: PathEventType): Promise<number> {

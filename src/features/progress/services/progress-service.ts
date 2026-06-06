@@ -1,3 +1,4 @@
+import { getAllDailyPath } from '@/content';
 import {
   FORGE_CATEGORIES,
   type ForgeAct,
@@ -6,6 +7,7 @@ import {
 import type { JournalEntry } from '@/features/journal/domain/journal-entry';
 import type { PathEvent } from '@/features/path/domain/path-event';
 import { currentPathDay, daysSince } from '@/features/path/domain/practice';
+import type { UserProfile } from '@/features/path/domain/user-profile';
 import {
   TRIGGER_LABELS,
   TRIGGER_TYPES,
@@ -13,8 +15,10 @@ import {
   type UrgeLog,
 } from '@/features/pause/domain/urge-log';
 import type { Repositories } from '@/db';
-import type { Clock } from '@/shared/lib';
-import { differenceInDays } from '@/shared/utils';
+import { createLogger, type Clock } from '@/shared/lib';
+import { addDays, differenceInDays, toIsoDateTime } from '@/shared/utils';
+
+const log = createLogger('progress');
 
 // ─── Public types ────────────────────────────────────────────────────────────
 
@@ -77,10 +81,38 @@ export interface NextCommand {
   body: string;
 }
 
+/** The lead synthesis — the single takeaway the record reveals. Null until there is data. */
+export interface Reveal {
+  title: string;
+  body: string;
+}
+
+/**
+ * The arc of the current 90-day rite: when Day 1 began and when Day 90 (the Crown)
+ * is reached. Driven by `currentPathStartedAt`, so a lapse honestly restarts the arc
+ * while all practice history is preserved elsewhere.
+ */
+export interface PathArc {
+  started: boolean;
+  complete: boolean;
+  /** ISO timestamp of Day 1 of the current run (null when no path is running). */
+  startDateISO: string | null;
+  /** ISO timestamp of Day `totalDays` — the Crown horizon (null when not started). */
+  endDateISO: string | null;
+  currentDay: number;
+  totalDays: number;
+  daysRemaining: number;
+  /** 0..1, current day over total — for the timeline fill. */
+  progress: number;
+}
+
 export interface RecordData {
   hasEnoughData: boolean;
+  arc: PathArc;
+  reveal: Reveal | null;
   triggerCounts: TriggerCount[];
   forgeCategoryCounts: ForgeCategoryCount[];
+  forgeBalance: string | null;
   weeklyPattern: WeeklyPattern;
   returnRecord: ReturnRecord;
   practiceRhythm: PracticeRhythm;
@@ -219,7 +251,95 @@ function countActiveDays(
   return [...active].filter((d) => d >= from && d <= to).length;
 }
 
-function buildNextCommand(
+/**
+ * The arc of the current 90-day rite. `totalDays` is the bundled daily-path length
+ * (the rite is exactly as long as its content), and `clock` drives the current day so
+ * the calculation stays pure and testable.
+ */
+export function buildPathArc(
+  profile: Pick<UserProfile, 'currentPathStartedAt' | 'currentPathPhase'>,
+  totalDays: number,
+  clock: Clock,
+): PathArc {
+  const startISO = profile.currentPathStartedAt;
+  const currentDay = currentPathDay(profile, clock);
+
+  if (!startISO) {
+    return {
+      started: false,
+      complete: false,
+      startDateISO: null,
+      endDateISO: null,
+      currentDay: 0,
+      totalDays,
+      daysRemaining: totalDays,
+      progress: 0,
+    };
+  }
+
+  // Day 1 is the start date; Day `totalDays` is start + (totalDays - 1) days.
+  const endDateISO = toIsoDateTime(addDays(new Date(startISO), totalDays - 1));
+  const complete = currentDay >= totalDays || profile.currentPathPhase === 'crowned_long_path';
+  const boundedDay = Math.min(Math.max(currentDay, 0), totalDays);
+
+  return {
+    started: true,
+    complete,
+    startDateISO: startISO,
+    endDateISO,
+    currentDay,
+    totalDays,
+    daysRemaining: Math.max(0, totalDays - currentDay),
+    progress: totalDays > 0 ? boundedDay / totalDays : 0,
+  };
+}
+
+/**
+ * The lead synthesis: one headline takeaway the record reveals, built from the week's
+ * pattern and the return history. Null when there is nothing observed yet — the screen
+ * shows a teaching promise in that case rather than an empty sentence.
+ */
+export function buildReveal(pattern: WeeklyPattern, returnRecord: ReturnRecord): Reveal | null {
+  const hasData = pattern.mostCommonTrigger !== null || pattern.strongestForgeCategory !== null;
+  if (!hasData) return null;
+
+  let title: string;
+  if (pattern.mostCommonTrigger === 'unknown') {
+    title = 'The fire often rises before you can name it.';
+  } else if (pattern.mostCommonTriggerLabel) {
+    title = `${pattern.mostCommonTriggerLabel} is the fire you meet most often.`;
+  } else {
+    title = `Your energy flows mostly to ${(pattern.strongestForgeCategoryLabel ?? '').toLowerCase()}.`;
+  }
+
+  let body: string;
+  if (returnRecord.returnsRecorded > 0) {
+    body = `And when a streak breaks, the record shows you return — ${returnRecord.averageReturnTime.toLowerCase()}.`;
+  } else if (pattern.strongestForgeCategoryLabel && pattern.mostCommonTrigger !== null) {
+    body = `You turn the most energy toward ${pattern.strongestForgeCategoryLabel.toLowerCase()}.`;
+  } else {
+    body = 'Watch the map below — it shows where you are most tested.';
+  }
+
+  return { title, body };
+}
+
+/**
+ * One interpretive line about forge direction (the Forge tab already shows the raw chart;
+ * the record keeps only the *reading* of it). Null when nothing has been forged yet.
+ */
+export function buildForgeBalanceInsight(forgeCounts: ForgeCategoryCount[]): string | null {
+  const top = forgeCounts[0];
+  if (!top || top.count === 0) return null;
+
+  const leastUsed = [...forgeCounts].reverse().find((c) => c.count === 0);
+  if (leastUsed) {
+    return `You forge mostly through ${top.label.toLowerCase()}. Next: add one act of ${leastUsed.label.toLowerCase()}.`;
+  }
+  return `You forge across all directions — ${top.label.toLowerCase()} leads.`;
+}
+
+export function buildNextCommand(
   hasData: boolean,
   pattern: WeeklyPattern,
   forgeCounts: ForgeCategoryCount[],
@@ -364,7 +484,11 @@ export class ProgressService {
     weekStart.setHours(0, 0, 0, 0);
     const weekISO = weekStart.toISOString();
 
-    const [urgeLogs, forgeActs, journalEntries, pathEvents] = await Promise.all([
+    const [profile, urgeLogs, forgeActs, journalEntries, pathEvents] = await Promise.all([
+      this.repos.profile.get().catch((error) => {
+        log.warn('getRecord: profile load failed, treating the arc as not started', error);
+        return null;
+      }),
       this.repos.urge.list(500),
       this.repos.forge.list(500),
       this.repos.journal.list(500),
@@ -389,12 +513,22 @@ export class ProgressService {
       forgeActsThisWeek: weekForgeActs.length,
     };
 
+    const arc = buildPathArc(
+      profile ?? { currentPathStartedAt: null, currentPathPhase: 'initiation_90' },
+      getAllDailyPath().length,
+      this.clock,
+    );
+    const reveal = buildReveal(weeklyPattern, returnRecord);
+    const forgeBalance = buildForgeBalanceInsight(forgeCategoryCounts);
     const nextCommand = buildNextCommand(hasEnoughData, weeklyPattern, forgeCategoryCounts);
 
     return {
       hasEnoughData,
+      arc,
+      reveal,
       triggerCounts,
       forgeCategoryCounts,
+      forgeBalance,
       weeklyPattern,
       returnRecord,
       practiceRhythm,

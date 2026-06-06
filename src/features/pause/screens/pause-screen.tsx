@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Animated, Easing, ScrollView, StyleSheet, View } from 'react-native';
+import Svg, { Circle as SvgCircle, Defs, RadialGradient, Stop } from 'react-native-svg';
 
 import {
   AppButton,
@@ -10,8 +11,11 @@ import {
   AppText,
   type SelectOption,
   AppSelectList,
+  FlameCircleGlyph,
+  symbolStroke,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { haptics } from '@/shared/lib';
 import { Routes } from '@/navigation';
 
 import { PAUSE_COMMANDS, TIMER_OPTIONS } from '../domain/commands';
@@ -77,6 +81,8 @@ export function PauseScreen() {
   useEffect(() => {
     if (step !== 'breathing') return undefined;
     if (phase === 'idle') return undefined;
+    // A soft beat at each phase change — a tactile metronome for the breath.
+    haptics.impact('light');
     if (phase === 'inhale' || phase === 'exhale') {
       Animated.timing(scale, {
         toValue: phase === 'inhale' ? 1 : 0.6,
@@ -136,6 +142,7 @@ export function PauseScreen() {
         note: null,
       });
       setSavedUrgeId(log.id);
+      haptics.notify('success'); // the rep is logged — a quiet mark of completion
       setStep('complete');
     } finally {
       setSaving(false);
@@ -244,6 +251,9 @@ export function PauseScreen() {
 function StepEntry({ onContinue, onDismiss }: { onContinue: () => void; onDismiss: () => void }) {
   return (
     <View style={styles.step}>
+      <View style={styles.entryGlyph}>
+        <FlameCircleGlyph size={88} color={theme.colors.primary} strokeWidth={symbolStroke(88)} />
+      </View>
       <AppText variant="caption" color="support" uppercase align="center">
         Pause
       </AppText>
@@ -392,6 +402,16 @@ function StepBreathing({
         {`${formatTime(timeLeft)} remaining`}
       </AppText>
       <View style={styles.breathArea}>
+        <Svg width={260} height={260} style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Defs>
+            <RadialGradient id="breathAura" cx="50%" cy="50%" r="50%">
+              <Stop offset="0%" stopColor={theme.colors.support} stopOpacity={0.18} />
+              <Stop offset="70%" stopColor={theme.colors.support} stopOpacity={0.04} />
+              <Stop offset="100%" stopColor={theme.colors.support} stopOpacity={0} />
+            </RadialGradient>
+          </Defs>
+          <SvgCircle cx={130} cy={130} r={130} fill="url(#breathAura)" />
+        </Svg>
         <Animated.View style={[styles.circle, { transform: [{ scale }] }]} />
         <AppText variant="heading" color="energy" style={styles.breathLabel}>
           {breathLabel}
@@ -515,6 +535,7 @@ function IntensityPicker({
 const styles = StyleSheet.create({
   scroll: { flexGrow: 1, padding: theme.spacing.xl },
   step: { gap: theme.spacing.lg },
+  entryGlyph: { alignItems: 'center', opacity: 0.12 },
   breathStep: { alignItems: 'center' },
   centered: { alignItems: 'center' },
   nav: { gap: theme.spacing.sm },

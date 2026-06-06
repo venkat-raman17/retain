@@ -1,8 +1,11 @@
 export { palette } from './colors';
 export { spacing } from './spacing';
 export { radii } from './radius';
-export { typography } from './typography';
+export { typography, fontFamilyFor, BUNDLED_FONT_FAMILIES } from './typography';
+export type { FontFamilyName, FontWeightName } from './typography';
 export { shadows } from './shadows';
 export { durations, easing, motion } from './motion';
-export { theme } from './theme';
+export { theme, sharedArchetype } from './theme';
 export type { AppTheme, ThemeColor, ArchetypeTone } from './theme';
+export { THEMES, THEME_META, THEME_IDS, DEFAULT_THEME_ID, isThemeId } from './themes';
+export type { ThemeId, ThemeMeta } from './themes';

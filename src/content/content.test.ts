@@ -40,7 +40,7 @@ describe('bundled content — basic counts', () => {
     expect(archetypeProfiles).toHaveLength(12);
     expect(codexDays).toHaveLength(7);
     expect(dailyPath.length).toBe(90);
-    expect(studies).toHaveLength(3);
+    expect(studies).toHaveLength(11);
     expect(rituals).toHaveLength(3);
     expect(journalPrompts.length).toBeGreaterThanOrEqual(12);
     expect(rites).toHaveLength(8);

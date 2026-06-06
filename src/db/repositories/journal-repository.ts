@@ -5,6 +5,7 @@ import {
 } from '@/features/journal/domain/journal-entry';
 
 import type { AppDatabase } from '../database';
+import { parseRows } from './parse-rows';
 
 export interface JournalRepository {
   list(limit?: number): Promise<JournalEntry[]>;
@@ -47,7 +48,7 @@ export class SqliteJournalRepository implements JournalRepository {
       'SELECT * FROM journal_entries ORDER BY created_at DESC LIMIT ?;',
       [limit],
     );
-    return rows.map(toEntry);
+    return parseRows('journal_entries', rows, toEntry);
   }
 
   async listByType(type: JournalType, limit = 100): Promise<JournalEntry[]> {
@@ -55,7 +56,7 @@ export class SqliteJournalRepository implements JournalRepository {
       'SELECT * FROM journal_entries WHERE type = ? ORDER BY created_at DESC LIMIT ?;',
       [type, limit],
     );
-    return rows.map(toEntry);
+    return parseRows('journal_entries', rows, toEntry);
   }
 
   async getById(id: string): Promise<JournalEntry | null> {

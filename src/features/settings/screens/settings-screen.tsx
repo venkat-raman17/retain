@@ -4,6 +4,7 @@ import { StyleSheet, Switch, View } from 'react-native';
 import { copy } from '@/content';
 import { AppText, AppButton, AppCard, AppDivider, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { haptics, setHapticsEnabled } from '@/shared/lib';
 import { Routes } from '@/navigation';
 
 import { useSettings } from '../hooks/use-settings';
@@ -55,7 +56,11 @@ export function SettingsScreen() {
             label="Haptics"
             description="Subtle vibration feedback"
             value={preferences?.hapticsEnabled ?? true}
-            onValueChange={(next) => void update({ hapticsEnabled: next })}
+            onValueChange={(next) => {
+              setHapticsEnabled(next); // take effect immediately, before the async write
+              if (next) haptics.selection(); // a confirming tick when turning on
+              void update({ hapticsEnabled: next });
+            }}
           />
           <AppDivider inset />
           <ToggleRow

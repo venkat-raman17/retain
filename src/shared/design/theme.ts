@@ -1,10 +1,10 @@
 /**
- * Semantic theme — maps the raw stone/ember/gold palette to *meaning*.
+ * Semantic theme — maps palette values to *meaning*.
  *
- * Components reference these names (e.g. `colors.support`, `colors.danger`) so the
- * palette can change without touching screens. Retain ships a single, intentional
- * dark theme for v1; consume it via `useTheme()` so a future theme context is a
- * drop-in change.
+ * Components reference semantic names (e.g. `colors.primary`, `colors.danger`)
+ * via `useTheme()` so the active theme can change at runtime without touching
+ * screens. Four premium themes are available; the active one is held in
+ * ThemeContext and persisted to SQLite.
  *
  * Three layers per accent/state, so the right tone is always reachable:
  *   - base   (`primary`, `support`, `danger`, …) — fills, borders, structural use.
@@ -15,12 +15,87 @@
  * Accessibility: text tones (`*Text`, `textPrimary/Secondary`, parchment ink) are
  * chosen to clear WCAG AA on the surfaces they're used on; base state tones
  * (`danger`, `success`, `warning`) are for fills/borders, not small text — pair
- * them with `*Text` for labels. See docs/DESIGN_SYSTEM.md.
+ * them with `*Text` for labels.
  */
 import { durations, palette, radii, shadows, spacing, typography } from './tokens';
 
+// ─── Explicit type definitions ───────────────────────────────────────────────
+// Defined explicitly (not derived with `typeof theme`) so all four runtime
+// themes can satisfy the same interface regardless of their specific hex values.
+
+export type ThemeColor =
+  | 'background'
+  | 'backgroundRaised'
+  | 'surface'
+  | 'surfaceRaised'
+  | 'surfaceOverlay'
+  | 'border'
+  | 'borderStrong'
+  | 'borderGold'
+  | 'textPrimary'
+  | 'textSecondary'
+  | 'textMuted'
+  | 'onPrimary'
+  | 'textInverse'
+  | 'primary'
+  | 'primarySoft'
+  | 'primaryBright'
+  | 'primarySurface'
+  | 'accent'
+  | 'accentSoft'
+  | 'accentText'
+  | 'support'
+  | 'supportSoft'
+  | 'ember'
+  | 'emberMuted'
+  | 'gold'
+  | 'bronze'
+  | 'iron'
+  | 'success'
+  | 'successSoft'
+  | 'successText'
+  | 'calm'
+  | 'calmSoft'
+  | 'warning'
+  | 'warningSoft'
+  | 'warningText'
+  | 'danger'
+  | 'dangerSoft'
+  | 'dangerText'
+  | 'focusRing'
+  | 'parchment'
+  | 'parchmentText'
+  | 'parchmentMuted'
+  | 'parchmentBorder';
+
+export type ArchetypeTone =
+  | 'monk'
+  | 'warrior'
+  | 'craftsman'
+  | 'king'
+  | 'lover'
+  | 'pilgrim'
+  | 'sage'
+  | 'brother'
+  | 'guardian'
+  | 'builder'
+  | 'healer'
+  | 'sovereign';
+
+export interface AppTheme {
+  colors: Record<ThemeColor, string>;
+  archetype: Record<ArchetypeTone, string>;
+  spacing: typeof spacing;
+  radii: typeof radii;
+  typography: typeof typography;
+  durations: typeof durations;
+  shadows: typeof shadows;
+}
+
+// ─── Shared non-color tokens — identical across all themes ───────────────────
+
 /** The 12 archetype tones, used subtly to tint an archetype's surfaces. */
-const archetype = {
+export const sharedArchetype: Record<ArchetypeTone, string> = {
   monk: palette.monk,
   warrior: palette.warrior,
   craftsman: palette.craftsman,
@@ -33,95 +108,83 @@ const archetype = {
   builder: palette.builder,
   healer: palette.healer,
   sovereign: palette.sovereign,
-} as const;
+};
 
-export const theme = {
+// ─── Default theme (Noir & Bone) ─────────────────────────────────────────────
+// This is the base/default theme and the fallback used by app-data-provider
+// before the ThemeContext initializes. All components must consume the active
+// theme through `useTheme()`, never by importing this constant directly.
+
+export const theme: AppTheme = {
   colors: {
-    // ── Surfaces — the stone room, floor to overlay ──────────────────────────
-    background: palette.backgroundPrimary, // app floor
-    backgroundRaised: palette.backgroundSecondary, // nav chrome, sunken wells
-    surface: palette.surfacePrimary, // default card slab
-    surfaceRaised: palette.surfaceSecondary, // raised/secondary card
-    surfaceOverlay: palette.surfaceElevated, // modals, inputs, highest slab
+    // ── Surfaces ─────────────────────────────────────────────────────────────
+    background: palette.backgroundPrimary,
+    backgroundRaised: palette.backgroundSecondary,
+    surface: palette.surfacePrimary,
+    surfaceRaised: palette.surfaceSecondary,
+    surfaceOverlay: palette.surfaceElevated,
 
-    // ── Edges — iron lines over heavy shadow ────────────────────────────────
+    // ── Edges ────────────────────────────────────────────────────────────────
     border: palette.borderSubtle,
     borderStrong: palette.borderStrong,
-    borderGold: palette.borderGold, // ceremonial edge (milestones, vows)
+    borderGold: palette.borderGold,
 
-    // ── Text — warm parchment on iron ───────────────────────────────────────
+    // ── Text ─────────────────────────────────────────────────────────────────
     textPrimary: palette.textPrimary,
     textSecondary: palette.textSecondary,
-    textMuted: palette.textMuted, // metadata only — non-essential copy
-    onPrimary: palette.textInverse, // text on an ember/copper fill
+    textMuted: palette.textMuted,
+    onPrimary: palette.textInverse,
     textInverse: palette.textInverse,
 
-    /**
-     * The copper ember — primary buttons, forge actions, selected borders,
-     * active day, "I feel the fire." The fire is not decorative; it is governed.
-     */
+    // ── Primary accent ───────────────────────────────────────────────────────
     primary: palette.ember,
     primarySoft: palette.emberWash,
-    primaryBright: palette.emberBright, // readable ember text on dark stone
-    primarySurface: palette.emberSurface, // solid ember-tinted fill surface
+    primaryBright: palette.emberBright,
+    primarySurface: palette.emberSurface,
 
-    /** Editorial accent — codex ink. Eyebrows, lineage labels, content marks. */
+    // ── Editorial accent ─────────────────────────────────────────────────────
     accent: palette.bronze,
     accentSoft: palette.bronzeWash,
-    accentText: palette.bronzeSoft, // readable editorial eyebrow text
+    accentText: palette.bronzeSoft,
 
-    /** The fire itself — ember. Pause/urge moments: warm, present, never an alarm. */
+    // ── Support / ember ──────────────────────────────────────────────────────
     support: palette.ember,
     supportSoft: palette.emberWash,
     ember: palette.ember,
     emberMuted: palette.emberMuted,
 
-    /** Standalone metals. Gold is ceremonial/archetype only; ember is primary. */
+    // ── Standalone metals ────────────────────────────────────────────────────
     gold: palette.gold,
     bronze: palette.bronze,
     iron: palette.iron,
 
-    /** Completion & integration — deep olive. A thing that grew, not a checkmark. */
+    // ── State ────────────────────────────────────────────────────────────────
     success: palette.success,
     successSoft: palette.successWash,
     successText: palette.successSoft,
-    /** Calm/recovery — same olive, steadying and restorative copy. */
     calm: palette.success,
     calmSoft: palette.successWash,
-
-    /** Caution / urge — warm amber. The fire noticed; attention without shrillness. */
     warning: palette.warning,
     warningSoft: palette.warningWash,
     warningText: palette.warningSoft,
-
-    /**
-     * Lapse — deep rust. Grave, warm, and recoverable. Deliberately NOT a bright
-     * red: a lapse ends a streak, not the practice (see docs/CONTENT_SAFETY.md).
-     */
     danger: palette.danger,
     dangerSoft: palette.dangerWash,
     dangerText: palette.dangerSoft,
 
-    /** Keyboard/focus ring — the copper ember glow. */
+    // ── Focus ────────────────────────────────────────────────────────────────
     focusRing: palette.ember,
 
-    // ── Reading surfaces — warm parchment for long passages ─────────────────
+    // ── Reading surfaces ─────────────────────────────────────────────────────
     parchment: palette.parchment,
     parchmentText: palette.parchmentText,
     parchmentMuted: palette.parchmentMuted,
     parchmentBorder: palette.parchmentBorder,
   },
 
-  /** Per-archetype tones — keyed by archetype id. Use subtly (rules in docs). */
-  archetype,
-
+  archetype: sharedArchetype,
   spacing,
   radii,
   typography,
   durations,
   shadows,
-} as const;
-
-export type AppTheme = typeof theme;
-export type ThemeColor = keyof AppTheme['colors'];
-export type ArchetypeTone = keyof AppTheme['archetype'];
+};

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
+import { copy } from '@/content';
 import {
   AppButton,
   AppCard,
@@ -60,26 +61,30 @@ const BOUNDARY_OPTIONS: SelectOption<string>[] = [
 ];
 
 const PATH_START_OPTIONS: SelectOption<string>[] = [
-  { value: 'today', label: 'Starting today.', description: 'Begin fresh. Day 1 starts now.' },
+  {
+    value: 'today',
+    label: copy.onboarding.pathStart.today.label,
+    description: copy.onboarding.pathStart.today.description,
+  },
   {
     value: 'existing',
-    label: "I'm already on a path.",
-    description: 'Tell the app which day you are on.',
+    label: copy.onboarding.pathStart.existing.label,
+    description: copy.onboarding.pathStart.existing.description,
   },
 ];
 
 /** A consistent top mark on every screen so the flow has one rhythm. */
 const STEP_EYEBROW: Record<OnboardingStep, string> = {
-  welcome: 'Before the path begins',
-  philosophy: 'Before the path begins',
-  privacy: 'Before the path begins',
+  welcome: copy.onboarding.eyebrow.intro,
+  philosophy: copy.onboarding.eyebrow.intro,
+  privacy: copy.onboarding.eyebrow.intro,
   intention: 'Step 1 of 4',
   vow: 'Step 2 of 4',
   forge: 'Step 3 of 4',
   boundary: 'Step 4 of 4',
-  disclaimer: 'Before you begin',
-  path_start: 'Your path',
-  begin: 'The threshold',
+  disclaimer: copy.onboarding.eyebrow.disclaimer,
+  path_start: copy.onboarding.eyebrow.pathStart,
+  begin: copy.onboarding.eyebrow.threshold,
 };
 
 export function OnboardingScreen() {
@@ -180,10 +185,10 @@ export function OnboardingScreen() {
 
   const primaryLabel =
     currentStep === 'begin'
-      ? 'Begin the practice'
+      ? copy.onboarding.actions.begin
       : currentStep === 'disclaimer'
-        ? 'I acknowledge'
-        : 'Continue';
+        ? copy.onboarding.actions.acknowledge
+        : copy.onboarding.actions.continue;
 
   return (
     <AppScreen
@@ -199,7 +204,7 @@ export function OnboardingScreen() {
             onPress={() => (currentStep === 'begin' ? void complete() : advance())}
           />
           {stepIndex > 0 ? (
-            <AppButton label="Back" variant="ghost" fullWidth onPress={back} />
+            <AppButton label={copy.onboarding.actions.back} variant="ghost" fullWidth onPress={back} />
           ) : null}
         </View>
       }
@@ -216,8 +221,8 @@ export function OnboardingScreen() {
         {currentStep === 'intention' && (
           <>
             <AppHeader
-              title="Why are you here?"
-              subtitle="Choose the reason you entered this practice."
+              title={copy.onboarding.intention.title}
+              subtitle={copy.onboarding.intention.subtitle}
             />
             <AppSelectList options={INTENTION_OPTIONS} value={intention} onChange={setIntention} />
           </>
@@ -226,14 +231,14 @@ export function OnboardingScreen() {
         {currentStep === 'vow' && (
           <>
             <AppHeader
-              title="Choose your vow."
-              subtitle="This is the sentence you return to when the fire rises."
+              title={copy.onboarding.vow.title}
+              subtitle={copy.onboarding.vow.subtitle}
             />
             <AppSelectList options={VOW_OPTIONS} value={vowPresetId} onChange={setVowPresetId} />
             {vowPresetId === CUSTOM_VOW_ID && (
               <AppTextInput
-                label="Your vow"
-                placeholder="Write your vow in one sentence..."
+                label={copy.onboarding.vow.customLabel}
+                placeholder={copy.onboarding.vow.customPlaceholder}
                 value={customVow}
                 onChangeText={setCustomVow}
                 maxLength={280}
@@ -246,8 +251,8 @@ export function OnboardingScreen() {
         {currentStep === 'forge' && (
           <>
             <AppHeader
-              title="Where will you forge first?"
-              subtitle="Choose where your energy will be turned into action."
+              title={copy.onboarding.forge.title}
+              subtitle={copy.onboarding.forge.subtitle}
             />
             <AppSelectList options={FORGE_OPTIONS} value={forgeCategory} onChange={setForgeCategory} />
           </>
@@ -256,14 +261,14 @@ export function OnboardingScreen() {
         {currentStep === 'boundary' && (
           <>
             <AppHeader
-              title="Guard the gates."
-              subtitle="A boundary is a small rule that wins before the battle begins."
+              title={copy.onboarding.boundary.title}
+              subtitle={copy.onboarding.boundary.subtitle}
             />
             <AppSelectList options={BOUNDARY_OPTIONS} value={boundaryChoice} onChange={setBoundaryChoice} />
             {boundaryChoice === BOUNDARY_CUSTOM && (
               <AppTextInput
-                label="Your boundary"
-                placeholder="Name one rule you will keep..."
+                label={copy.onboarding.boundary.customLabel}
+                placeholder={copy.onboarding.boundary.customPlaceholder}
                 value={customBoundary}
                 onChangeText={setCustomBoundary}
                 maxLength={160}
@@ -278,8 +283,8 @@ export function OnboardingScreen() {
         {currentStep === 'path_start' && (
           <>
             <AppHeader
-              title="Where are you?"
-              subtitle="Honor the work you have already done."
+              title={copy.onboarding.pathStart.title}
+              subtitle={copy.onboarding.pathStart.subtitle}
             />
             <AppSelectList
               options={PATH_START_OPTIONS}
@@ -288,8 +293,8 @@ export function OnboardingScreen() {
             />
             {pathStartMode === 'existing' && (
               <AppTextInput
-                label="What day are you on?"
-                placeholder="e.g. 14"
+                label={copy.onboarding.pathStart.existingLabel}
+                placeholder={copy.onboarding.pathStart.existingPlaceholder}
                 value={existingDaysText}
                 onChangeText={setExistingDaysText}
                 keyboardType="numeric"
@@ -318,17 +323,17 @@ function StepWelcome() {
     <>
       <AppHeader
         align="center"
-        title="Welcome to Retain."
-        subtitle="A private practice of pause, command, and transmutation."
+        title={copy.onboarding.welcome.title}
+        subtitle={copy.onboarding.welcome.subtitle}
       />
       <AppCard tone="overlay" style={styles.centered}>
         <AppText variant="subheading" color="energy" align="center">
-          {'"When the fire rises, what will you remember?"'}
+          {copy.onboarding.welcome.quote}
         </AppText>
       </AppCard>
       <AppCard>
         <AppText variant="body" color="secondary">
-          {'Retain is a practice, not a promise. It does not ask you to be perfect. It asks you to choose — every time the fire rises — whether you will obey the compulsion or govern it.'}
+          {copy.onboarding.welcome.body}
         </AppText>
       </AppCard>
     </>
@@ -339,42 +344,38 @@ function StepPhilosophy() {
   return (
     <>
       <AppHeader
-        title="This is not about hating desire."
-        subtitle="The energy is the ally. The compulsion is the enemy. The man is never the enemy."
+        title={copy.onboarding.philosophy.title}
+        subtitle={copy.onboarding.philosophy.subtitle}
       />
       <AppCard>
-        <AppText variant="body" color="secondary">
-          {'This practice does not ask you to deny your nature, shame your body, or see desire as evil.'}
-        </AppText>
-        <AppText variant="body" color="secondary" style={styles.bodySpacing}>
-          {'It asks you to pause. To choose. To give the energy a worthy destination.'}
-        </AppText>
-        <AppText variant="body" color="secondary" style={styles.bodySpacing}>
-          {'The same fire that pulls you toward compulsion can be turned toward discipline, creation, courage, and depth.'}
-        </AppText>
+        {copy.onboarding.philosophy.body.map((paragraph, index) => (
+          <AppText
+            key={paragraph}
+            variant="body"
+            color="secondary"
+            style={index > 0 ? styles.bodySpacing : undefined}
+          >
+            {paragraph}
+          </AppText>
+        ))}
       </AppCard>
-      <AppQuoteBlock quote="Desire is not evil. The body is not dirty." attribution="Retain principle" />
+      <AppQuoteBlock
+        quote={copy.onboarding.philosophy.quote}
+        attribution={copy.onboarding.philosophy.quoteAttribution}
+      />
     </>
   );
 }
 
 function StepPrivacy() {
-  const bullets = [
-    'No account is created.',
-    'No analytics collected.',
-    'No private practice leaves your device.',
-    'Works without internet.',
-    'The vault belongs to you alone.',
-  ];
-
   return (
     <>
       <AppHeader
-        title="Your practice is private."
-        subtitle="No account. No cloud. No public profile."
+        title={copy.onboarding.privacy.title}
+        subtitle={copy.onboarding.privacy.subtitle}
       />
       <AppCard>
-        {bullets.map((bullet) => (
+        {copy.onboarding.privacy.bullets.map((bullet) => (
           <View key={bullet} style={styles.bullet}>
             <AppText variant="body" color="accent">
               {'—'}
@@ -387,7 +388,7 @@ function StepPrivacy() {
       </AppCard>
       <AppCard tone="overlay">
         <AppText variant="caption" color="muted" align="center">
-          {'What you build here is between you and your practice.'}
+          {copy.onboarding.privacy.footer}
         </AppText>
       </AppCard>
     </>
@@ -397,23 +398,19 @@ function StepPrivacy() {
 function StepDisclaimer() {
   return (
     <>
-      <AppHeader title="Before you begin." subtitle="Read and acknowledge." />
+      <AppHeader
+        title={copy.onboarding.disclaimer.title}
+        subtitle={copy.onboarding.disclaimer.subtitle}
+      />
       <AppCard>
         <AppText variant="label" color="secondary">
-          A note before the practice
+          {copy.onboarding.disclaimer.cardTitle}
         </AppText>
-        <AppText variant="body" color="muted" style={styles.disclaimerPara}>
-          {'Retain is a philosophical self-mastery, journaling, and discipline app. It is not medical advice, therapy, diagnosis, or a mental health service.'}
-        </AppText>
-        <AppText variant="body" color="muted" style={styles.disclaimerPara}>
-          {'Retain does not diagnose, treat, cure, or prevent any condition. It makes no claims about testosterone, fertility, attraction, disease, depression, anxiety, or athletic performance.'}
-        </AppText>
-        <AppText variant="body" color="muted" style={styles.disclaimerPara}>
-          {'The teaching draws from philosophical and historical traditions only. It is not religious authority, medical fact, or sexual technique.'}
-        </AppText>
-        <AppText variant="body" color="muted" style={styles.disclaimerPara}>
-          {'Desire is not evil. The body is not dirty. The practice is about pause, reflection, discipline, and direction.'}
-        </AppText>
+        {copy.onboarding.disclaimer.paragraphs.map((paragraph) => (
+          <AppText key={paragraph} variant="body" color="muted" style={styles.disclaimerPara}>
+            {paragraph}
+          </AppText>
+        ))}
       </AppCard>
     </>
   );
@@ -431,16 +428,25 @@ function StepBegin({ vow, intention, forgeCategory, boundary }: StepBeginProps) 
     <>
       <AppHeader
         align="center"
-        title="The path begins in the pause."
-        subtitle="Your practice is set. The work starts now."
+        title={copy.onboarding.begin.title}
+        subtitle={copy.onboarding.begin.subtitle}
       />
       <View style={styles.summaryList}>
-        {vow ? <SummaryRow label="Vow" value={`"${vow}"`} /> : null}
-        {intention ? <SummaryRow label="Intention" value={intention} /> : null}
-        {forgeCategory ? <SummaryRow label="First forge" value={forgeCategory} /> : null}
-        {boundary ? <SummaryRow label="First boundary" value={boundary} /> : null}
+        {vow ? <SummaryRow label={copy.onboarding.begin.summaryLabels.vow} value={`"${vow}"`} /> : null}
+        {intention ? (
+          <SummaryRow label={copy.onboarding.begin.summaryLabels.intention} value={intention} />
+        ) : null}
+        {forgeCategory ? (
+          <SummaryRow label={copy.onboarding.begin.summaryLabels.forge} value={forgeCategory} />
+        ) : null}
+        {boundary ? (
+          <SummaryRow label={copy.onboarding.begin.summaryLabels.boundary} value={boundary} />
+        ) : null}
       </View>
-      <AppQuoteBlock quote="The path begins in the pause." attribution="Retain" />
+      <AppQuoteBlock
+        quote={copy.onboarding.begin.quote}
+        attribution={copy.onboarding.begin.quoteAttribution}
+      />
     </>
   );
 }

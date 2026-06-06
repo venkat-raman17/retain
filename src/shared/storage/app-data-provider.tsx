@@ -17,7 +17,15 @@ type Status = 'loading' | 'ready' | 'error';
  * repositories to the tree. Renders a calm loading state while initializing and
  * a recoverable message if it fails — never a crash.
  */
-export function AppDataProvider({ children }: { children: ReactNode }) {
+export function AppDataProvider({
+  children,
+  onSettled,
+}: {
+  children: ReactNode;
+  /** Fired once the database has settled (ready or error) — lets the root hold
+   *  the native splash until data (and fonts) are ready, then reveal. */
+  onSettled?: () => void;
+}) {
   const [status, setStatus] = useState<Status>('loading');
   const [repositories, setRepositories] = useState<Repositories | null>(null);
 
@@ -38,6 +46,10 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (status !== 'loading') onSettled?.();
+  }, [status, onSettled]);
 
   if (status === 'error') {
     return (

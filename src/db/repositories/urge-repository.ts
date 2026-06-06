@@ -1,6 +1,7 @@
 import { urgeLogSchema, type UrgeLog } from '@/features/pause/domain/urge-log';
 
 import type { AppDatabase } from '../database';
+import { parseRows } from './parse-rows';
 
 export interface UrgeRepository {
   add(log: UrgeLog): Promise<void>;
@@ -60,7 +61,7 @@ export class SqliteUrgeRepository implements UrgeRepository {
       'SELECT * FROM urge_logs ORDER BY occurred_at DESC LIMIT ?;',
       [limit],
     );
-    return rows.map(toLog);
+    return parseRows('urge_logs', rows, toLog);
   }
 
   async count(): Promise<number> {

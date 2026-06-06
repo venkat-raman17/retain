@@ -12,6 +12,11 @@ import {
   AppScreen,
   AppText,
   AppTextInput,
+  FadeInRise,
+  NoJournalSymbol,
+  ScreenCrest,
+  TabletSigil,
+  symbolStroke,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
 
@@ -281,11 +286,16 @@ export function JournalScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <AppHeader
-          eyebrow="Journal"
-          title="The record."
-          subtitle="What you observe here cannot be taken."
-        />
+        <View>
+          <ScreenCrest>
+            <TabletSigil size={110} color={theme.colors.textMuted} strokeWidth={symbolStroke(110)} />
+          </ScreenCrest>
+          <AppHeader
+            eyebrow="Journal"
+            title="The record."
+            subtitle="What you observe here cannot be taken."
+          />
+        </View>
 
         <AppButton label="New entry" fullWidth onPress={() => setMode('new_entry')} />
 
@@ -308,16 +318,19 @@ export function JournalScreen() {
             </AppText>
           </AppCard>
         ) : filteredEntries.length === 0 ? (
-          <AppEmptyState
-            title="No record yet."
-            message="Write what is true. One line is enough."
-            actionLabel="New entry"
-            onAction={() => setMode('new_entry')}
-          />
+          <View style={styles.emptyState}>
+            <NoJournalSymbol size={56} color={theme.colors.textMuted} />
+            <AppEmptyState
+              title="No record yet."
+              message="Write what is true. One line is enough."
+              actionLabel="New entry"
+              onAction={() => setMode('new_entry')}
+            />
+          </View>
         ) : (
           <View style={styles.list}>
             {filteredEntries.map((entry, index) => (
-              <View key={entry.id}>
+              <FadeInRise key={entry.id} index={Math.min(index, 8)}>
                 <AppCard
                   tone="overlay"
                   onPress={() => {
@@ -343,7 +356,7 @@ export function JournalScreen() {
                   </AppText>
                 </AppCard>
                 {index < filteredEntries.length - 1 ? <AppDivider /> : null}
-              </View>
+              </FadeInRise>
             ))}
           </View>
         )}
@@ -357,6 +370,7 @@ const styles = StyleSheet.create({
   nav: { gap: theme.spacing.sm },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm },
   list: { gap: theme.spacing.xs },
+  emptyState: { gap: theme.spacing.md, alignItems: 'center' },
   entryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',

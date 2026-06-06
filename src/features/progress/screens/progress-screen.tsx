@@ -1,15 +1,48 @@
 import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
+import { copy } from '@/content';
 import { Routes } from '@/navigation';
-import { AppButton, AppCard, AppHeader, AppScreen, AppText } from '@/shared/components';
-import { theme } from '@/shared/design';
-import { usePath } from '@/features/path';
+import {
+  AppButton,
+  AppCard,
+  AppHeader,
+  AppScreen,
+  AppText,
+  FadeInRise,
+  MirrorSigil,
+  NoRecordSymbol,
+  ScreenCrest,
+  symbolStroke,
+  TRIGGER_GLYPHS,
+  useCountUp,
+} from '@/shared/components';
+import { theme, type AppTheme } from '@/shared/design';
+import { useTheme } from '@/shared/hooks/use-theme';
 
 import { useProgressSummary } from '../hooks/use-progress-summary';
-import type { ForgeCategoryCount, RecordData, TriggerCount } from '../services/progress-service';
+import type {
+  PathArc,
+  PracticeRhythm,
+  RecordData,
+  ReturnRecord,
+  TriggerCount,
+  WeeklyPattern,
+} from '../services/progress-service';
 
-// ─── Section components ───────────────────────────────────────────────────────
+type ThemeColors = AppTheme['colors'];
+type InsightColor = 'accent' | 'energy' | 'calm' | 'secondary';
+
+/** Display format matches the Journal screen: "Jun 6, 2026". */
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+// ─── Shared row primitives ────────────────────────────────────────────────────
 
 function SectionLabel({ children }: { children: string }) {
   return (
@@ -19,7 +52,15 @@ function SectionLabel({ children }: { children: string }) {
   );
 }
 
-function InsightRow({ label, value, valueColor = 'accent' }: { label: string; value: string; valueColor?: 'accent' | 'energy' | 'calm' | 'secondary' }) {
+function InsightRow({
+  label,
+  value,
+  valueColor = 'accent',
+}: {
+  label: string;
+  value: string;
+  valueColor?: InsightColor;
+}) {
   return (
     <View style={styles.insightRow}>
       <AppText variant="body" color="secondary">
@@ -32,56 +73,64 @@ function InsightRow({ label, value, valueColor = 'accent' }: { label: string; va
   );
 }
 
-function BarRow({ label, count, max }: { label: string; count: number; max: number }) {
-  const fill = max > 0 ? count / max : 0;
-  return (
-    <View style={styles.barRow}>
-      <AppText variant="body" color="secondary" style={styles.barLabel}>
-        {label}
-      </AppText>
-      <View style={styles.barTrack}>
-        <View style={[styles.barFill, { flex: fill }]} />
-        <View style={{ flex: 1 - fill }} />
-      </View>
-      <AppText variant="body" color={count > 0 ? 'energy' : 'muted'} style={styles.barCount}>
-        {count.toString()}
-      </AppText>
-    </View>
-  );
-}
+// ─── The 90-day arc (when it began, when the Crown is reached) ─────────────────
 
-// ─── Weekly pattern card ──────────────────────────────────────────────────────
-
-function WeeklyPatternCard({ record }: { record: RecordData }) {
-  const { weeklyPattern } = record;
-  const hasWeekData =
-    weeklyPattern.mostCommonTrigger !== null || weeklyPattern.strongestForgeCategory !== null;
-
+function ArcCard({ arc, colors }: { arc: PathArc; colors: ThemeColors }) {
   return (
     <AppCard tone="overlay">
-      <SectionLabel>{"This week's pattern"}</SectionLabel>
-      {hasWeekData ? (
-        <View style={styles.cardBody}>
-          {weeklyPattern.mostCommonTriggerLabel ? (
-            <InsightRow label="Most common trigger" value={weeklyPattern.mostCommonTriggerLabel} valueColor="accent" />
-          ) : null}
-          {weeklyPattern.strongestUrgeHourLabel ? (
-            <InsightRow label="Strongest urge hour" value={weeklyPattern.strongestUrgeHourLabel} valueColor="accent" />
-          ) : null}
-          {weeklyPattern.mostCommonResponse ? (
-            <InsightRow label="Most common response" value={weeklyPattern.mostCommonResponse} valueColor="secondary" />
-          ) : null}
-          {weeklyPattern.strongestForgeCategoryLabel ? (
-            <InsightRow label="Strongest forge" value={weeklyPattern.strongestForgeCategoryLabel} valueColor="energy" />
-          ) : null}
-        </View>
+      <SectionLabel>{copy.record.arc.label}</SectionLabel>
+      {!arc.started ? (
+        <AppText variant="body" color="muted">
+          {copy.record.arc.notStarted}
+        </AppText>
       ) : (
         <View style={styles.cardBody}>
-          <AppText variant="body" color="muted">
-            Not enough record yet.
+          <AppText variant="heading" color="primary">
+            {`Day ${arc.currentDay} of ${arc.totalDays}`}
           </AppText>
-          <AppText variant="body" color="muted" style={styles.emptyNote}>
-            Log urges, forge acts, and journal entries to reveal the pattern.
+
+          {/* Timeline: start ●━━━━○ crown, filled to the current day */}
+          <View style={styles.arcTimeline}>
+            <View style={[styles.arcDot, { backgroundColor: colors.ember }]} />
+            <View style={[styles.arcTrack, { backgroundColor: colors.border }]}>
+              <View style={[styles.arcFill, { flex: arc.progress, backgroundColor: colors.ember }]} />
+              <View style={{ flex: Math.max(0, 1 - arc.progress) }} />
+            </View>
+            <View
+              style={[
+                styles.arcDot,
+                {
+                  borderColor: arc.complete ? colors.ember : colors.borderStrong,
+                  borderWidth: 1.5,
+                  backgroundColor: arc.complete ? colors.ember : 'transparent',
+                },
+              ]}
+            />
+          </View>
+
+          <View style={styles.arcDates}>
+            <View>
+              <AppText variant="caption" color="muted" uppercase>
+                {copy.record.arc.began}
+              </AppText>
+              <AppText variant="body" color="secondary">
+                {arc.startDateISO ? formatDate(arc.startDateISO) : '—'}
+              </AppText>
+            </View>
+            <View style={styles.arcDateRight}>
+              <AppText variant="caption" color="muted" uppercase>
+                {copy.record.arc.crown}
+              </AppText>
+              <AppText variant="body" color="energy">
+                {arc.endDateISO ? formatDate(arc.endDateISO) : '—'}
+              </AppText>
+            </View>
+          </View>
+
+          <AppText variant="body" color={arc.complete ? 'calm' : 'muted'}>
+            {arc.complete
+              ? copy.record.arc.complete
+              : `${arc.daysRemaining} ${arc.daysRemaining === 1 ? copy.record.arc.remainingOne : copy.record.arc.remaining}`}
           </AppText>
         </View>
       )}
@@ -89,93 +138,180 @@ function WeeklyPatternCard({ record }: { record: RecordData }) {
   );
 }
 
-// ─── Fire map ────────────────────────────────────────────────────────────────
+// ─── 1. What the record reveals (lead synthesis) ───────────────────────────────
 
-function FireMapCard({ triggerCounts }: { triggerCounts: TriggerCount[] }) {
+function RevealCard({ record }: { record: RecordData }) {
+  return (
+    <AppCard tone="overlay">
+      <SectionLabel>{copy.record.reveal.label}</SectionLabel>
+      {record.reveal ? (
+        <View style={styles.cardBody}>
+          <AppText variant="title" color="primary">
+            {record.reveal.title}
+          </AppText>
+          <AppText variant="body" color="secondary">
+            {record.reveal.body}
+          </AppText>
+          <PatternRows pattern={record.weeklyPattern} />
+        </View>
+      ) : (
+        <AppText variant="body" color="muted">
+          {copy.record.reveal.empty}
+        </AppText>
+      )}
+    </AppCard>
+  );
+}
+
+function PatternRows({ pattern }: { pattern: WeeklyPattern }) {
+  const hasAny =
+    pattern.mostCommonTriggerLabel !== null ||
+    pattern.strongestUrgeHourLabel !== null ||
+    pattern.mostCommonResponse !== null ||
+    pattern.strongestForgeCategoryLabel !== null;
+  if (!hasAny) return null;
+
+  return (
+    <View style={styles.patternRows}>
+      {pattern.mostCommonTriggerLabel ? (
+        <InsightRow label={copy.record.pattern.trigger} value={pattern.mostCommonTriggerLabel} valueColor="accent" />
+      ) : null}
+      {pattern.strongestUrgeHourLabel ? (
+        <InsightRow label={copy.record.pattern.hour} value={pattern.strongestUrgeHourLabel} valueColor="accent" />
+      ) : null}
+      {pattern.mostCommonResponse ? (
+        <InsightRow label={copy.record.pattern.response} value={pattern.mostCommonResponse} valueColor="secondary" />
+      ) : null}
+      {pattern.strongestForgeCategoryLabel ? (
+        <InsightRow label={copy.record.pattern.forge} value={pattern.strongestForgeCategoryLabel} valueColor="energy" />
+      ) : null}
+    </View>
+  );
+}
+
+// ─── 2. The fire map ────────────────────────────────────────────────────────
+
+function FireMapCard({ triggerCounts, colors }: { triggerCounts: TriggerCount[]; colors: ThemeColors }) {
+  const total = triggerCounts.reduce((sum, t) => sum + t.count, 0);
   const maxCount = Math.max(...triggerCounts.map((t) => t.count), 1);
   return (
     <AppCard>
-      <SectionLabel>The fire map</SectionLabel>
+      <SectionLabel>{copy.record.fireMap.label}</SectionLabel>
+      {total === 0 ? (
+        <AppText variant="body" color="muted" style={styles.framing}>
+          {copy.record.fireMap.empty}
+        </AppText>
+      ) : null}
       <View style={styles.cardBody}>
         {triggerCounts.map((t) => (
-          <BarRow key={t.triggerType} label={t.label} count={t.count} max={maxCount} />
+          <FireRow key={t.triggerType} item={t} max={maxCount} colors={colors} />
         ))}
       </View>
     </AppCard>
   );
 }
 
-// ─── Return record ────────────────────────────────────────────────────────────
+function FireRow({ item, max, colors }: { item: TriggerCount; max: number; colors: ThemeColors }) {
+  const Glyph = TRIGGER_GLYPHS[item.triggerType];
+  const fill = max > 0 ? item.count / max : 0;
+  const active = item.count > 0;
+  return (
+    <View style={styles.fireRow}>
+      {Glyph ? (
+        <Glyph size={18} color={active ? colors.ember : colors.textMuted} strokeWidth={symbolStroke(18)} />
+      ) : null}
+      <AppText variant="body" color="secondary" style={styles.fireLabel}>
+        {item.label}
+      </AppText>
+      <View style={[styles.barTrack, { backgroundColor: colors.border }]}>
+        <View style={[styles.barFill, { flex: fill, backgroundColor: colors.ember }]} />
+        <View style={{ flex: Math.max(0, 1 - fill) }} />
+      </View>
+      <AppText variant="body" color={active ? 'energy' : 'muted'} style={styles.barCount}>
+        {item.count.toString()}
+      </AppText>
+    </View>
+  );
+}
 
-function ReturnRecordCard({ record }: { record: RecordData }) {
-  const { returnRecord } = record;
-  const postureColor = returnRecord.currentPosture === 'Returning' ? 'accent' : 'calm';
+// ─── 3. The return ────────────────────────────────────────────────────────────
+
+function ReturnCard({ returnRecord }: { returnRecord: ReturnRecord }) {
+  const noReturns = returnRecord.lapsesStudied === 0 && returnRecord.returnsRecorded === 0;
+  const postureColor: InsightColor =
+    returnRecord.currentPosture === copy.record.return.postureReturning ? 'accent' : 'calm';
   return (
     <AppCard tone="overlay">
-      <SectionLabel>Return record</SectionLabel>
+      <SectionLabel>{copy.record.return.label}</SectionLabel>
+      {noReturns ? (
+        <AppText variant="body" color="muted" style={styles.framing}>
+          {copy.record.return.empty}
+        </AppText>
+      ) : null}
       <View style={styles.cardBody}>
-        <InsightRow label="Lapses studied" value={returnRecord.lapsesStudied.toString()} valueColor="secondary" />
-        <InsightRow label="Returns recorded" value={returnRecord.returnsRecorded.toString()} valueColor="calm" />
-        <InsightRow label="Average return time" value={returnRecord.averageReturnTime} valueColor="secondary" />
-        <InsightRow label="Current posture" value={returnRecord.currentPosture} valueColor={postureColor} />
+        <InsightRow
+          label={copy.record.return.lapsesStudied}
+          value={returnRecord.lapsesStudied.toString()}
+          valueColor="secondary"
+        />
+        <InsightRow
+          label={copy.record.return.returnsRecorded}
+          value={returnRecord.returnsRecorded.toString()}
+          valueColor="calm"
+        />
+        <InsightRow
+          label={copy.record.return.averageReturn}
+          value={returnRecord.averageReturnTime}
+          valueColor="secondary"
+        />
+        <InsightRow
+          label={copy.record.return.posture}
+          value={returnRecord.currentPosture}
+          valueColor={postureColor}
+        />
       </View>
     </AppCard>
   );
 }
 
-// ─── Forge direction ─────────────────────────────────────────────────────────
+// ─── 4. Forge balance (interpretation only — the chart lives on the Forge tab) ──
 
-function ForgeDirectionCard({ forgeCategoryCounts }: { forgeCategoryCounts: ForgeCategoryCount[] }) {
-  const maxCount = Math.max(...forgeCategoryCounts.map((c) => c.count), 1);
-  const topCategory = forgeCategoryCounts[0];
-  const leastUsed = [...forgeCategoryCounts].reverse().find((c) => c.count === 0);
-
+function ForgeBalanceCard({ forgeBalance }: { forgeBalance: string | null }) {
   return (
     <AppCard>
-      <SectionLabel>Forge direction</SectionLabel>
-      <View style={styles.cardBody}>
-        {forgeCategoryCounts.map((c) => (
-          <BarRow key={c.category} label={c.label} count={c.count} max={maxCount} />
-        ))}
-        {topCategory && topCategory.count > 0 ? (
-          <View style={styles.forgeInsight}>
-            <AppText variant="caption" color="muted">
-              {leastUsed
-                ? `You are forging mostly through ${topCategory.label.toLowerCase()}. Next: add one act of ${leastUsed.label.toLowerCase()}.`
-                : `You are forging across all directions.`}
-            </AppText>
-          </View>
-        ) : null}
-      </View>
+      <SectionLabel>{copy.record.forge.label}</SectionLabel>
+      <AppText variant="body" color={forgeBalance ? 'secondary' : 'muted'}>
+        {forgeBalance ?? copy.record.forge.empty}
+      </AppText>
     </AppCard>
   );
 }
 
-// ─── Practice rhythm ─────────────────────────────────────────────────────────
+// ─── 5. Practice rhythm ────────────────────────────────────────────────────────
 
-function PracticeRhythmCard({ record }: { record: RecordData }) {
-  const { practiceRhythm } = record;
+function RhythmCard({ practiceRhythm }: { practiceRhythm: PracticeRhythm }) {
   return (
     <AppCard tone="overlay">
-      <SectionLabel>Practice rhythm</SectionLabel>
+      <SectionLabel>{copy.record.rhythm.label}</SectionLabel>
       <View style={styles.rhythmGrid}>
-        <RhythmItem label="Active days" value={practiceRhythm.activeDaysThisWeek} />
-        <RhythmItem label="Urges met" value={practiceRhythm.urgesThisWeek} />
-        <RhythmItem label="Journal" value={practiceRhythm.journalEntriesThisWeek} />
-        <RhythmItem label="Forge acts" value={practiceRhythm.forgeActsThisWeek} />
+        <RhythmItem label={copy.record.rhythm.activeDays} value={practiceRhythm.activeDaysThisWeek} />
+        <RhythmItem label={copy.record.rhythm.urges} value={practiceRhythm.urgesThisWeek} />
+        <RhythmItem label={copy.record.rhythm.journal} value={practiceRhythm.journalEntriesThisWeek} />
+        <RhythmItem label={copy.record.rhythm.forge} value={practiceRhythm.forgeActsThisWeek} />
       </View>
       <AppText variant="caption" color="muted" style={styles.rhythmNote}>
-        This week
+        {copy.record.rhythm.note}
       </AppText>
     </AppCard>
   );
 }
 
 function RhythmItem({ label, value }: { label: string; value: number }) {
+  const display = useCountUp(value);
   return (
     <View style={styles.rhythmItem}>
       <AppText variant="display" color="energy" numberOfLines={1} adjustsFontSizeToFit>
-        {value.toString()}
+        {display.toString()}
       </AppText>
       <AppText variant="caption" color="muted" uppercase numberOfLines={1}>
         {label}
@@ -184,76 +320,56 @@ function RhythmItem({ label, value }: { label: string; value: number }) {
   );
 }
 
-// ─── Weekly account ───────────────────────────────────────────────────────────
+// ─── 6. Weekly account ─────────────────────────────────────────────────────────
 
 function WeeklyAccountCard({ onPress }: { onPress: () => void }) {
   return (
     <AppCard border="gold">
-      <SectionLabel>Weekly account</SectionLabel>
+      <SectionLabel>{copy.record.account.label}</SectionLabel>
       <View style={styles.cardBody}>
-        <AppText variant="body" color="muted">
-          What pattern kept returning?
-        </AppText>
-        <AppText variant="body" color="muted">
-          Where did I obey less quickly?
-        </AppText>
-        <AppText variant="body" color="muted">
-          What must I guard next week?
-        </AppText>
+        {copy.record.account.prompts.map((prompt) => (
+          <AppText key={prompt} variant="body" color="muted">
+            {prompt}
+          </AppText>
+        ))}
       </View>
       <View style={styles.cardCta}>
-        <AppButton label="Write weekly account" variant="secondary" onPress={onPress} />
+        <AppButton label={copy.record.account.cta} variant="secondary" onPress={onPress} />
       </View>
     </AppCard>
   );
 }
 
-// ─── Next command ─────────────────────────────────────────────────────────────
+// ─── 7. Next command ───────────────────────────────────────────────────────────
 
 function NextCommandCard({ record }: { record: RecordData }) {
-  const { nextCommand } = record;
   return (
     <AppCard border="ember">
-      <SectionLabel>Next command</SectionLabel>
+      <SectionLabel>{copy.record.command.label}</SectionLabel>
       <View style={styles.cardBody}>
         <AppText variant="title" color="primary">
-          {nextCommand.title}
+          {record.nextCommand.title}
         </AppText>
-        <AppText variant="body" color="secondary" style={styles.commandBody}>
-          {nextCommand.body}
+        <AppText variant="body" color="secondary">
+          {record.nextCommand.body}
         </AppText>
       </View>
     </AppCard>
   );
 }
 
-// ─── Empty state ──────────────────────────────────────────────────────────────
+// ─── Hard-error fallback (service returned null) ───────────────────────────────
 
-function EmptyRecord({ onOpen }: { onOpen: () => void }) {
+function RecordUnavailable({ colors }: { colors: ThemeColors }) {
   return (
-    <View style={styles.emptyContainer}>
-      <AppCard tone="overlay">
-        <SectionLabel>The record is empty</SectionLabel>
-        <View style={styles.cardBody}>
-          <AppText variant="body" color="secondary">
-            Retain does not judge what has not yet been observed.
-          </AppText>
-          <AppText variant="body" color="muted" style={styles.emptyNote}>
-            Use the Path, Forge, Journal, and Pause tools. After a few entries, this page will begin
-            to show your patterns.
-          </AppText>
-        </View>
-        <View style={styles.cardCta}>
-          <AppButton label="Open today's chamber" variant="primary" onPress={onOpen} />
-        </View>
-      </AppCard>
-
-      <AppCard tone="overlay">
-        <AppText variant="body" color="calm" align="center">
-          {'Command is trained in the return.\nThe record shows where the fire asks for discipline.'}
+    <AppCard tone="overlay">
+      <View style={styles.fallback}>
+        <NoRecordSymbol size={48} color={colors.textMuted} strokeWidth={symbolStroke(48)} />
+        <AppText variant="body" color="muted" align="center">
+          {copy.record.reveal.empty}
         </AppText>
-      </AppCard>
-    </View>
+      </View>
+    </AppCard>
   );
 }
 
@@ -261,41 +377,66 @@ function EmptyRecord({ onOpen }: { onOpen: () => void }) {
 
 export function ProgressScreen() {
   const { record, loading } = useProgressSummary();
-  const { currentDay } = usePath();
+  const { colors } = useTheme();
   const router = useRouter();
 
-  const day = currentDay > 0 ? currentDay : 1;
-  const openChamber = () =>
-    router.push({ pathname: Routes.chamber, params: { day: day.toString() } } as never);
   const openJournal = () => router.push(Routes.journal as never);
 
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <AppHeader
-          eyebrow="Record"
-          title="The record of practice."
-          subtitle="Your practice is more than a streak."
-        />
+        {/* Intention header — the mirror sigil sits faintly behind the title */}
+        <View>
+          <ScreenCrest>
+            <MirrorSigil size={120} color={colors.textMuted} strokeWidth={symbolStroke(120)} />
+          </ScreenCrest>
+          <AppHeader
+            eyebrow={copy.record.eyebrow}
+            title={copy.record.title}
+            subtitle={copy.record.subtitle}
+          />
+          <AppText variant="body" color="secondary" style={styles.intention}>
+            {copy.record.intention}
+          </AppText>
+        </View>
 
         {!loading ? (
           record ? (
             <>
-              <WeeklyPatternCard record={record} />
-              <FireMapCard triggerCounts={record.triggerCounts} />
-              <ReturnRecordCard record={record} />
-              <ForgeDirectionCard forgeCategoryCounts={record.forgeCategoryCounts} />
-              <PracticeRhythmCard record={record} />
-              <WeeklyAccountCard onPress={openJournal} />
-              <NextCommandCard record={record} />
-              <AppCard tone="overlay">
-                <AppText variant="body" color="calm" align="center">
-                  {'Command is trained in the return.\nThe record shows where the fire asks for discipline.'}
-                </AppText>
-              </AppCard>
+              <FadeInRise index={0}>
+                <ArcCard arc={record.arc} colors={colors} />
+              </FadeInRise>
+              <FadeInRise index={1}>
+                <RevealCard record={record} />
+              </FadeInRise>
+              <FadeInRise index={2}>
+                <FireMapCard triggerCounts={record.triggerCounts} colors={colors} />
+              </FadeInRise>
+              <FadeInRise index={3}>
+                <ReturnCard returnRecord={record.returnRecord} />
+              </FadeInRise>
+              <FadeInRise index={4}>
+                <ForgeBalanceCard forgeBalance={record.forgeBalance} />
+              </FadeInRise>
+              <FadeInRise index={5}>
+                <RhythmCard practiceRhythm={record.practiceRhythm} />
+              </FadeInRise>
+              <FadeInRise index={6}>
+                <WeeklyAccountCard onPress={openJournal} />
+              </FadeInRise>
+              <FadeInRise index={7}>
+                <NextCommandCard record={record} />
+              </FadeInRise>
+              <FadeInRise index={8}>
+                <AppCard tone="overlay">
+                  <AppText variant="body" color="calm" align="center">
+                    {copy.record.principle}
+                  </AppText>
+                </AppCard>
+              </FadeInRise>
             </>
           ) : (
-            <EmptyRecord onOpen={openChamber} />
+            <RecordUnavailable colors={colors} />
           )
         ) : null}
       </View>
@@ -307,11 +448,11 @@ export function ProgressScreen() {
 
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
+  intention: { marginTop: theme.spacing.sm },
   sectionLabel: { marginBottom: theme.spacing.sm },
   cardBody: { gap: theme.spacing.sm },
   cardCta: { marginTop: theme.spacing.lg },
-  emptyContainer: { gap: theme.spacing.lg },
-  emptyNote: { marginTop: theme.spacing.xs },
+  framing: { marginBottom: theme.spacing.md },
 
   insightRow: {
     flexDirection: 'row',
@@ -319,42 +460,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: theme.spacing.md,
   },
+  patternRows: { marginTop: theme.spacing.sm, gap: theme.spacing.sm },
 
-  barRow: {
+  arcTimeline: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.sm,
+    marginVertical: theme.spacing.xs,
   },
-  barLabel: { width: 110 },
+  arcDot: { width: 9, height: 9, borderRadius: 5 },
+  arcTrack: {
+    flex: 1,
+    height: 6,
+    flexDirection: 'row',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  arcFill: { borderRadius: 3 },
+  arcDates: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  arcDateRight: { alignItems: 'flex-end' },
+
+  fireRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
+  fireLabel: { width: 100 },
   barTrack: {
     flex: 1,
     height: 4,
     flexDirection: 'row',
     borderRadius: 2,
     overflow: 'hidden',
-    backgroundColor: theme.colors.border,
   },
-  barFill: {
-    backgroundColor: theme.colors.ember,
-    borderRadius: 2,
-  },
-  barCount: { width: 28, textAlign: 'right' },
+  barFill: { borderRadius: 2 },
+  barCount: { width: 24, textAlign: 'right' },
 
-  forgeInsight: { marginTop: theme.spacing.sm },
+  rhythmGrid: { flexDirection: 'row', gap: theme.spacing.sm },
+  rhythmItem: { flex: 1, alignItems: 'center', gap: theme.spacing.xs },
+  rhythmNote: { marginTop: theme.spacing.sm, textAlign: 'center' },
 
-  rhythmGrid: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
-  },
-  rhythmItem: {
-    flex: 1,
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-  },
-  rhythmNote: {
-    marginTop: theme.spacing.sm,
-    textAlign: 'center',
-  },
-
-  commandBody: { marginTop: theme.spacing.sm },
+  fallback: { alignItems: 'center', gap: theme.spacing.md, paddingVertical: theme.spacing.md },
 });

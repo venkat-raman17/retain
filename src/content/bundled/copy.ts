@@ -150,7 +150,7 @@ export const copy = {
     previewEvening: 'Evening account',
     longPathComplete:
       'The daily chambers are complete. Walk the Long Path — revisit any day from the map.',
-    recordLapse: 'Record a lapse and return',
+    recordLapse: 'Lapse and return',
     feelTheFire: 'I Feel the Fire',
   },
 
@@ -189,6 +189,86 @@ export const copy = {
       done: 'Day recorded. Well walked.',
       gate: 'Open the hidden instruction before completing the day.',
     },
+  },
+
+  record: {
+    eyebrow: 'Record',
+    title: 'The record of practice.',
+    subtitle: 'Your practice is more than a streak.',
+    intention:
+      'Path is what you do today. This is the mirror — what the record reveals about you: where the fire rises, how you answer, and how fast you return.',
+
+    arc: {
+      label: 'The 90-day arc',
+      began: 'Began',
+      crown: 'Crown',
+      remaining: 'days remain',
+      remainingOne: 'day remains',
+      notStarted: 'Your arc has not begun. Begin the path to set Day one.',
+      complete: 'The ninety days are complete. The Crown is yours.',
+    },
+
+    reveal: {
+      label: 'What the record reveals',
+      empty:
+        'Nothing observed yet. Each urge you log, each act you forge, each return you record draws the pattern. Begin, and the mirror will show your face.',
+    },
+
+    pattern: {
+      trigger: 'Most common trigger',
+      hour: 'Strongest urge hour',
+      response: 'Most common response',
+      forge: 'Strongest forge',
+    },
+
+    fireMap: {
+      label: 'The fire map',
+      empty:
+        'The fires you may meet. When you log an urge you name which one — the map will show where you are most tested.',
+    },
+
+    return: {
+      label: 'The return',
+      empty: 'No lapse recorded. The record measures not the fall, but the speed of the return.',
+      lapsesStudied: 'Lapses studied',
+      returnsRecorded: 'Returns recorded',
+      averageReturn: 'Average return',
+      posture: 'Current posture',
+      postureOnPath: 'On the path',
+      postureReturning: 'Returning',
+      noReturnYet: '—',
+    },
+
+    forge: {
+      label: 'Forge balance',
+      empty: 'No acts forged yet. The record will show where your energy goes — and where it is missing.',
+    },
+
+    rhythm: {
+      label: 'Practice rhythm',
+      note: 'This week',
+      activeDays: 'Active days',
+      urges: 'Urges met',
+      journal: 'Journal',
+      forge: 'Forge acts',
+    },
+
+    account: {
+      label: 'Weekly account',
+      prompts: [
+        'What pattern kept returning?',
+        'Where did I obey less quickly?',
+        'What must I guard next week?',
+      ],
+      cta: 'Write weekly account',
+    },
+
+    command: {
+      label: 'Next command',
+    },
+
+    principle:
+      'Command is trained in the return.\nThe record shows where the fire asks for discipline.',
   },
 
   settings: {

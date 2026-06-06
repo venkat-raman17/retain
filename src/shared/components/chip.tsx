@@ -1,6 +1,8 @@
 import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { theme } from '@/shared/design';
+import { haptics } from '@/shared/lib';
+import { useTheme } from '@/shared/hooks/use-theme';
 
 import { AppText, type TextColor } from './text';
 
@@ -14,27 +16,29 @@ export interface AppChipProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const toneMap: Record<ChipTone, { bg: string; border: string; text: TextColor }> = {
-  neutral: { bg: theme.colors.surfaceOverlay, border: theme.colors.borderStrong, text: 'secondary' },
-  energy: { bg: theme.colors.primarySoft, border: theme.colors.primary, text: 'energy' },
-  accent: { bg: theme.colors.accentSoft, border: theme.colors.accent, text: 'accent' },
-  support: { bg: theme.colors.supportSoft, border: theme.colors.support, text: 'support' },
-};
-
 export function AppChip({ label, selected = false, onPress, tone = 'neutral', style }: AppChipProps) {
-  const colors = toneMap[tone];
+  const { colors } = useTheme();
+
+  const toneMap: Record<ChipTone, { bg: string; border: string; text: TextColor }> = {
+    neutral: { bg: colors.surfaceOverlay, border: colors.borderStrong, text: 'secondary' },
+    energy: { bg: colors.primarySoft, border: colors.primary, text: 'energy' },
+    accent: { bg: colors.accentSoft, border: colors.accent, text: 'accent' },
+    support: { bg: colors.supportSoft, border: colors.support, text: 'support' },
+  };
+
+  const tone_ = toneMap[tone];
   const content = (
     <View
       style={[
         styles.chip,
         {
-          backgroundColor: selected ? colors.bg : 'transparent',
-          borderColor: selected ? colors.border : theme.colors.border,
+          backgroundColor: selected ? tone_.bg : 'transparent',
+          borderColor: selected ? tone_.border : colors.border,
         },
         style,
       ]}
     >
-      <AppText variant="label" color={selected ? colors.text : 'secondary'}>
+      <AppText variant="label" color={selected ? tone_.text : 'secondary'}>
         {label}
       </AppText>
     </View>
@@ -42,7 +46,14 @@ export function AppChip({ label, selected = false, onPress, tone = 'neutral', st
 
   if (!onPress) return content;
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityState={{ selected }}>
+    <Pressable
+      onPress={() => {
+        haptics.selection();
+        onPress();
+      }}
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+    >
       {content}
     </Pressable>
   );
