@@ -10,10 +10,12 @@
     "userInterfaceStyle": "dark",
     "backgroundColor": "#0C0B0A",
     "ios": {
+      "bundleIdentifier": "com.venkatramanks.retain",
       "icon": "./assets/expo.icon",
       "supportsTablet": false
     },
     "android": {
+      "package": "com.venkatramanks.retain",
       "adaptiveIcon": {
         "backgroundColor": "#0B0B12",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
