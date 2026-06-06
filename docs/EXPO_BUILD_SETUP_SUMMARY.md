@@ -25,15 +25,19 @@ Added build convenience scripts:
 - `pnpm run build:preview` — Build both platforms
 - `pnpm run build:dev:android` / `build:dev:ios` — Local testing builds
 
-### 4. `.github/workflows/eas-build-preview.yml` — GitHub Actions CI/CD
-- **Triggers:** Push to main, PR to main
-- **Steps:**
+### 4. GitHub Actions Workflows — Manual Build Triggers
+- **Android Workflow:** `.github/workflows/eas-build-preview.yml`
+  - **Trigger:** Manual via GitHub Actions UI (`workflow_dispatch`)
+  - **Output:** Android APK artifact
+- **iOS Workflow:** `.github/workflows/eas-build-preview-ios.yml`
+  - **Trigger:** Manual via GitHub Actions UI (`workflow_dispatch`)
+  - **Output:** iOS IPA artifact
+- **Each workflow:**
   1. Checkout code
   2. Setup Node 18 + pnpm 9
   3. Run full verify (typecheck + lint + tests)
-  4. Build Android APK
-  5. Build iOS IPA
-  6. Upload artifacts for download
+  4. Build platform (APK or IPA)
+  5. Upload artifact for download
 - **Secrets:** Uses `EXPO_TOKEN` from GitHub Secrets
 
 ### 5. `docs/BUILD_PREVIEW.md` — Reference Guide
@@ -138,42 +142,40 @@ pnpm run build:preview:ios
    - Go to GitHub repo → Settings → Secrets and variables → Actions
    - Create secret: `EXPO_TOKEN` = (paste token)
 
-3. **Verify Workflow File:**
-   - Workflow file already created at `.github/workflows/eas-build-preview.yml`
-   - Committed to repo
+3. **Verify Workflow Files:**
+   - Android: `.github/workflows/eas-build-preview.yml`
+   - iOS: `.github/workflows/eas-build-preview-ios.yml`
+   - Both committed to repo
 
-```bash
-# Test CI/CD
-git push origin main
-# → Watch Actions tab for build progress
-# → Download APK/IPA artifacts when ready
-```
+4. **Trigger Manual Builds:**
+   ```
+   Go to GitHub repo → Actions tab
+   → Select "EAS Build Preview Android" or "EAS Build Preview iOS"
+   → Click "Run workflow" button
+   → Watch progress, download artifact when ready
+   ```
 
-✅ **After this:** Automated builds on every push to main
+✅ **After this:** Manual build triggers available in GitHub Actions
 
-### Phase 6: TestFlight Auto-Submission (Optional, 5 min)
+### Phase 6: TestFlight Submission (Optional, 5 min)
 
-To automatically submit iOS builds to TestFlight:
+To submit iOS builds to TestFlight after workflow completes:
 
-1. Update `eas.json` submit section (add after build config):
-```json
-{
-  "submit": {
-    "preview": {
-      "ios": {
-        "testFlightEnabled": true
-      }
-    }
-  }
-}
-```
-
-2. After build completes:
+1. Download IPA artifact from workflow run
+2. Submit locally:
 ```bash
 eas submit --platform ios --latest
 ```
 
-✅ **After this:** iOS builds auto-submitted to TestFlight testers
+Or add submit step to iOS workflow in `.github/workflows/eas-build-preview-ios.yml`:
+```yaml
+      - name: Submit to TestFlight
+        run: eas submit --platform ios --latest
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+```
+
+✅ **After this:** iOS builds submitted to TestFlight testers
 
 ## From Expo Portal Perspective
 

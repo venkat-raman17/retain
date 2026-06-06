@@ -198,30 +198,40 @@ Error: INSTALL_FAILED_INVALID_APK
 
 ## GitHub Actions CI/CD
 
-### Workflow File
-Location: `.github/workflows/eas-build-preview.yml`
+### Workflow Files
+- **Android:** `.github/workflows/eas-build-preview.yml`
+- **iOS:** `.github/workflows/eas-build-preview-ios.yml`
 
-**Triggers:**
-- Push to main branch
-- Pull requests to main branch
+**Trigger:** Manual only (`workflow_dispatch`)
 
-**Steps:**
+### Running Builds via GitHub Actions
+
+1. Go to your repo → Actions tab
+2. Select workflow:
+   - "EAS Build Preview Android" — builds APK
+   - "EAS Build Preview iOS" — builds IPA
+3. Click "Run workflow" button
+4. Wait for build to complete (10-20 minutes typical)
+5. Download artifact from build summary
+
+### Each Workflow Steps
 1. Checkout code
 2. Setup Node 18 + pnpm 9
 3. Install dependencies
 4. Run `pnpm run verify` (typecheck + lint + tests)
-5. Build Android APK
-6. Build iOS IPA
-7. Upload artifacts
+5. Build platform-specific artifact (APK or IPA)
+6. Upload artifact
 
 **Access Results:**
-- Go to Actions tab → Latest workflow run
+- Go to Actions tab → Select workflow run
 - View build logs in real-time
-- Download artifacts (APK/IPA) after completion
+- Download artifact (APK or IPA) from summary
 
 ### Customizing Triggers
 
-**Push to main only (no PR builds):**
+To change from manual to automatic:
+
+**Push to main:**
 ```yaml
 on:
   push:
@@ -237,10 +247,12 @@ on:
       - 'v*'
 ```
 
-**Manual trigger:**
+**Pull requests:**
 ```yaml
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 ```
 
 ## Next Steps
