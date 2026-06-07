@@ -17,7 +17,8 @@
       },
       "ios": {
         "credentialsSource": "remote",
-        "distribution": "store"
+        "distribution": "store",
+        "autoIncrement": true
       }
     },
     "production": {
@@ -27,7 +28,8 @@
       },
       "ios": {
         "credentialsSource": "remote",
-        "distribution": "store"
+        "distribution": "store",
+        "autoIncrement": true
       }
     }
   }
