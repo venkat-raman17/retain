@@ -1,4 +1,5 @@
-import { useRouter } from 'expo-router';
+import { useCallback } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 import { copy } from '@/content';
@@ -376,9 +377,15 @@ function RecordUnavailable({ colors }: { colors: ThemeColors }) {
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export function ProgressScreen() {
-  const { record, loading } = useProgressSummary();
+  const { record, loading, refresh } = useProgressSummary();
   const { colors } = useTheme();
   const router = useRouter();
+
+  useFocusEffect(
+    useCallback(() => {
+      refresh();
+    }, [refresh]),
+  );
 
   const openJournal = () => router.push(Routes.journal as never);
 

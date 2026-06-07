@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { createLogger, systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
@@ -10,6 +10,7 @@ const log = createLogger('progress');
 export interface UseProgressSummary {
   record: RecordData | null;
   loading: boolean;
+  refresh: () => void;
 }
 
 /**
@@ -22,6 +23,8 @@ export function useProgressSummary(): UseProgressSummary {
 
   const [record, setRecord] = useState<RecordData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [reloadToken, setReloadToken] = useState(0);
+  const refresh = useCallback(() => setReloadToken((t) => t + 1), []);
 
   useEffect(() => {
     let active = true;
@@ -39,7 +42,7 @@ export function useProgressSummary(): UseProgressSummary {
     return () => {
       active = false;
     };
-  }, [service]);
+  }, [service, reloadToken]);
 
-  return { record, loading };
+  return { record, loading, refresh };
 }

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 import { copy, getDailyPathContent } from '@/content';
@@ -29,10 +29,17 @@ import { useDailyPath } from '../hooks/use-daily-path';
 export function PathScreen() {
   const router = useRouter();
   const { colors } = useTheme();
-  const { currentDay, isRunning, vow, loading, beginPath, profile } = usePath();
-  const { summary } = usePathProgress();
+  const { currentDay, isRunning, vow, loading, beginPath, profile, refresh: refreshPath } = usePath();
+  const { summary, refresh: refreshProgress } = usePathProgress();
   const { isCrownUnlocked: checkCrownUnlocked } = useDailyPath();
   const [themePickerOpen, setThemePickerOpen] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshPath();
+      refreshProgress();
+    }, [refreshPath, refreshProgress]),
+  );
 
   const isCrownUnlocked = profile ? checkCrownUnlocked(profile, currentDay) : false;
 
@@ -105,7 +112,7 @@ export function PathScreen() {
             {/* Stats — short labels so they never wrap */}
             {summary ? (
               <View style={styles.statsGrid}>
-                <AppStatCard label={copy.path.stats.day} value={summary.currentPathDays.toString()} style={styles.stat} />
+                <AppStatCard label={copy.path.stats.day} value={currentDay.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.streak} value={summary.longestPathDays.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.urges} value={summary.urgesObserved.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.forge} value={summary.forgeActs.toString()} style={styles.stat} />
