@@ -122,12 +122,8 @@ Day 90 completion unlocks the Crown Celebration screen:
 
 ## Content Status
 
-All 90 days carry a `contentStatus` field:
-- `'final'` — Days 1–30 and milestone days are fully written
-- `'draft'` — Days 31–90 are structurally correct with placeholder bodies
-
-Draft days show their correct title, arc, archetype, and theme. The `[Draft]` prefix on
-teaching/command bodies marks them for content writing before v1 ship.
+All 90 days carry a `contentStatus` field. Days 1–90 are now written as `'final'`; the
+`'draft'` value remains in the schema as a future tag for content revisions.
 
 ---
 
