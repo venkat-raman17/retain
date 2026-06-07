@@ -1,4 +1,4 @@
-# Retain — The 90-Day Path
+# Manforge — The 90-Day Path
 
 ## Philosophy
 

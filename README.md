@@ -1,4 +1,4 @@
-# Retain
+# Manforge
 
 A fully offline, local-only practice app for men working with semen retention, energy
 transmutation, discipline, and self-mastery. Philosophical and aspirational — **not medical,
@@ -52,5 +52,5 @@ Built from `all-prompts.md` — a 20-prompt plan (foundation → features → re
 
 ## Privacy
 
-Retain is offline by design. Your practice stays on your device. No account. No sync. No
+Manforge is offline by design. Your practice stays on your device. No account. No sync. No
 public profile. No telemetry.

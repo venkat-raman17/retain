@@ -3,7 +3,7 @@ import type { OnboardingStep } from '../schemas';
 export const onboardingSteps: readonly OnboardingStep[] = [
   {
     id: 'welcome',
-    title: 'Welcome to Retain',
+    title: 'Welcome to Manforge',
     body: 'This is a quiet space for practicing retention, transmuting energy, and building self-mastery. No accounts, no tracking, no noise — everything stays on your device.',
     affirmation: 'I am here to build, not to punish.',
   },

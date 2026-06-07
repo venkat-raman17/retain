@@ -204,7 +204,7 @@ export function LapseScreen() {
 
             <AppQuoteBlock
               quote="Command is trained in the return."
-              attribution="Retain principle"
+              attribution="Manforge principle"
             />
 
             {saved && submittedMode ? (

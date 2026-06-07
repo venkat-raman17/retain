@@ -2,7 +2,7 @@ import type { ArchetypeProfile } from '../../schemas';
 
 /**
  * The 12 archetypes are modes of formation, not costumes. Each has a light and a
- * shadow so the man can recognize himself honestly. Retain voices honor the shadow
+ * shadow so the man can recognize himself honestly. Manforge voices honor the shadow
  * without becoming its mouthpiece — the shadow is named to be understood, not
  * worshiped (see docs/CONTENT_SAFETY.md).
  */

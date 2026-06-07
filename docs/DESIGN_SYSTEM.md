@@ -1,4 +1,4 @@
-# Retain — Design System
+# Manforge — Design System
 
 > The visual contract for Retain. Read this with
 > [ARCHITECTURE.md](ARCHITECTURE.md) and [CONTENT_SAFETY.md](CONTENT_SAFETY.md).

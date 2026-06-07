@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Retain the seed",
+    "name": "Manforge",
     "slug": "retain",
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
@@ -11,7 +11,6 @@
     "backgroundColor": "#0C0B0A",
     "ios": {
       "bundleIdentifier": "com.venkatramanks.retain",
-      "icon": "./assets/expo.icon",
       "supportsTablet": false,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -22,7 +21,6 @@
       "adaptiveIcon": {
         "backgroundColor": "#0B0B12",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
@@ -39,7 +37,7 @@
           "backgroundColor": "#0C0B0A",
           "android": {
             "image": "./assets/images/splash-icon.png",
-            "imageWidth": 76
+            "imageWidth": 200
           }
         }
       ]

@@ -1,4 +1,4 @@
-# Retain — Project Guide
+# Manforge — Project Guide
 
 > Standing instructions for any AI/dev session working on this repo. Read this before
 > writing code. The full build roadmap is `all-prompts.md` (a 20-prompt pack). When in doubt,
@@ -8,7 +8,7 @@
 [docs/OFFLINE_FIRST.md](docs/OFFLINE_FIRST.md) · [docs/CONTENT_SAFETY.md](docs/CONTENT_SAFETY.md) ·
 [docs/RELEASE_V1_SCOPE.md](docs/RELEASE_V1_SCOPE.md). This file is the summary; those are the detail.
 
-## What Retain is
+## What Manforge is
 
 A **fully offline, local-only, bundled** mobile app for men practicing semen retention,
 sexual-energy transmutation, discipline, and self-mastery. It is **philosophical, mystical,

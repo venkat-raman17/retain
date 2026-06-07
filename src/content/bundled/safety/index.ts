@@ -9,8 +9,8 @@ export const safetyContent: SafetyContent = {
     version: 1,
     title: 'A note before you begin',
     paragraphs: [
-      'Retain is a philosophical self-mastery, journaling, and discipline app. It is not medical advice, not therapy, and not a mental-health service.',
-      'Retain does not diagnose, treat, cure, or prevent any condition, and it makes no claims about testosterone, fertility, attraction, disease, depression, anxiety, or athletic performance.',
+      'Manforge is a philosophical self-mastery, journaling, and discipline app. It is not medical advice, not therapy, and not a mental-health service.',
+      'Manforge does not diagnose, treat, cure, or prevent any condition, and it makes no claims about testosterone, fertility, attraction, disease, depression, anxiety, or athletic performance.',
       'The teachings draw on many traditions as philosophical and historical inspiration only — never as religious authority, medical fact, or sexual technique.',
       'Desire is not evil. The body is not dirty. The practice is about pause, reflection, and discipline.',
     ],
@@ -20,7 +20,7 @@ export const safetyContent: SafetyContent = {
   resources: {
     title: 'If you need more than a practice',
     intro:
-      'Retain is a practice, not a lifeline. If you are in crisis, at risk of harming yourself or others, or struggling with compulsive behavior, please reach out now.',
+      'Manforge is a practice, not a lifeline. If you are in crisis, at risk of harming yourself or others, or struggling with compulsive behavior, please reach out now.',
     items: [
       'Contact your local emergency number immediately if you or anyone is in danger.',
       'Reach out to a licensed mental-health professional.',

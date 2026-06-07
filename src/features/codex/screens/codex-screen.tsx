@@ -229,7 +229,7 @@ function StudiesTab() {
 
         <AppCard tone="overlay">
           <AppText variant="caption" color="accent" uppercase>
-            Retain principle
+            Manforge principle
           </AppText>
           <AppText variant="body" color="secondary" style={styles.body}>
             {selected.retainPrinciple}

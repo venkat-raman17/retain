@@ -1,6 +1,6 @@
-# Lineage Content for Retain: Applications and Framing
+# Lineage Content for Manforge: Applications and Framing
 
-This document translates the wisdom traditions research into actionable guidance for writing Studies, Rites, and Codex content in the Retain app.
+This document translates the wisdom traditions research into actionable guidance for writing Studies, Rites, and Codex content in the Manforge app.
 
 ---
 
@@ -30,7 +30,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "Marcus Aurelius was a Roman emperor. Epictetus was a slave. Both faced constant pressure and threat. Both were Stoic philosophers who taught the same thing: your tranquility depends not on what happens to you but on whether you assent to the judgment that it's bad. In the gap between impulse and reaction, you are free."
 
-**Retain Principle:**
+**Manforge Principle:**
 "When the urge rises, there is a moment before you decide whether to follow it. In that moment, you are free. The Stoics called this 'assent'—the judgment you make about whether something is worth your energy. Train yourself to pause in that gap."
 
 **Practice:**
@@ -40,7 +40,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 "In what moment did I recognize that the impulse was not me? What did I choose to do instead?"
 
 **Guardrail:**
-"This is philosophical inspiration, not medical advice. Retain teaches pause, reflection, and discipline—not addiction treatment or therapy."
+"This is philosophical inspiration, not medical advice. Manforge teaches pause, reflection, and discipline—not addiction treatment or therapy."
 
 ---
 
@@ -59,7 +59,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "Buddhist monks for 2,500 years have practiced indriya-samvara—'guarding the sense doors.' The teaching is simple: the moment your eye lands on an image, your ear hears a trigger, your mind thinks of a fantasy—in that instant, craving can arise. If you meet that instant with awareness and restraint, the craving does not take root. If you don't, the mind spirals. The battle is won or lost at the gate, not deep in the fire."
 
-**Retain Principle:**
+**Manforge Principle:**
 "Guard the gates. The first victory is looking away—meeting the spark with awareness instead of feeding it."
 
 **Practice:**
@@ -88,7 +88,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "The Desert Fathers and Mothers—Christian monks and nuns who withdrew to Egypt's deserts in the 3rd–5th centuries—developed a practice called nepsis, or watchfulness. They understood that the heart is shaped by what the eyes see, the ears hear, the mind thinks about. A wandering mind leads to a wandering heart. So they trained in vigilance: watching the arising of thoughts without judgment, and redirecting attention toward prayer. It took years. It was not grim refusal; it was careful cultivation of where the mind rested."
 
-**Retain Principle:**
+**Manforge Principle:**
 "Guard the gates. The first victory is often looking away—meeting the spark with awareness instead of feeding it."
 
 **Practice:**
@@ -117,7 +117,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "Islamic Sufis have practiced tazkiyah for over 1,000 years—the purification of the nafs, often translated as 'self' or 'ego.' The nafs is not evil; it is raw, compulsive, driven by appetite and fear. Tazkiyah is not its destruction but its discipline and refinement. The Sufi master teaches students to regulate food and sleep, to speak with intention, to serve others so the self-referential chatter quiets. Over time, the nafs becomes transparent to divine wisdom. The entire being flows from something larger than personal desire."
 
-**Retain Principle:**
+**Manforge Principle:**
 "Refine the fire. Raw desire, given a worthy channel, becomes strength, focus, and creation."
 
 **Practice:**
@@ -146,7 +146,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "Daoist masters for 1,500 years have taught neidan—inner alchemy. The teaching is that you have three treasures: essence (jing), energy (qi), and spirit (shen). These are not physical substances in the modern sense; they are the vitality of body, the circulation of energy, and the clarity of mind. Raw essence can be wasted through uncontrolled indulgence, or it can be refined. The Daoist does not hate the body; he refines it. He does not hate his drives; he transforms them. Essence becomes energy. Energy becomes spirit. Spirit returns to emptiness—and in that emptiness, true power emerges."
 
-**Retain Principle:**
+**Manforge Principle:**
 "Refine the fire. Raw desire, given a worthy channel, becomes strength, focus, and creation."
 
 **Practice:**
@@ -175,7 +175,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "Tibetan Buddhist masters have practiced tummo—the generation of inner fire—for nearly 1,000 years. The teaching is profound: the energy of negative emotions (anger, attachment, fear, ego) is not destroyed; it is transmuted. A meditation master explained: tummo means turning 'tu' (negativity) into 'mo' (wisdom). In the practice, the raw energy of the craving, the rage, the shame—instead of being suppressed or acted on—is circulated and refined into clarity and compassion. The inner fire burns away what is false and awakens what is real."
 
-**Retain Principle:**
+**Manforge Principle:**
 "Refine the fire. Raw desire, given a worthy channel, becomes strength, focus, and creation."
 
 **Practice:**
@@ -204,7 +204,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "Ancient Greek athletes trained for Olympic glory. They followed a four-day cycle: Day 1, preparation; Day 2, all-out effort; Day 3, recovery; Day 4, medium work. This was not random. They understood that the body adapts to progressively harder challenges, but it also needs recovery to grow. The point was arete—excellence. Not perfection, not dominance, but the full actualization of their potential. And the point was not narcissism. The athlete's excellence brought honor to his city. He was trained to be strong not for himself alone but for the community he represented."
 
-**Retain Principle:**
+**Manforge Principle:**
 "The energy is the ally. Conserve attention so you have something to direct—toward the body, the work, and the people you love."
 
 **Practice:**
@@ -233,7 +233,7 @@ Every Study and Rite that draws on a wisdom tradition must:
 **Historical Frame:**
 "Jewish Kabbalists teach tikkun olam—repair of the world. The cosmic story they tell is this: creation involved a 'breaking of vessels,' and sparks of divine light were scattered throughout the material world and became trapped. Every action, every choice, every moment of discipline and intention has the power to 'elevate the sparks'—to gather them and return them to their source. This is not abstract mysticism. It means: when you choose to pause instead of act compulsively, you are repairing the universe. When you channel your energy into service or creation, you are healing existence itself. Every person has been given a unique mission of repair."
 
-**Retain Principle:**
+**Manforge Principle:**
 "Refine the fire. Raw desire, given a worthy channel, becomes strength, focus, and creation."
 
 **Practice:**
@@ -254,7 +254,7 @@ Use these or adapt them for any Study/Rite that references a wisdom tradition:
 ### General
 - "This is philosophical inspiration, not medical advice."
 - "This is philosophical inspiration, not religious authority or esoteric technique."
-- "Retain teaches pause, reflection, and discipline—not ideology or dogma."
+- "Manforge teaches pause, reflection, and discipline—not ideology or dogma."
 
 ### For Traditions with Spiritual/Religious Roots
 - "This tradition arose in a specific culture and era. We honor its wisdom while recognizing it as one path among many. This is inspiration, not prescription."
@@ -287,11 +287,11 @@ Before publishing any Study or Rite referencing a wisdom tradition:
 
 ---
 
-## Integration with Retain's Domain Language
+## Integration with Manforge's Domain Language
 
-Map tradition concepts to Retain's domain language:
+Map tradition concepts to Manforge's domain language:
 
-| Tradition | Core Concept | Retain Equivalent |
+| Tradition | Core Concept | Manforge Equivalent |
 | --- | --- | --- |
 | Stoicism | Apatheia (freedom from compulsive reaction) | The pause; command of assent |
 | Buddhism | Indriya-samvara (guarding the sense doors) | Guard the gates |
@@ -308,21 +308,21 @@ Map tradition concepts to Retain's domain language:
 
 ### Study: "The Three Choices" (Stoicism + Buddhism)
 - Historical Frame: What Marcus Aurelius and Buddhist monks both taught about impulse
-- Retain Principle: In the gap between impulse and action, you have three choices: pause, redirect, or act consciously
+- Manforge Principle: In the gap between impulse and action, you have three choices: pause, redirect, or act consciously
 - Practice: Today, make one conscious choice instead of reacting automatically
 - Reflection: What changed when I paused?
 - Guardrail: [Select appropriate guardrail]
 
 ### Study: "The Forge Acts" (Daoism + Sufism + Kabbalah)
 - Historical Frame: How Daoists, Sufis, and Kabbalists all understood that energy redirected becomes creation/service/repair
-- Retain Principle: Held energy must move; give it a worthy channel
+- Manforge Principle: Held energy must move; give it a worthy channel
 - Practice: List your forges (body, mind, spirit, order, creation, brotherhood); this week, pour one urge into each
 - Reflection: What did I create or build?
 - Guardrail: [Select appropriate guardrail]
 
 ### Study: "The Discipline Cycle" (Greco-Roman Athletics + Modern Training)
 - Historical Frame: How ancient athletes understood that peak effort requires recovery
-- Retain Principle: Sustainable discipline beats heroic efforts that burn out
+- Manforge Principle: Sustainable discipline beats heroic efforts that burn out
 - Practice: Design your own four-day cycle: intensity, recovery, medium, intensity
 - Reflection: What happens to my practice when I honor the rhythm?
 - Guardrail: [Select appropriate guardrail]
@@ -343,4 +343,4 @@ Map tradition concepts to Retain's domain language:
 
 **Date Created:** June 6, 2026
 **Intended Use:** Provide templates and guidance for writing Studies, Rites, and Codex content grounded in wisdom traditions.
-**Audience:** Retain content writers, product team, editorial review.
+**Audience:** Manforge content writers, product team, editorial review.

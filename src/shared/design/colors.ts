@@ -1,6 +1,6 @@
 /**
  * Raw color palette — Iron & Ember: the dark-iron / copper-fire / aged-codex
- * language of Retain.
+ * language of Manforge.
  *
  * This is the lowest layer: literal values only. **No component references these
  * directly** — the semantic mapping lives in `theme.ts`, and screens consume the

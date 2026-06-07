@@ -19,7 +19,7 @@ export const studies: readonly Study[] = [
       'Pick one gate today — a feed, a habit, an hour — and do not feed it. Notice the energy that remains.',
     reflectionPrompt: 'Where did my attention want to leak today, and what did I do with it instead?',
     guardrail:
-      'This is philosophical inspiration, not medical advice. Retain does not teach religious authority or esoteric sexual technique.',
+      'This is philosophical inspiration, not medical advice. Manforge does not teach religious authority or esoteric sexual technique.',
   },
   {
     id: 'guarding-the-gates-sense-restraint',
@@ -42,14 +42,14 @@ export const studies: readonly Study[] = [
     lineage: 'western_alchemy',
     summary: 'A single metaphor recurs across cultures: refine the raw into the noble.',
     historicalFrame:
-      'Very different traditions reach for the same image. Daoist inner alchemy speaks of refining essence into energy and energy into spirit. Tibetan contemplative practice describes an "inner fire" raised and circulated with breath and attention. Western alchemy — later read by Jung as a kind of "Western yoga" — treated turning lead into gold as a symbol for transforming the raw self into the realized one. Retain borrows the metaphor of refinement, not the metaphysics or the techniques.',
+      'Very different traditions reach for the same image. Daoist inner alchemy speaks of refining essence into energy and energy into spirit. Tibetan contemplative practice describes an "inner fire" raised and circulated with breath and attention. Western alchemy — later read by Jung as a kind of "Western yoga" — treated turning lead into gold as a symbol for transforming the raw self into the realized one. Manforge borrows the metaphor of refinement, not the metaphysics or the techniques.',
     retainPrinciple:
       'Refine the fire. Raw desire, given a worthy channel, becomes strength, focus, and creation.',
     practice:
       'The next time the fire rises, choose a forge — body, mind, spirit, order, creation, or brotherhood — and pour ten real minutes into it.',
     reflectionPrompt: 'What did I turn the fire into today?',
     guardrail:
-      'This is symbolic and philosophical inspiration, not medical claims and not esoteric or partnered sexual technique. Retain teaches pause, reflection, and discipline.',
+      'This is symbolic and philosophical inspiration, not medical claims and not esoteric or partnered sexual technique. Manforge teaches pause, reflection, and discipline.',
   },
   {
     id: 'daoist-inner-alchemy-essence-to-spirit',
@@ -64,7 +64,7 @@ export const studies: readonly Study[] = [
       'Today, notice the moment desire or excitement arises in the body. Breathe into that sensation as if drawing it upward. Do not force; let breath and awareness gently circulate it.',
     reflectionPrompt: 'When energy rose in my body today, what happened when I met it with breath and attention instead of immediate action?',
     guardrail:
-      'This is philosophical and historical inspiration. Retain does not teach esoteric techniques, respiratory practices as medical treatment, or claims about energy channels.',
+      'This is philosophical and historical inspiration. Manforge does not teach esoteric techniques, respiratory practices as medical treatment, or claims about energy channels.',
   },
   {
     id: 'tibetan-inner-fire-heat-discipline',
@@ -79,7 +79,7 @@ export const studies: readonly Study[] = [
       'When you feel the stirring of desire, anxiety, or restlessness, sit for three breaths. Feel the sensation fully; do not push it away. Then imagine drawing that energy inward, gathering it into steady focus.',
     reflectionPrompt: 'What did I burn through today — and what clarity came on the other side?',
     guardrail:
-      'This is philosophical inspiration, not medical advice or esoteric technique. Retain teaches conscious awareness and redirection, not breathing exercises as treatment.',
+      'This is philosophical inspiration, not medical advice or esoteric technique. Manforge teaches conscious awareness and redirection, not breathing exercises as treatment.',
   },
   {
     id: 'stoic-discipline-apatheia-freedom',
@@ -94,7 +94,7 @@ export const studies: readonly Study[] = [
       'When an impulse arises, pause and ask: "Is this my choice, or am I being carried?" Then deliberately choose your next step — even if it is to pause a moment longer.',
     reflectionPrompt: 'Today, where did I have command of my choice? Where did I give it away?',
     guardrail:
-      'This is philosophical inspiration from classical Stoicism. Retain does not teach suppression or shame, but rather the dignity of conscious choice.',
+      'This is philosophical inspiration from classical Stoicism. Manforge does not teach suppression or shame, but rather the dignity of conscious choice.',
   },
   {
     id: 'monastic-watchfulness-guarding-heart',
@@ -139,7 +139,7 @@ export const studies: readonly Study[] = [
       'Today, choose one practice that demands full presence: hard physical work, a skill you are building, or a conversation in which you show up entirely. Pour your vitality into it.',
     reflectionPrompt: 'When I brought my full presence to something today, how did it feel? How did I change?',
     guardrail:
-      'This is historical and philosophical inspiration from classical sources. Retain does not make medical or performance claims; the practice is the cultivation of focused presence and discipline.',
+      'This is historical and philosophical inspiration from classical sources. Manforge does not make medical or performance claims; the practice is the cultivation of focused presence and discipline.',
   },
   {
     id: 'kabbalistic-repair-channeling-desire',
@@ -154,7 +154,7 @@ export const studies: readonly Study[] = [
       'When energy or desire arises today, pause and ask: "What am I actually hungry for? What is this reaching toward?" Let that deeper hunger guide you toward something whole and true.',
     reflectionPrompt: 'Today, what did I really want beneath the surface urge? Did I feed that deeper hunger?',
     guardrail:
-      'This is philosophical inspiration from Jewish mysticism. Retain does not teach religious doctrine or make claims about spiritual status or cosmic consequences.',
+      'This is philosophical inspiration from Jewish mysticism. Manforge does not teach religious doctrine or make claims about spiritual status or cosmic consequences.',
   },
   {
     id: 'warrior-athlete-discipline-excellence',
@@ -169,6 +169,6 @@ export const studies: readonly Study[] = [
       'Today, when energy or intensity arises, do not dissipate it or suppress it. Pour it into something that demands your excellence: work that matters, a skill you are building, or a goal that calls for your full presence.',
     reflectionPrompt: 'Today, what would have been wasted became powerful. What did I do with the raw energy that arose?',
     guardrail:
-      'This is philosophical inspiration from ancient and modern martial/athletic traditions. Retain does not make medical or performance enhancement claims; the practice is the cultivation of discipline and excellence through focused effort.',
+      'This is philosophical inspiration from ancient and modern martial/athletic traditions. Manforge does not make medical or performance enhancement claims; the practice is the cultivation of discipline and excellence through focused effort.',
   },
 ] as const;

@@ -7,7 +7,7 @@
 
 ## Overview
 
-This is a comprehensive research package on eight wisdom traditions' teachings about energy, discipline, desire-mastery, and transmutation. The research is designed to deepen Retain's bundled content (Studies, Rites, Codex) with philosophically authentic and historically grounded material.
+This is a comprehensive research package on eight wisdom traditions' teachings about energy, discipline, desire-mastery, and transmutation. The research is designed to deepen Manforge's bundled content (Studies, Rites, Codex) with philosophically authentic and historically grounded material.
 
 **Total Documentation:** 4 files, ~85 KB of research and guidance
 
@@ -38,7 +38,7 @@ Contains:
 **Cross-tradition synthesis:**
 - Common themes across all eight
 - Key differences in emphasis
-- Implications for Retain content
+- Implications for Manforge content
 
 **Sources:** 40+ scholarly and primary sources cited
 
@@ -63,7 +63,7 @@ Contains:
 
 - Study template structure:
   - Historical Frame
-  - Retain Principle
+  - Manforge Principle
   - Practice (concrete, doable today)
   - Reflection Prompt
   - Guardrail
@@ -72,7 +72,7 @@ Contains:
 
 - Content Safety Checklist for every piece
 
-- Mapping of tradition concepts to Retain's domain language
+- Mapping of tradition concepts to Manforge's domain language
 
 - Sample Study outlines (ready to expand)
 
@@ -85,7 +85,7 @@ Contains:
 
 Contains:
 - Five key findings from research
-- How research validates Retain's core framing
+- How research validates Manforge's core framing
 - Practical implications for app content (Studies, Rites, Codex)
 - Research quality note (all sources are scholarly/reputable)
 - Next steps for the team
@@ -152,7 +152,7 @@ All eight wisdom traditions teach the same fundamental truth:
 - **Transmutation (not suppression) is the practice**
 - **The purpose is virtue/wisdom/awakening, not perfection**
 
-### Validation of Retain's Framing
+### Validation of Manforge's Framing
 - "The energy is the ally" ✓ (all 8 traditions honor vital energy)
 - "The compulsion is the enemy" ✓ (all distinguish raw energy from habitual unconscious loop)
 - "The man is never the enemy" ✓ (no shame/punishment; all teach awakening to potential)
@@ -209,7 +209,7 @@ All eight wisdom traditions teach the same fundamental truth:
 
 ## License & Usage
 
-This research is created for the Retain app and is intended for:
+This research is created for the Manforge app and is intended for:
 - Internal product development
 - Content creation (Studies, Rites, Codex)
 - Educational reference (team training)
@@ -217,11 +217,11 @@ This research is created for the Retain app and is intended for:
 
 It is NOT intended for:
 - External publication without attribution
-- Commercial use outside Retain
+- Commercial use outside Manforge
 - Replacing original primary sources
 
 ---
 
 **Last Updated:** June 6, 2026  
-**Maintained By:** Retain Content & Research Team  
+**Maintained By:** Manforge Content & Research Team  
 **Status:** Ready for implementation

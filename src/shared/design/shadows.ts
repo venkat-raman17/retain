@@ -5,7 +5,7 @@ import { palette } from './colors';
 /**
  * Elevation shadows — soft, warm, and rare.
  *
- * Retain leans on iron borders, not heavy drop shadows. These exist for the few
+ * Manforge leans on iron borders, not heavy drop shadows. These exist for the few
  * surfaces that genuinely float (modals, the active pause card). The shadow is a
  * warm near-black so it reads as deepening stone, not a hard UI drop.
  */

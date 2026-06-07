@@ -1,4 +1,4 @@
-# Retain — Agent guide
+# Manforge — Agent guide
 
 The full project guide (product principles, domain language, architecture/layering rules,
 coding standards, and content-safety rules) lives in @CLAUDE.md. Read it first.

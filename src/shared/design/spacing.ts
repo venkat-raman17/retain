@@ -1,7 +1,7 @@
 /**
  * 4pt spacing scale — generous by default.
  *
- * Retain breathes. Sections get real air (`xxl`/`xxxl`), and `xxxxl` exists for
+ * Manforge breathes. Sections get real air (`xxl`/`xxxl`), and `xxxxl` exists for
  * ceremonial space around a single statement (a vow, a seal, a milestone). Use
  * the semantic names, not raw numbers, in components.
  */

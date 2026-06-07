@@ -63,7 +63,7 @@ ls eas.json
 eas init
 # → Log in with Expo account (expo.dev)
 # → Select "Create a new Expo project"
-# → Confirm app name: "Retain" and slug: "retain"
+# → Confirm app name: "Manforge" and slug: "retain"
 # → EAS auto-updates app.json with projectId
 ```
 
@@ -104,7 +104,7 @@ eas credentials
 2. **Verify Team ID** matches what you gave EAS
 
 3. **Prepare TestFlight** at appstoreconnect.apple.com:
-   - Create app: "Retain"
+   - Create app: "Manforge"
    - Bundle ID: `com.venkatramanks.retain`
    - (TestFlight is auto-configured to receive IPA builds)
 
@@ -213,7 +213,7 @@ iOS builds are **automatically submitted to TestFlight** in the workflow:
 
 2. **Create App in App Store Connect** (required for TestFlight)
    - Apps → Create app
-   - Name: "Retain"
+   - Name: "Manforge"
    - Bundle ID: `com.venkatramanks.retain`
    - SKU: (any unique ID)
 

@@ -9,7 +9,7 @@
  */
 export const copy = {
   app: {
-    name: 'Retain',
+    name: 'Manforge',
     tagline: 'The energy is the ally. The compulsion is the adversary.',
   },
   tabs: {
@@ -45,10 +45,10 @@ export const copy = {
       back: 'Back',
     },
     welcome: {
-      title: 'Welcome to Retain.',
+      title: 'Welcome to Manforge.',
       subtitle: 'A private practice of pause, command, and transmutation.',
       quote: '"When the fire rises, what will you remember?"',
-      body: 'Retain is a practice, not a promise. It does not ask you to be perfect. It asks you to choose — every time the fire rises — whether you will obey the compulsion or govern it.',
+      body: 'Manforge is a practice, not a promise. It does not ask you to be perfect. It asks you to choose — every time the fire rises — whether you will obey the compulsion or govern it.',
     },
     philosophy: {
       title: 'This is not about hating desire.',
@@ -59,7 +59,7 @@ export const copy = {
         'The same fire that pulls you toward compulsion can be turned toward discipline, creation, courage, and depth.',
       ],
       quote: 'Desire is not evil. The body is not dirty.',
-      quoteAttribution: 'Retain principle',
+      quoteAttribution: 'Manforge principle',
     },
     privacy: {
       title: 'Your practice is private.',
@@ -106,8 +106,8 @@ export const copy = {
       subtitle: 'Read and acknowledge.',
       cardTitle: 'A note before the practice',
       paragraphs: [
-        'Retain is a philosophical self-mastery, journaling, and discipline app. It is not medical advice, therapy, diagnosis, or a mental health service.',
-        'Retain does not diagnose, treat, cure, or prevent any condition. It makes no claims about testosterone, fertility, attraction, disease, depression, anxiety, or athletic performance.',
+        'Manforge is a philosophical self-mastery, journaling, and discipline app. It is not medical advice, therapy, diagnosis, or a mental health service.',
+        'Manforge does not diagnose, treat, cure, or prevent any condition. It makes no claims about testosterone, fertility, attraction, disease, depression, anxiety, or athletic performance.',
         'The teaching draws from philosophical and historical traditions only. It is not religious authority, medical fact, or sexual technique.',
         'Desire is not evil. The body is not dirty. The practice is about pause, reflection, discipline, and direction.',
       ],
@@ -116,7 +116,7 @@ export const copy = {
       title: 'The path begins in the pause.',
       subtitle: 'Your practice is set. The work starts now.',
       quote: 'The path begins in the pause.',
-      quoteAttribution: 'Retain',
+      quoteAttribution: 'Manforge',
       summaryLabels: {
         vow: 'Vow',
         intention: 'Intention',

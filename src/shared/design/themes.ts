@@ -1,5 +1,5 @@
 /**
- * All four premium runtime themes for Retain.
+ * All four premium runtime themes for Manforge.
  *
  * Each theme satisfies `AppTheme` and is selectable at runtime via ThemeContext.
  * Non-color tokens (spacing, radii, typography, durations, shadows) are shared
