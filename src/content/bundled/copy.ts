@@ -154,6 +154,23 @@ export const copy = {
     feelTheFire: 'I Feel the Fire',
   },
 
+  daily: {
+    greeting: {
+      dawn: 'Before the world wakes.',
+      morning: 'The day is yours to forge.',
+      midday: 'Hold the line through the noon.',
+      evening: 'The day asks for its account.',
+      night: 'Guard the gates as you rest.',
+    },
+    focus: {
+      morning: 'This morning',
+      midday: "Today's practice",
+      evening: 'Tonight',
+      night: 'Before you sleep',
+    },
+    teachingEyebrow: "Today's teaching",
+  },
+
   chamber: {
     locked: {
       title: 'This chamber is not yet open.',

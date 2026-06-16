@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { theme } from '@/shared/design';
+import { useTheme } from '@/shared/hooks/use-theme';
 
 import { AppText } from './text';
 
@@ -22,6 +23,7 @@ export function AppSelectList<T extends string>({
   value,
   onChange,
 }: AppSelectListProps<T>) {
+  const { colors } = useTheme();
   return (
     <View style={styles.list}>
       {options.map((option) => {
@@ -35,8 +37,8 @@ export function AppSelectList<T extends string>({
             style={[
               styles.option,
               {
-                borderColor: selected ? theme.colors.primary : theme.colors.border,
-                backgroundColor: selected ? theme.colors.primarySoft : 'transparent',
+                borderColor: selected ? colors.primary : colors.border,
+                backgroundColor: selected ? colors.primarySoft : 'transparent',
               },
             ]}
           >

@@ -7,18 +7,18 @@ import { Routes } from '@/navigation';
 import {
   AppButton,
   AppCard,
-  AppHeader,
+  AppHero,
   AppScreen,
   AppText,
   FadeInRise,
   MirrorSigil,
   NoRecordSymbol,
-  ScreenCrest,
   symbolStroke,
   TRIGGER_GLYPHS,
   useCountUp,
 } from '@/shared/components';
 import { theme, type AppTheme } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 
 import { useProgressSummary } from '../hooks/use-progress-summary';
@@ -379,6 +379,7 @@ function RecordUnavailable({ colors }: { colors: ThemeColors }) {
 export function ProgressScreen() {
   const { record, loading, refresh } = useProgressSummary();
   const { colors } = useTheme();
+  const mirrorTone = useSurfaceTone({ kind: 'semantic', name: 'mirror' });
   const router = useRouter();
 
   useFocusEffect(
@@ -392,20 +393,17 @@ export function ProgressScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        {/* Intention header — the mirror sigil sits faintly behind the title */}
-        <View>
-          <ScreenCrest>
-            <MirrorSigil size={120} color={colors.textMuted} strokeWidth={symbolStroke(120)} />
-          </ScreenCrest>
-          <AppHeader
-            eyebrow={copy.record.eyebrow}
-            title={copy.record.title}
-            subtitle={copy.record.subtitle}
-          />
-          <AppText variant="body" color="secondary" style={styles.intention}>
-            {copy.record.intention}
-          </AppText>
-        </View>
+        {/* The mirror — a cool, desaturated identity, distinct from the warm tabs. */}
+        <AppHero
+          tone={mirrorTone}
+          eyebrow={copy.record.eyebrow}
+          title={copy.record.title}
+          subtitle={copy.record.subtitle}
+          art={<MirrorSigil size={84} color={mirrorTone.text} strokeWidth={symbolStroke(84)} />}
+        />
+        <AppText variant="body" color="secondary" style={styles.intention}>
+          {copy.record.intention}
+        </AppText>
 
         {!loading ? (
           record ? (

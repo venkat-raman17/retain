@@ -6,18 +6,21 @@ import {
   AppButton,
   AppCard,
   AppDivider,
-  AppHeader,
+  AppHero,
   AppQuoteBlock,
   AppScreen,
   AppText,
+  SealArt,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
 import { Routes } from '@/navigation';
 
 import { useDailyPath } from '../hooks/use-daily-path';
 
 export function CrownCelebrationScreen() {
   const router = useRouter();
+  const goldTone = useSurfaceTone({ kind: 'semantic', name: 'gold' });
   const { getCollectedCrownFragments, receiveCrown: commitCrown } = useDailyPath();
 
   const [fragments, setFragments] = useState<string[]>([]);
@@ -41,12 +44,13 @@ export function CrownCelebrationScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <AppHeader
+        <AppHero
+          tone={goldTone}
           align="center"
           eyebrow="Day 90"
-          eyebrowColor="energy"
           title="The Crown of Command"
           subtitle="Ninety days does not make a man finished. It proves he can be formed."
+          art={<SealArt source={{ kind: 'arc', arcNumber: 9 }} size={124} color={goldTone.text} />}
         />
 
         <AppCard tone="raised" border="gold">

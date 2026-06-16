@@ -6,13 +6,17 @@ import { copy, getDailyPathContent, getMilestoneRiteById, getArchetypeProfile } 
 import {
   AppButton,
   AppCard,
-  AppChip,
   AppDivider,
+  AppHero,
   AppQuoteBlock,
   AppScreen,
   AppText,
+  SealArt,
+  SectionBand,
+  SplitRow,
 } from '@/shared/components';
-import { theme } from '@/shared/design';
+import { theme, type ArchetypeTone } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
 import { Routes } from '@/navigation';
 
 import { useDailyPath } from '../hooks/use-daily-path';
@@ -34,6 +38,9 @@ export function DailyChamberScreen() {
   const content = getDailyPathContent(dayNumber);
   const archetype = content?.archetype ? getArchetypeProfile(content.archetype) : null;
   const milestoneRite = content?.milestoneRiteId ? getMilestoneRiteById(content.milestoneRiteId) : null;
+
+  // The chamber takes the day's archetype as its identity color.
+  const tone = useSurfaceTone({ kind: 'archetype', id: (content?.archetype ?? 'monk') as ArchetypeTone });
 
   const completeDay = useCallback(async () => {
     await markDayCompleted(dayNumber);
@@ -60,16 +67,18 @@ export function DailyChamberScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <AppChip label={`Day ${dayNumber}`} tone="energy" selected />
-          <AppChip label={content.arcTitle} tone="accent" />
-        </View>
-
-        <AppText variant="title">{content.title}</AppText>
-        <AppText variant="body" color="secondary">
-          {content.openingLine}
-        </AppText>
+        {/* Hero — the day's archetype sigil in the archetype tone. */}
+        <AppHero
+          tone={tone}
+          eyebrow={`Day ${dayNumber} · ${content.arcTitle}`}
+          title={content.title}
+          subtitle={content.openingLine}
+          art={
+            content.archetype ? (
+              <SealArt source={{ kind: 'archetype', archetype: content.archetype }} size={92} color={tone.text} />
+            ) : undefined
+          }
+        />
 
         {/* Teaching */}
         <AppCard>
@@ -102,14 +111,16 @@ export function DailyChamberScreen() {
           )}
         </AppCard>
 
-        {/* Command */}
-        <AppCard tone="raised">
-          <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.command}</AppText>
+        {/* Command — the day's central instruction, set in the archetype tone. */}
+        <SectionBand tone={tone}>
+          <AppText variant="caption" uppercase style={{ color: tone.text }}>
+            {copy.chamber.labels.command}
+          </AppText>
           <AppText variant="subheading" style={styles.body}>{content.command}</AppText>
-        </AppCard>
+        </SectionBand>
 
-        {/* Practice + Forge row */}
-        <View style={styles.row}>
+        {/* Practice + Forge */}
+        <SplitRow>
           <AppCard tone="overlay" style={styles.halfCard}>
             <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.practice}</AppText>
             <AppText variant="body" color="secondary">{content.practice}</AppText>
@@ -118,7 +129,7 @@ export function DailyChamberScreen() {
             <AppText variant="caption" color="energy" uppercase>{copy.chamber.labels.forge}</AppText>
             <AppText variant="body" color="secondary">{content.forgeChallenge}</AppText>
           </AppCard>
-        </View>
+        </SplitRow>
 
         {/* Journal prompt */}
         <AppCard>
@@ -139,9 +150,12 @@ export function DailyChamberScreen() {
         {/* Archetype */}
         {archetype ? (
           <AppCard tone="overlay">
-            <AppText variant="caption" color="muted" uppercase>
-              {`Archetype · ${archetype.name}`}
-            </AppText>
+            <View style={styles.archetypeHead}>
+              <AppText variant="caption" color="muted" uppercase style={styles.flex}>
+                {`Archetype · ${archetype.name}`}
+              </AppText>
+              <SealArt source={{ kind: 'archetype', archetype: archetype.id }} size={40} color={tone.base} />
+            </View>
             <AppText variant="body" color="secondary">{archetype.retainLine}</AppText>
           </AppCard>
         ) : null}
@@ -174,7 +188,12 @@ export function DailyChamberScreen() {
           </AppCard>
         ) : null}
 
-        <AppQuoteBlock quote={content.seal} attribution={`Day ${dayNumber}`} />
+        {/* Closing seal — a ceremonial centered statement. */}
+        <View style={styles.sealWrap}>
+          <AppText variant="seal" color="gold" align="center">
+            {content.seal}
+          </AppText>
+        </View>
 
         {/* Complete button — gated: user must open the hidden instruction first */}
         {completed ? (
@@ -203,8 +222,9 @@ export function DailyChamberScreen() {
 
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
-  header: { flexDirection: 'row', gap: theme.spacing.sm },
   body: { marginTop: theme.spacing.xs },
-  row: { flexDirection: 'row', gap: theme.spacing.md },
   halfCard: { flex: 1, gap: theme.spacing.xs },
+  archetypeHead: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
+  flex: { flex: 1 },
+  sealWrap: { paddingVertical: theme.spacing.md },
 });

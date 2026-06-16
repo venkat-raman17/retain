@@ -7,17 +7,29 @@ import {
   AppButton,
   AppCard,
   AppHeader,
+  AppHero,
   AppScreen,
   AppText,
+  ArcSeal,
+  symbolStroke,
 } from '@/shared/components';
-import { theme } from '@/shared/design';
+import { arcTone, theme } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
+import { useTheme } from '@/shared/hooks/use-theme';
 
 import { useDailyPath } from '../hooks/use-daily-path';
 import type { DayStatus } from '../services/daily-path-service';
 
 function DayDot({ status, onPress }: { status: DayStatus; onPress: () => void }) {
+  const { colors } = useTheme();
   const locked = status.unlockState === 'locked';
   const today = status.unlockState === 'available_today';
+
+  const stateStyle = today
+    ? { backgroundColor: colors.primarySurface, borderColor: colors.primary, borderWidth: 2 }
+    : locked
+      ? { backgroundColor: colors.backgroundRaised, borderColor: colors.border }
+      : { backgroundColor: colors.surfaceRaised, borderColor: colors.border };
 
   return (
     <Pressable
@@ -25,17 +37,13 @@ function DayDot({ status, onPress }: { status: DayStatus; onPress: () => void })
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`Day ${status.dayNumber}${locked ? ', locked' : ''}`}
-      style={[
-        styles.dot,
-        today ? styles.dotToday : null,
-        locked ? styles.dotLocked : styles.dotOpen,
-      ]}
+      style={[styles.dot, stateStyle]}
     >
       <AppText
         variant="caption"
         color={today ? 'energy' : 'secondary'}
         numberOfLines={1}
-        style={locked ? styles.dotLockedText : undefined}
+        style={locked ? { color: colors.textMuted } : undefined}
       >
         {status.dayNumber}
       </AppText>
@@ -67,10 +75,12 @@ export function PathMapScreen() {
     };
   }, [getDayStatusList]);
 
+  const current = dayStatuses.find((d) => d.unlockState === 'available_today');
+  const tone = useSurfaceTone({ kind: 'arc', arcNumber: current?.arcNumber ?? 1 });
+
   const openDay = (day: number) =>
     router.push({ pathname: '/chamber', params: { day: day.toString() } });
 
-  const current = dayStatuses.find((d) => d.unlockState === 'available_today');
   const nextDay = current && current.dayNumber < 90 ? current.dayNumber + 1 : null;
   const nextContent = nextDay ? getDailyPathContent(nextDay) : null;
 
@@ -85,9 +95,12 @@ export function PathMapScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <AppHeader
+        <AppHero
+          tone={tone}
+          eyebrow="The Map"
           title="The 90-Day Path"
           subtitle="Nine arcs. Ninety chambers. One opens each day."
+          art={<ArcSeal arcNumber={current?.arcNumber ?? 1} size={80} color={tone.text} strokeWidth={symbolStroke(80)} />}
         />
 
         {/* Current + next unlock */}
@@ -108,17 +121,22 @@ export function PathMapScreen() {
           </AppCard>
         ) : null}
 
-        {/* Arc-grouped compact grid — phases, not 90 full cards */}
+        {/* Arc-grouped compact grid — each arc tinted by its own tone */}
         {arcs.map((arc) => {
           const arcDays = dayStatuses.filter(
             (d) => d.dayNumber >= arc.dayStart && d.dayNumber <= arc.dayEnd,
           );
           return (
             <View key={arc.id} style={styles.arc}>
-              <AppText variant="caption" color="accent" uppercase>
-                {`Arc ${arc.arcNumber} · Days ${arc.dayStart}–${arc.dayEnd}`}
-              </AppText>
-              <AppText variant="subheading">{arc.title}</AppText>
+              <View style={styles.arcHead}>
+                <View style={styles.flex}>
+                  <AppText variant="caption" uppercase style={{ color: arcTone(arc.arcNumber) }}>
+                    {`Arc ${arc.arcNumber} · Days ${arc.dayStart}–${arc.dayEnd}`}
+                  </AppText>
+                  <AppText variant="subheading">{arc.title}</AppText>
+                </View>
+                <ArcSeal arcNumber={arc.arcNumber} size={34} color={arcTone(arc.arcNumber)} strokeWidth={symbolStroke(34)} />
+              </View>
               <AppText variant="caption" color="muted" style={styles.arcQuestion}>
                 {arc.centralQuestion}
               </AppText>
@@ -147,6 +165,8 @@ const styles = StyleSheet.create({
   container: { gap: theme.spacing.xl },
   nextLine: { marginTop: theme.spacing.sm },
   arc: { gap: theme.spacing.xs },
+  arcHead: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
+  flex: { flex: 1 },
   arcQuestion: { fontStyle: 'italic', marginBottom: theme.spacing.xs },
   dotGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm, marginTop: theme.spacing.xs },
   dot: {
@@ -157,8 +177,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: StyleSheet.hairlineWidth,
   },
-  dotLockedText: { color: theme.colors.textMuted },
-  dotOpen: { backgroundColor: theme.colors.surfaceRaised, borderColor: theme.colors.border },
-  dotLocked: { backgroundColor: theme.colors.backgroundRaised, borderColor: theme.colors.border },
-  dotToday: { backgroundColor: theme.colors.primarySurface, borderColor: theme.colors.primary, borderWidth: 2 },
 });

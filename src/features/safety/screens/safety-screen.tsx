@@ -4,10 +4,12 @@ import { StyleSheet, View } from 'react-native';
 import { copy, getSafetyDisclaimer, getSafetyResources } from '@/content';
 import { AppText, AppButton, AppCard, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useTheme } from '@/shared/hooks/use-theme';
 import { useRepositories } from '@/shared/storage';
 
 export function SafetyScreen() {
   const router = useRouter();
+  const { colors } = useTheme();
   const { settings } = useRepositories();
   const disclaimer = getSafetyDisclaimer();
   const resources = getSafetyResources();
@@ -49,7 +51,7 @@ export function SafetyScreen() {
           </AppText>
           {resources.items.map((item) => (
             <View key={item} style={styles.row}>
-              <View style={styles.dot} />
+              <View style={[styles.dot, { backgroundColor: colors.support }]} />
               <AppText variant="body" color="secondary" style={styles.itemText}>
                 {item}
               </AppText>
@@ -75,7 +77,6 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: theme.radii.pill,
-    backgroundColor: theme.colors.support,
     marginTop: 8,
   },
   itemText: { flex: 1 },

@@ -15,13 +15,14 @@ import {
   symbolStroke,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useTheme } from '@/shared/hooks/use-theme';
 import { haptics } from '@/shared/lib';
 import { Routes } from '@/navigation';
 
 import { PAUSE_COMMANDS, TIMER_OPTIONS } from '../domain/commands';
 import { TRIGGER_LABELS, TRIGGER_TYPES, type TriggerType } from '../domain/urge-log';
 import { usePause } from '../hooks/use-pause';
-import { usePauseSession } from '../store/pause-session';
+import { usePauseSession, type BreathPhase } from '../store/pause-session';
 
 type PauseStep =
   | 'entry'
@@ -51,7 +52,16 @@ const COMMAND_OPTIONS: SelectOption<string>[] = PAUSE_COMMANDS.map((c) => ({
   label: c,
 }));
 
-const PHASE_MS = 4000;
+const INHALE_MS = 4000;
+const HOLD_MS = 4000;
+const EXHALE_MS = 6000;
+
+function phaseDuration(p: BreathPhase): number {
+  if (p === 'inhale') return INHALE_MS;
+  if (p === 'hold') return HOLD_MS;
+  if (p === 'exhale') return EXHALE_MS;
+  return INHALE_MS;
+}
 
 function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
@@ -83,10 +93,11 @@ export function PauseScreen() {
     if (phase === 'idle') return undefined;
     // A soft beat at each phase change — a tactile metronome for the breath.
     haptics.impact('light');
+    const ms = phaseDuration(phase);
     if (phase === 'inhale' || phase === 'exhale') {
       Animated.timing(scale, {
         toValue: phase === 'inhale' ? 1 : 0.6,
-        duration: PHASE_MS,
+        duration: ms,
         easing: Easing.inOut(Easing.ease),
         useNativeDriver: true,
       }).start();
@@ -95,7 +106,7 @@ export function PauseScreen() {
       if (phase === 'inhale') setPhase('hold');
       else if (phase === 'hold') setPhase('exhale');
       else { completeCycle(); setPhase('inhale'); }
-    }, PHASE_MS);
+    }, ms);
     return () => clearTimeout(timer);
   }, [step, phase, scale, setPhase, completeCycle]);
 
@@ -249,10 +260,11 @@ export function PauseScreen() {
 // ── Sub-steps ────────────────────────────────────────────────────────────────
 
 function StepEntry({ onContinue, onDismiss }: { onContinue: () => void; onDismiss: () => void }) {
+  const { colors } = useTheme();
   return (
     <View style={styles.step}>
       <View style={styles.entryGlyph}>
-        <FlameCircleGlyph size={88} color={theme.colors.primary} strokeWidth={symbolStroke(88)} />
+        <FlameCircleGlyph size={120} color={colors.support} strokeWidth={symbolStroke(120)} />
       </View>
       <AppText variant="caption" color="support" uppercase align="center">
         Pause
@@ -395,6 +407,7 @@ function StepBreathing({
   timerSeconds: number;
   onReady: () => void;
 }) {
+  const { colors } = useTheme();
   const progress = timerSeconds > 0 ? Math.round(((timerSeconds - timeLeft) / timerSeconds) * 100) : 100;
   return (
     <View style={[styles.step, styles.breathStep]}>
@@ -405,14 +418,20 @@ function StepBreathing({
         <Svg width={260} height={260} style={StyleSheet.absoluteFill} pointerEvents="none">
           <Defs>
             <RadialGradient id="breathAura" cx="50%" cy="50%" r="50%">
-              <Stop offset="0%" stopColor={theme.colors.support} stopOpacity={0.18} />
-              <Stop offset="70%" stopColor={theme.colors.support} stopOpacity={0.04} />
-              <Stop offset="100%" stopColor={theme.colors.support} stopOpacity={0} />
+              <Stop offset="0%" stopColor={colors.support} stopOpacity={0.18} />
+              <Stop offset="70%" stopColor={colors.support} stopOpacity={0.04} />
+              <Stop offset="100%" stopColor={colors.support} stopOpacity={0} />
             </RadialGradient>
           </Defs>
           <SvgCircle cx={130} cy={130} r={130} fill="url(#breathAura)" />
         </Svg>
-        <Animated.View style={[styles.circle, { transform: [{ scale }] }]} />
+        <Animated.View
+          style={[
+            styles.circle,
+            { backgroundColor: colors.supportSoft, borderColor: colors.support },
+            { transform: [{ scale }] },
+          ]}
+        />
         <AppText variant="heading" color="energy" style={styles.breathLabel}>
           {breathLabel}
         </AppText>
@@ -535,7 +554,7 @@ function IntensityPicker({
 const styles = StyleSheet.create({
   scroll: { flexGrow: 1, padding: theme.spacing.xl },
   step: { gap: theme.spacing.lg },
-  entryGlyph: { alignItems: 'center', opacity: 0.12 },
+  entryGlyph: { alignItems: 'center', opacity: 0.9 },
   breathStep: { alignItems: 'center' },
   centered: { alignItems: 'center' },
   nav: { gap: theme.spacing.sm },
@@ -545,9 +564,7 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     borderRadius: theme.radii.pill,
-    backgroundColor: theme.colors.supportSoft,
     borderWidth: 2,
-    borderColor: theme.colors.support,
   },
   breathLabel: { textAlign: 'center' },
   timerRow: { flexDirection: 'row', gap: theme.spacing.md },

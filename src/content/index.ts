@@ -99,6 +99,17 @@ export function getDailyCodexDay(dayNumber: number): CodexDay | undefined {
   return codexDays.find((day) => day.dayNumber === dayNumber);
 }
 
+/**
+ * Codex day chosen by an arbitrary rotation index, wrapping over the cycle. Pure
+ * (no clock): the caller decides whether to rotate by path day or calendar day.
+ * Surfaces the otherwise-buried daily codex onto the home.
+ */
+export function getCodexDayByIndex(index: number): CodexDay | undefined {
+  if (codexDays.length === 0) return undefined;
+  const i = ((Math.trunc(index) % codexDays.length) + codexDays.length) % codexDays.length;
+  return codexDays[i];
+}
+
 export function getAllStudies(): readonly Study[] {
   return studies;
 }

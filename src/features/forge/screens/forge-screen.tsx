@@ -6,20 +6,23 @@ import {
   AppCard,
   AppChip,
   AppEmptyState,
-  AppHeader,
+  AppHero,
   AppScreen,
   AppSelectList,
   AppText,
   AppTextInput,
   type SelectOption,
+  Bento,
+  BentoItem,
   EmberSigil,
   FadeInRise,
   FORGE_GLYPHS,
   NoForgeSymbol,
-  ScreenCrest,
   symbolStroke,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
+import { useTheme } from '@/shared/hooks/use-theme';
 
 import {
   FORGE_CATEGORIES,
@@ -51,6 +54,10 @@ const DURATION_CHIPS: { label: string; value: number | 'custom' }[] = [
   { label: 'Custom', value: 'custom' },
 ];
 
+function cap(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 function formatDate(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
@@ -62,6 +69,8 @@ function actCountLabel(count: number): string {
 
 export function ForgeScreen() {
   const { acts, categoryCounts, loading, logAct } = useForge();
+  const { colors } = useTheme();
+  const tone = useSurfaceTone({ kind: 'semantic', name: 'primary' });
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -114,11 +123,12 @@ export function ForgeScreen() {
     return (
       <AppScreen scroll>
         <View style={styles.container}>
-          <AppHeader
+          <AppHero
+            tone={tone}
             eyebrow="Forge"
-            eyebrowColor="energy"
             title="What are you building?"
             subtitle="Name the act. Give the fire a destination."
+            art={<EmberSigil size={84} color={tone.text} strokeWidth={symbolStroke(84)} />}
           />
 
           <AppCard>
@@ -207,17 +217,13 @@ export function ForgeScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <View>
-          <ScreenCrest>
-            <EmberSigil size={110} color={theme.colors.textMuted} strokeWidth={symbolStroke(110)} />
-          </ScreenCrest>
-          <AppHeader
-            eyebrow="Forge"
-            eyebrowColor="energy"
-            title="Turn the fire into action."
-            subtitle="Raw desire becomes strength through direction."
-          />
-        </View>
+        <AppHero
+          tone={tone}
+          eyebrow="Forge"
+          title="Turn the fire into action."
+          subtitle="Raw desire becomes strength through direction."
+          art={<EmberSigil size={84} color={tone.text} strokeWidth={symbolStroke(84)} />}
+        />
 
         <AppButton
           label="Log a Forge Act"
@@ -226,30 +232,33 @@ export function ForgeScreen() {
         />
 
         {acts.length > 0 ? (
-          <AppCard>
+          <>
             <AppText variant="caption" color="muted" uppercase>
               Category distribution
             </AppText>
-            <View style={styles.distList}>
+            <Bento>
               {FORGE_CATEGORIES.map((cat) => {
                 const count = categoryCounts.find((c) => c.category === cat)?.count ?? 0;
                 const Glyph = FORGE_GLYPHS[cat];
+                const active = count > 0;
                 return (
-                  <View key={cat} style={styles.distRow}>
-                    <View style={styles.distLabel}>
-                      {Glyph ? <Glyph size={20} color={theme.colors.textMuted} strokeWidth={symbolStroke(20)} /> : null}
-                      <AppText variant="body" color={count > 0 ? 'secondary' : 'muted'}>
-                        {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  <BentoItem key={cat}>
+                    <AppCard tone={active ? 'raised' : 'overlay'} style={styles.catTile}>
+                      {Glyph ? (
+                        <Glyph size={26} color={active ? tone.text : colors.textMuted} strokeWidth={symbolStroke(26)} />
+                      ) : null}
+                      <AppText variant="label" color={active ? 'primary' : 'muted'}>
+                        {cap(cat)}
                       </AppText>
-                    </View>
-                    <AppText variant="body" color={count > 0 ? 'energy' : 'muted'}>
-                      {actCountLabel(count)}
-                    </AppText>
-                  </View>
+                      <AppText variant="caption" color={active ? 'energy' : 'muted'}>
+                        {actCountLabel(count)}
+                      </AppText>
+                    </AppCard>
+                  </BentoItem>
                 );
               })}
-            </View>
-          </AppCard>
+            </Bento>
+          </>
         ) : null}
 
         {loading ? (
@@ -260,7 +269,7 @@ export function ForgeScreen() {
           </AppCard>
         ) : acts.length === 0 ? (
           <View style={styles.emptyState}>
-            <NoForgeSymbol size={56} color={theme.colors.textMuted} />
+            <NoForgeSymbol size={64} color={colors.textMuted} />
             <AppEmptyState
               title="No forge acts recorded yet."
               message="When the fire rises, turn it into one visible action."
@@ -280,7 +289,7 @@ export function ForgeScreen() {
                 <FadeInRise key={act.id} index={Math.min(index, 8)}>
                 <AppCard tone="overlay" style={styles.actCard}>
                   <View style={styles.actCategoryRow}>
-                    {Glyph ? <Glyph size={18} color={theme.colors.ember} strokeWidth={symbolStroke(18)} /> : null}
+                    {Glyph ? <Glyph size={18} color={colors.ember} strokeWidth={symbolStroke(18)} /> : null}
                     <AppText variant="caption" color="energy" uppercase>
                       {act.category}
                     </AppText>
@@ -311,9 +320,7 @@ export function ForgeScreen() {
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
   nav: { gap: theme.spacing.sm },
-  distList: { gap: theme.spacing.sm, marginTop: theme.spacing.sm },
-  distRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  distLabel: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
+  catTile: { gap: theme.spacing.xs, alignItems: 'flex-start' },
   list: { gap: theme.spacing.sm },
   actCard: { gap: theme.spacing.xs },
   actCategoryRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },

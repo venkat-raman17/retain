@@ -5,15 +5,17 @@ import { StyleSheet, View } from 'react-native';
 import {
   AppButton,
   AppCard,
-  AppHeader,
+  AppHero,
   AppQuoteBlock,
   AppScreen,
   AppSelectList,
   AppText,
   AppTextInput,
+  SealArt,
   type SelectOption,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
 import { Routes } from '@/navigation';
 import { TRIGGER_LABELS, TRIGGER_TYPES, type TriggerType } from '@/features/pause/domain/urge-log';
 
@@ -32,6 +34,9 @@ export function LapseScreen() {
   const { vow, recordLapse, recordReturn } = usePath();
 
   const [step, setStep] = useState<LapseStep>('entry');
+  // The screen's tone shifts from rust (grave) to olive (return) as the man moves
+  // through the steps — the visual arc reinforces "learn, then return."
+  const tone = useSurfaceTone({ kind: 'semantic', name: step === 'return' ? 'success' : 'danger' });
   const [triggerType, setTriggerType] = useState<TriggerType | null>(null);
   const [stateBefore, setStateBefore] = useState('');
   const [lesson, setLesson] = useState('');
@@ -71,7 +76,9 @@ export function LapseScreen() {
       <View style={styles.container}>
         {step === 'entry' && (
           <>
-            <AppHeader
+            <AppHero
+              tone={tone}
+              eyebrow="Lapse"
               title="Record a lapse without shame."
               subtitle="A lapse ends a streak. It does not end the practice."
             />
@@ -106,7 +113,9 @@ export function LapseScreen() {
 
         {step === 'understand' && (
           <>
-            <AppHeader
+            <AppHero
+              tone={tone}
+              eyebrow="Understand"
               title="What happened?"
               subtitle="Name it clearly. The unnamed pattern repeats."
             />
@@ -140,7 +149,9 @@ export function LapseScreen() {
 
         {step === 'learn' && (
           <>
-            <AppHeader
+            <AppHero
+              tone={tone}
+              eyebrow="Learn"
               title="Study it. Do not worship it."
               subtitle="One insight. One action. That is enough."
             />
@@ -177,9 +188,12 @@ export function LapseScreen() {
 
         {step === 'return' && (
           <>
-            <AppHeader
+            <AppHero
+              tone={tone}
+              eyebrow="Return"
               title="Return."
               subtitle="The practice continues."
+              art={<SealArt source={{ kind: 'archetype', archetype: 'healer' }} size={80} color={tone.text} />}
             />
 
             {vow ? (

@@ -6,6 +6,7 @@ export type { FontFamilyName, FontWeightName } from './typography';
 export { shadows } from './shadows';
 export { durations, easing, motion } from './motion';
 export { theme, sharedArchetype } from './theme';
+export { ARC_TONE, arcTone } from './arc-colors';
 export type { AppTheme, ThemeColor, ArchetypeTone } from './theme';
 export { THEMES, THEME_META, THEME_IDS, DEFAULT_THEME_ID, isThemeId } from './themes';
 export type { ThemeId, ThemeMeta } from './themes';

@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
 
 import { theme } from '@/shared/design';
+import { useTheme } from '@/shared/hooks/use-theme';
 
 import { AppText } from './text';
 
@@ -10,6 +11,7 @@ export interface AppTextInputProps extends TextInputProps {
 }
 
 export function AppTextInput({ label, error, style, multiline, ...rest }: AppTextInputProps) {
+  const { colors } = useTheme();
   return (
     <View style={styles.container}>
       {label ? (
@@ -18,12 +20,17 @@ export function AppTextInput({ label, error, style, multiline, ...rest }: AppTex
         </AppText>
       ) : null}
       <TextInput
-        placeholderTextColor={theme.colors.textMuted}
+        placeholderTextColor={colors.textMuted}
         multiline={multiline}
         style={[
           styles.input,
+          {
+            color: colors.textPrimary,
+            backgroundColor: colors.surfaceOverlay,
+            borderColor: colors.border,
+          },
           multiline ? styles.multiline : null,
-          error ? styles.inputError : null,
+          error ? { borderColor: colors.support } : null,
           style,
         ]}
         {...rest}
@@ -40,16 +47,12 @@ export function AppTextInput({ label, error, style, multiline, ...rest }: AppTex
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.sm },
   input: {
-    color: theme.colors.textPrimary,
     fontSize: theme.typography.size.body,
-    backgroundColor: theme.colors.surfaceOverlay,
     borderRadius: theme.radii.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.colors.border,
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.md,
     minHeight: 48,
   },
   multiline: { minHeight: 96, textAlignVertical: 'top' },
-  inputError: { borderColor: theme.colors.support },
 });

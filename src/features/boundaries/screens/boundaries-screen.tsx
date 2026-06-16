@@ -8,13 +8,16 @@ import {
   AppDivider,
   AppEmptyState,
   AppHeader,
+  AppHero,
   AppScreen,
   AppSelectList,
   AppText,
   AppTextInput,
+  SealArt,
   type SelectOption,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
 
 import type { Boundary } from '../domain/boundary';
 import type { CheckinStatus } from '../domain/boundary-checkin';
@@ -44,6 +47,7 @@ const DEFAULT_BOUNDARIES = [
 
 export function BoundariesScreen() {
   const { boundaries, loading, add, checkin, deactivate } = useBoundaries();
+  const guardianTone = useSurfaceTone({ kind: 'archetype', id: 'guardian' });
   const [mode, setMode] = useState<ViewMode>('overview');
 
   // Add form
@@ -212,10 +216,12 @@ export function BoundariesScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <AppHeader
+        <AppHero
+          tone={guardianTone}
           eyebrow="Guard the Gates"
           title="Your boundaries."
           subtitle="Small rules that win before the battle begins."
+          art={<SealArt source={{ kind: 'arc', arcNumber: 2 }} size={80} color={guardianTone.text} />}
         />
 
         <View style={styles.row}>

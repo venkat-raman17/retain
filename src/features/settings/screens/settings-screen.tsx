@@ -4,6 +4,7 @@ import { StyleSheet, Switch, View } from 'react-native';
 import { copy } from '@/content';
 import { AppText, AppButton, AppCard, AppDivider, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useTheme } from '@/shared/hooks/use-theme';
 import { haptics, setHapticsEnabled } from '@/shared/lib';
 import { Routes } from '@/navigation';
 
@@ -20,6 +21,7 @@ function ToggleRow({
   value: boolean;
   onValueChange: (next: boolean) => void;
 }) {
+  const { colors } = useTheme();
   return (
     <View style={styles.row}>
       <View style={styles.rowText}>
@@ -31,8 +33,8 @@ function ToggleRow({
       <Switch
         value={value}
         onValueChange={onValueChange}
-        trackColor={{ true: theme.colors.primary, false: theme.colors.surfaceOverlay }}
-        thumbColor={theme.colors.textPrimary}
+        trackColor={{ true: colors.primary, false: colors.surfaceOverlay }}
+        thumbColor={colors.textPrimary}
       />
     </View>
   );

@@ -10,6 +10,7 @@ import {
   AppDivider,
   AppEmptyState,
   AppHeader,
+  AppHero,
   AppQuoteBlock,
   AppScreen,
   AppSelectList,
@@ -17,9 +18,17 @@ import {
   AppText,
   AppTextInput,
   AppTimerRing,
+  Bento,
+  BentoItem,
+  HeroStat,
+  PathPulse,
+  SealArt,
+  SectionBand,
+  SplitRow,
   type TextVariant,
 } from '@/shared/components';
 import { theme, type ArchetypeTone } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
 import { Routes } from '@/navigation';
 
 const TEXT_VARIANTS: readonly TextVariant[] = [
@@ -83,6 +92,9 @@ function Swatch({ label, color }: { label: string; color: string }) {
 export default function DesignSystemRoute() {
   const [vow, setVow] = useState<'pause' | 'fire'>('pause');
   const [note, setNote] = useState('');
+  const arcToneForge = useSurfaceTone({ kind: 'arc', arcNumber: 6 });
+  const mirrorTone = useSurfaceTone({ kind: 'semantic', name: 'mirror' });
+  const guardianTone = useSurfaceTone({ kind: 'archetype', id: 'guardian' });
 
   if (!__DEV__) {
     return <Redirect href={Routes.path} />;
@@ -97,6 +109,75 @@ export default function DesignSystemRoute() {
           title="Design System"
           subtitle="The stone, the forge, the codex. Development build only."
         />
+
+        <Section title="Hero · left (arc tone)">
+          <AppHero
+            tone={arcToneForge}
+            eyebrow="Day 54"
+            title="The Forge"
+            subtitle="What am I building with the fire?"
+            art={<SealArt source={{ kind: 'arc', arcNumber: 6 }} size={88} color={arcToneForge.text} />}
+          />
+        </Section>
+
+        <Section title="Hero · centered + PathPulse">
+          <AppHero
+            tone={arcToneForge}
+            align="center"
+            eyebrow="The Path"
+            title="Day 54 of 90"
+            halo={false}
+          >
+            <PathPulse currentDay={54} arcTitle="The Forge" litColor={arcToneForge.base} size={200} />
+          </AppHero>
+        </Section>
+
+        <Section title="Section band (mirror tone)">
+          <SectionBand tone={mirrorTone}>
+            <AppText variant="subheading">A tonal zone</AppText>
+            <AppText variant="body" color="secondary">
+              Groups content into a distinct color block instead of one flat scroll.
+            </AppText>
+          </SectionBand>
+        </Section>
+
+        <Section title="Hero stats (split row)">
+          <SplitRow>
+            <HeroStat label="Path day" value="54" valueColorHex={arcToneForge.text} />
+            <HeroStat label="Returns" value="3" color="calm" />
+          </SplitRow>
+        </Section>
+
+        <Section title="Bento mosaic">
+          <Bento>
+            <BentoItem span={2}>
+              <AppCard tone="raised">
+                <AppText variant="label">Full-width tile (span 2)</AppText>
+              </AppCard>
+            </BentoItem>
+            <BentoItem>
+              <AppCard tone="raised">
+                <AppText variant="label">Half</AppText>
+              </AppCard>
+            </BentoItem>
+            <BentoItem>
+              <AppCard tone="raised">
+                <AppText variant="label">Half</AppText>
+              </AppCard>
+            </BentoItem>
+          </Bento>
+        </Section>
+
+        <Section title="Seal art (with halo)">
+          <View style={styles.center}>
+            <SealArt
+              source={{ kind: 'archetype', archetype: 'guardian' }}
+              size={96}
+              color={guardianTone.text}
+              halo
+            />
+          </View>
+        </Section>
 
         <Section title="Type scale">
           {TEXT_VARIANTS.map((variant) => (

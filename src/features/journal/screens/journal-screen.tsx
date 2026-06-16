@@ -9,16 +9,19 @@ import {
   AppDivider,
   AppEmptyState,
   AppHeader,
+  AppHero,
   AppScreen,
   AppText,
   AppTextInput,
   FadeInRise,
   NoJournalSymbol,
-  ScreenCrest,
   TabletSigil,
   symbolStroke,
+  type TextColor,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
+import { useSurfaceTone } from '@/shared/hooks';
+import { useTheme } from '@/shared/hooks/use-theme';
 
 import {
   JOURNAL_TYPES,
@@ -49,6 +52,17 @@ const CARD_TYPE_LABELS: Record<JournalType, string> = {
   study_reflection: 'STUDY',
 };
 
+/** Each entry type carries its own ink color, so the ledger reads at a glance. */
+const CARD_TYPE_COLOR: Record<JournalType, TextColor> = {
+  morning: 'accent',
+  evening: 'accent',
+  urge: 'warning',
+  lapse: 'danger',
+  return: 'calm',
+  freeform: 'muted',
+  study_reflection: 'energy',
+};
+
 const TYPE_PROMPTS: Record<JournalType, string> = {
   morning: 'What must I remember before the day begins?',
   evening: 'Did I live today from intention or from habit?',
@@ -76,6 +90,7 @@ function TypeGrid({
   value: JournalType | null;
   onChange: (t: JournalType) => void;
 }) {
+  const { colors } = useTheme();
   return (
     <View style={gridStyles.grid}>
       {JOURNAL_TYPES.map((t) => {
@@ -86,7 +101,13 @@ function TypeGrid({
             onPress={() => onChange(t)}
             accessibilityRole="radio"
             accessibilityState={{ selected }}
-            style={[gridStyles.cell, selected && gridStyles.cellSelected]}
+            style={[
+              gridStyles.cell,
+              {
+                borderColor: selected ? colors.primary : colors.border,
+                backgroundColor: selected ? colors.primarySoft : 'transparent',
+              },
+            ]}
           >
             <AppText variant="label" color={selected ? 'energy' : 'secondary'}>
               {TYPE_LABELS[t]}
@@ -110,17 +131,14 @@ const gridStyles = StyleSheet.create({
     paddingHorizontal: theme.spacing.sm,
     borderRadius: theme.radii.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: theme.colors.border,
     alignItems: 'center',
-  },
-  cellSelected: {
-    borderColor: theme.colors.primary,
-    backgroundColor: theme.colors.primarySoft,
   },
 });
 
 export function JournalScreen() {
   const { entries, loading, addEntry, deleteEntry, error } = useJournal();
+  const { colors } = useTheme();
+  const tone = useSurfaceTone({ kind: 'semantic', name: 'accent' });
   const { initialType, initialPrompt } = useLocalSearchParams<{
     initialType?: string;
     initialPrompt?: string;
@@ -257,15 +275,16 @@ export function JournalScreen() {
       <AppScreen scroll>
         <View style={styles.container}>
           <View style={styles.detailHeader}>
-            <AppText variant="caption" color="energy" uppercase>
+            <AppText variant="caption" color={CARD_TYPE_COLOR[selected.type]} uppercase>
               {CARD_TYPE_LABELS[selected.type]}
             </AppText>
             <AppText variant="caption" color="muted">
               {formatDate(selected.createdAt)}
             </AppText>
           </View>
-          <AppCard>
-            <AppText variant="body" color="secondary">
+          {/* The entry reads on warm parchment — the page, not another dark card. */}
+          <AppCard tone="parchment">
+            <AppText variant="body" color="ink">
               {selected.body}
             </AppText>
           </AppCard>
@@ -286,16 +305,13 @@ export function JournalScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        <View>
-          <ScreenCrest>
-            <TabletSigil size={110} color={theme.colors.textMuted} strokeWidth={symbolStroke(110)} />
-          </ScreenCrest>
-          <AppHeader
-            eyebrow="Journal"
-            title="The record."
-            subtitle="What you observe here cannot be taken."
-          />
-        </View>
+        <AppHero
+          tone={tone}
+          eyebrow="Journal"
+          title="The record."
+          subtitle="What you observe here cannot be taken."
+          art={<TabletSigil size={84} color={tone.text} strokeWidth={symbolStroke(84)} />}
+        />
 
         <AppButton label="New entry" fullWidth onPress={() => setMode('new_entry')} />
 
@@ -319,7 +335,7 @@ export function JournalScreen() {
           </AppCard>
         ) : filteredEntries.length === 0 ? (
           <View style={styles.emptyState}>
-            <NoJournalSymbol size={56} color={theme.colors.textMuted} />
+            <NoJournalSymbol size={56} color={colors.textMuted} />
             <AppEmptyState
               title="No record yet."
               message="Write what is true. One line is enough."
@@ -339,7 +355,7 @@ export function JournalScreen() {
                   }}
                 >
                   <View style={styles.entryRow}>
-                    <AppText variant="caption" color="energy" uppercase>
+                    <AppText variant="caption" color={CARD_TYPE_COLOR[entry.type]} uppercase>
                       {CARD_TYPE_LABELS[entry.type]}
                     </AppText>
                     <AppText variant="caption" color="muted">
