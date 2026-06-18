@@ -9,7 +9,6 @@ import {
   GateSigil,
   MirrorSigil,
   PillarsSigil,
-  TabletSigil,
 } from '@/shared/components/symbols';
 import { fontFamilyFor, theme } from '@/shared/design';
 import { haptics } from '@/shared/lib';
@@ -18,7 +17,8 @@ import { useTheme } from '@/shared/hooks/use-theme';
 // ─── Per-tab sigils ─────────────────────────────────────────────────────────
 // SVG sigils in the app's symbolic language: monoline, iron + ember, carved.
 // Path = gate to cross each day. Forge = ember diamond.
-// Journal = inscribed tablet. Codex = archive pillars. Record = hand mirror.
+// Codex = archive pillars. Hall (progress) = hand mirror; the day's trials and
+// honors live together here.
 
 const ICON_SIZE = 22;
 
@@ -27,7 +27,6 @@ type IconProps = { color: string; size: number };
 const TAB_ICON_MAP: Record<string, (props: IconProps) => ReactElement> = {
   path: ({ color }) => <GateSigil size={ICON_SIZE} color={color} />,
   forge: ({ color }) => <EmberSigil size={ICON_SIZE} color={color} />,
-  journal: ({ color }) => <TabletSigil size={ICON_SIZE} color={color} />,
   codex: ({ color }) => <PillarsSigil size={ICON_SIZE} color={color} />,
   progress: ({ color }) => <MirrorSigil size={ICON_SIZE} color={color} />,
 };

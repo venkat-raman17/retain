@@ -5,6 +5,14 @@ import type { Station, Trial } from '@/content/schemas';
  * Embers and rank can never decrease (monotonic by construction).
  */
 
+/** Days that close an arc and earn a milestone rite/key. */
+export const MILESTONE_DAYS = [7, 14, 21, 30, 45, 60, 75, 90] as const;
+
+/** Whether a given day is a milestone (rite) day. */
+export function isMilestoneDay(day: number): boolean {
+  return (MILESTONE_DAYS as readonly number[]).includes(day);
+}
+
 /** Total embers from all cleared days (days with completed content_progress). */
 export function embersForCompletedDays(
   trials: readonly Trial[],

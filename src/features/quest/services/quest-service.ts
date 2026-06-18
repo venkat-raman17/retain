@@ -64,4 +64,18 @@ export class QuestService {
 
     return evaluateDayQuest(trial, signals, this.clock);
   }
+
+  /**
+   * Today's quest plus the most recent prior days, newest first. Days without a
+   * trial (e.g. before day 1) are skipped. Used by the Trials hall to show the
+   * run of days as a gallery the user can revisit.
+   */
+  async getRecentQuests(currentDay: number, count: number): Promise<DayQuestResult[]> {
+    const firstDay = Math.max(1, currentDay - count + 1);
+    const days: number[] = [];
+    for (let d = currentDay; d >= firstDay; d--) days.push(d);
+
+    const results = await Promise.all(days.map((d) => this.getDayQuest(d)));
+    return results.filter((r): r is DayQuestResult => r !== null);
+  }
 }
