@@ -6,6 +6,7 @@ import type { Achievement } from '@/content/schemas';
 import type { EarnedAchievement } from '@/db';
 import { copy } from '@/content';
 import { useProgressSummary } from '@/features/progress/hooks/use-progress-summary';
+import { MILESTONE_DAYS } from '@/features/progress/domain/progression';
 import type {
   PathArc,
   PracticeRhythm,
@@ -36,8 +37,6 @@ import { useTheme } from '@/shared/hooks/use-theme';
 import { useHonors } from '../hooks/use-honors';
 
 type InsightColor = 'accent' | 'energy' | 'calm' | 'secondary';
-
-const MILESTONE_DAYS = [7, 14, 21, 30, 45, 60, 75, 90] as const;
 
 // ─── Shared helpers ───────────────────────────────────────────────────────────
 

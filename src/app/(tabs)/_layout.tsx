@@ -18,7 +18,8 @@ import { useTheme } from '@/shared/hooks/use-theme';
 // ─── Per-tab sigils ─────────────────────────────────────────────────────────
 // SVG sigils in the app's symbolic language: monoline, iron + ember, carved.
 // Path = gate to cross each day. Forge = ember diamond.
-// Journal = inscribed tablet. Codex = archive pillars. Record = hand mirror.
+// Trials = inscribed tablet of the day's objectives. Codex = archive pillars.
+// Record = hand mirror.
 
 const ICON_SIZE = 22;
 
@@ -27,7 +28,7 @@ type IconProps = { color: string; size: number };
 const TAB_ICON_MAP: Record<string, (props: IconProps) => ReactElement> = {
   path: ({ color }) => <GateSigil size={ICON_SIZE} color={color} />,
   forge: ({ color }) => <EmberSigil size={ICON_SIZE} color={color} />,
-  journal: ({ color }) => <TabletSigil size={ICON_SIZE} color={color} />,
+  trials: ({ color }) => <TabletSigil size={ICON_SIZE} color={color} />,
   codex: ({ color }) => <PillarsSigil size={ICON_SIZE} color={color} />,
   progress: ({ color }) => <MirrorSigil size={ICON_SIZE} color={color} />,
 };

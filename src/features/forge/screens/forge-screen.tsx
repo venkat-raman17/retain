@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
+import { copy } from '@/content';
 import {
   AppButton,
   AppCard,
@@ -18,6 +20,7 @@ import {
   FadeInRise,
   FORGE_GLYPHS,
   NoForgeSymbol,
+  SealArt,
   symbolStroke,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
@@ -30,7 +33,10 @@ import {
   type ForgeCategory,
 } from '../domain/forge-act';
 import { useForge } from '../hooks/use-forge';
+import { useTodaysObjective } from '../hooks/use-todays-objective';
 import { useHonors } from '@/features/honors/hooks/use-honors';
+
+const FORGE_TITLE_MAX = 200;
 
 const CATEGORY_DESCRIPTIONS: Record<ForgeCategory, string> = {
   body: 'Train, move, breathwork, cold exposure.',
@@ -71,10 +77,14 @@ function actCountLabel(count: number): string {
 export function ForgeScreen() {
   const { acts, categoryCounts, loading, logAct } = useForge();
   const { checkAndAward } = useHonors();
+  const { objective, refresh: refreshObjective } = useTodaysObjective();
   const { colors } = useTheme();
   const tone = useSurfaceTone({ kind: 'semantic', name: 'primary' });
+  const objectiveTone = useSurfaceTone({ kind: 'arc', arcNumber: objective?.arcNumber ?? 1 });
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  useFocusEffect(useCallback(() => refreshObjective(), [refreshObjective]));
 
   const [category, setCategory] = useState<ForgeCategory | null>(null);
   const [title, setTitle] = useState('');
@@ -92,6 +102,16 @@ export function ForgeScreen() {
     setCustomDurationText('');
     setReflection('');
     setFormError(null);
+  };
+
+  // Accept the day's forge challenge: prefill the act title from the bundled
+  // challenge text, leaving the category for the user to choose (the challenge
+  // is free text). Logging any act today clears the day's forge objective.
+  const acceptChallenge = () => {
+    if (!objective) return;
+    resetForm();
+    setTitle(objective.forgeChallenge.slice(0, FORGE_TITLE_MAX));
+    setShowForm(true);
   };
 
   const submit = async () => {
@@ -115,6 +135,7 @@ export function ForgeScreen() {
       };
       await logAct(draft);
       void checkAndAward();
+      refreshObjective();
       resetForm();
       setShowForm(false);
     } finally {
@@ -228,8 +249,44 @@ export function ForgeScreen() {
           art={<EmberSigil size={84} color={tone.text} strokeWidth={symbolStroke(84)} />}
         />
 
+        {/* Today's Forge — the day's written challenge, surfaced as the objective. */}
+        {objective ? (
+          <AppCard
+            tone={objective.alreadyDoneToday ? 'raised' : 'overlay'}
+            border={objective.alreadyDoneToday ? 'gold' : 'ember'}
+          >
+            <View style={styles.objectiveHead}>
+              <AppText variant="caption" uppercase style={{ color: objectiveTone.text }}>
+                {`${copy.forge.todaysObjective.label} · Day ${objective.day}`}
+              </AppText>
+              {objective.archetype ? (
+                <SealArt
+                  source={{ kind: 'archetype', archetype: objective.archetype }}
+                  size={34}
+                  color={objective.alreadyDoneToday ? colors.gold : objectiveTone.base}
+                />
+              ) : null}
+            </View>
+            <AppText variant="body" color="secondary">
+              {objective.forgeChallenge}
+            </AppText>
+            {objective.alreadyDoneToday ? (
+              <AppText variant="caption" color="energy">
+                {`✓ ${copy.forge.todaysObjective.done}`}
+              </AppText>
+            ) : (
+              <AppButton
+                label={copy.forge.todaysObjective.accept}
+                fullWidth
+                onPress={acceptChallenge}
+              />
+            )}
+          </AppCard>
+        ) : null}
+
         <AppButton
-          label="Log a Forge Act"
+          label={copy.path.logForge}
+          variant={objective && !objective.alreadyDoneToday ? 'secondary' : 'primary'}
           fullWidth
           onPress={() => setShowForm(true)}
         />
@@ -331,4 +388,5 @@ const styles = StyleSheet.create({
   emptyState: { gap: theme.spacing.md, alignItems: 'center' },
   durationSection: { gap: theme.spacing.sm },
   chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm },
+  objectiveHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
 });

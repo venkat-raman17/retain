@@ -17,6 +17,7 @@ import {
   SealArt,
   SectionBand,
   SplitRow,
+  useCountUp,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
 import { useSurfaceTone } from '@/shared/hooks';
@@ -43,6 +44,12 @@ export function PathScreen() {
   const day = currentDay > 0 ? currentDay : 1;
   const { quest, refresh: refreshQuest } = useDayQuest(day);
   const { summary: honorsSummary, refresh: refreshHonors } = useHonors();
+  const embersDisplay = useCountUp(honorsSummary?.totalEmbers ?? 0, 1200);
+
+  const stationSeal =
+    honorsSummary?.station?.sealSource === 'arc'
+      ? { kind: 'arc' as const, arcNumber: parseInt(honorsSummary.station.sealId, 10) }
+      : null;
 
   useFocusEffect(
     useCallback(() => {
@@ -130,16 +137,23 @@ export function PathScreen() {
             </AppHero>
 
             {/* Quest dock — today's trial name + objective progress */}
-            {quest ? <QuestDock quest={quest} toneText={tone.text} onPress={openChamber} /> : null}
+            {quest ? (
+              <QuestDock quest={quest} toneText={tone.text} toneBase={tone.base} onPress={openChamber} />
+            ) : null}
 
             {/* Vow — set in the arc tone. */}
             {vow ? (
               <SectionBand tone={tone}>
                 <AppQuoteBlock quote={vow} attribution={copy.path.vowAttribution} />
                 {honorsSummary?.station ? (
-                  <AppText variant="caption" style={{ color: tone.text }} uppercase>
-                    {`Station · ${honorsSummary.station.title}`}
-                  </AppText>
+                  <View style={styles.stationRow}>
+                    {stationSeal ? (
+                      <SealArt source={stationSeal} size={28} color={tone.base} />
+                    ) : null}
+                    <AppText variant="caption" style={{ color: tone.text }} uppercase>
+                      {`${copy.path.stationLabel} · ${honorsSummary.station.title}`}
+                    </AppText>
+                  </View>
                 ) : null}
               </SectionBand>
             ) : null}
@@ -205,6 +219,7 @@ export function PathScreen() {
             {/* Compact stat band — Day now lives in the pulse, so show the rest. */}
             {summary ? (
               <View style={styles.statsGrid}>
+                <AppStatCard label={copy.path.stats.embers} value={embersDisplay.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.streak} value={summary.longestPathDays.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.urges} value={summary.urgesObserved.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.forge} value={summary.forgeActs.toString()} style={styles.stat} />
@@ -214,7 +229,14 @@ export function PathScreen() {
             {/* Secondary actions */}
             <SplitRow>
               <AppButton label={copy.path.logForge} variant="secondary" fullWidth onPress={() => router.push(Routes.forge)} />
-              <AppButton label={copy.path.journalTonight} variant="secondary" fullWidth onPress={() => router.push(Routes.journal)} />
+              <AppButton
+                label={copy.path.journalTonight}
+                variant="secondary"
+                fullWidth
+                onPress={() =>
+                  router.push({ pathname: Routes.journal, params: { initialType: 'evening' } })
+                }
+              />
             </SplitRow>
             <AppButton label={copy.path.viewMap} variant="ghost" fullWidth onPress={() => router.push(Routes.pathMap)} />
 
@@ -232,10 +254,12 @@ export function PathScreen() {
 function QuestDock({
   quest,
   toneText,
+  toneBase,
   onPress,
 }: {
   quest: import('@/features/quest/domain/quest-evaluation').DayQuestResult;
   toneText: string;
+  toneBase: string;
   onPress: () => void;
 }) {
   const completed = quest.objectives.filter((o) => o.complete).length;
@@ -245,13 +269,16 @@ function QuestDock({
     <AppCard tone="overlay" onPress={onPress}>
       <View style={styles.questHeader}>
         <AppText variant="caption" uppercase style={{ color: toneText }}>
-          {allClear ? 'Trial complete' : 'Today\'s Trial'}
+          {allClear ? copy.trials.today + ' · ' + copy.trials.cleared : copy.trials.today}
         </AppText>
         <AppText variant="caption" color={allClear ? 'energy' : 'muted'}>
           {`${completed}/${total}`}
         </AppText>
       </View>
-      <AppText variant="label" color="primary">{quest.trial.name}</AppText>
+      <View style={styles.questTitleRow}>
+        <SealArt source={{ kind: 'arc', arcNumber: quest.trial.arcNumber ?? 1 }} size={26} color={toneBase} />
+        <AppText variant="label" color="primary" style={styles.questTitle}>{quest.trial.name}</AppText>
+      </View>
       {quest.objectives.filter((o) => !o.optional).map((obj) => (
         <View key={obj.id} style={styles.questObjective}>
           <AppText variant="caption" color={obj.complete ? 'energy' : 'muted'}>
@@ -303,11 +330,14 @@ const styles = StyleSheet.create({
   topBar: { flexDirection: 'row', justifyContent: 'flex-end', gap: theme.spacing.xs },
   gearIcon: { fontSize: 16, lineHeight: 20 },
   section: { gap: theme.spacing.sm },
-  statsGrid: { flexDirection: 'row', gap: theme.spacing.sm },
-  stat: { flex: 1, minWidth: 0 },
+  statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm },
+  stat: { flexBasis: '47%', flexGrow: 1, minWidth: 0 },
+  stationRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
   paletteIcon: { flexDirection: 'row', gap: 3, alignItems: 'center' },
   paletteDot: { width: 5, height: 5, borderRadius: 2.5 },
   questHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  questTitleRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
+  questTitle: { flex: 1 },
   questObjective: { flexDirection: 'row', alignItems: 'flex-start', gap: theme.spacing.xs },
   questLabel: { flex: 1 },
 });

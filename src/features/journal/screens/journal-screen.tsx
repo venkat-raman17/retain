@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import {
   AppButton,
@@ -136,6 +136,7 @@ const gridStyles = StyleSheet.create({
 });
 
 export function JournalScreen() {
+  const router = useRouter();
   const { entries, loading, addEntry, deleteEntry, error } = useJournal();
   const { colors } = useTheme();
   const tone = useSurfaceTone({ kind: 'semantic', name: 'accent' });
@@ -376,6 +377,8 @@ export function JournalScreen() {
             ))}
           </View>
         )}
+
+        <AppButton label="Close" variant="ghost" fullWidth onPress={() => router.back()} />
       </View>
     </AppScreen>
   );

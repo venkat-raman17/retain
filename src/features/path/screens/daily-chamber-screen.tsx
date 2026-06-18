@@ -11,16 +11,23 @@ import {
   AppQuoteBlock,
   AppScreen,
   AppText,
+  FadeInRise,
+  Halo,
   PressableScale,
   SealArt,
+  type SealArtSource,
   SectionBand,
   SplitRow,
+  useCountUp,
 } from '@/shared/components';
 import { theme, type ArchetypeTone } from '@/shared/design';
-import { useSurfaceTone } from '@/shared/hooks';
+import { useSurfaceTone, type SurfaceTone } from '@/shared/hooks';
+import { useTheme } from '@/shared/hooks/use-theme';
+import { haptics } from '@/shared/lib';
 import { Routes } from '@/navigation';
 import { useDayQuest } from '@/features/quest/hooks/use-day-quest';
 import { useHonors } from '@/features/honors/hooks/use-honors';
+import { isMilestoneDay } from '@/features/progress/domain/progression';
 import type { Achievement } from '@/content/schemas';
 
 import { useDailyPath } from '../hooks/use-daily-path';
@@ -32,7 +39,7 @@ export function DailyChamberScreen() {
 
   const { markDayOpened, markDayCompleted } = useDailyPath();
   const { quest, refresh: refreshQuest } = useDayQuest(dayNumber);
-  const { checkAndAward } = useHonors();
+  const { summary: honorsSummary, checkAndAward, refresh: refreshHonors } = useHonors();
 
   const [secretRevealed, setSecretRevealed] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -48,14 +55,19 @@ export function DailyChamberScreen() {
 
   // The chamber takes the day's archetype as its identity color.
   const tone = useSurfaceTone({ kind: 'archetype', id: (content?.archetype ?? 'monk') as ArchetypeTone });
+  const { colors } = useTheme();
+  const isMilestone = isMilestoneDay(dayNumber);
+  const milestoneGold = colors.gold;
 
   const completeDay = useCallback(async () => {
     await markDayCompleted(dayNumber);
     refreshQuest();
     const awarded = await checkAndAward();
+    refreshHonors();
     setNewHonors(awarded);
     setCompleted(true);
-  }, [markDayCompleted, dayNumber, refreshQuest, checkAndAward]);
+    haptics.notify('success');
+  }, [markDayCompleted, dayNumber, refreshQuest, checkAndAward, refreshHonors]);
 
   if (!content) {
     return (
@@ -76,14 +88,17 @@ export function DailyChamberScreen() {
   return (
     <AppScreen scroll>
       <View style={styles.container}>
-        {/* Hero — the day's archetype sigil in the archetype tone. */}
+        {/* Hero — the day's archetype sigil in the archetype tone; milestone days
+            wear their rite medallion in gold to mark the sealed rite. */}
         <AppHero
           tone={tone}
           eyebrow={`Day ${dayNumber} · ${content.arcTitle}`}
           title={content.title}
           subtitle={content.openingLine}
           art={
-            content.archetype ? (
+            isMilestone ? (
+              <SealArt source={{ kind: 'rite', day: dayNumber }} size={104} color={milestoneGold} />
+            ) : content.archetype ? (
               <SealArt source={{ kind: 'archetype', archetype: content.archetype }} size={92} color={tone.text} />
             ) : undefined
           }
@@ -134,9 +149,14 @@ export function DailyChamberScreen() {
             <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.practice}</AppText>
             <AppText variant="body" color="secondary">{content.practice}</AppText>
           </AppCard>
-          <AppCard tone="overlay" style={styles.halfCard}>
+          <AppCard
+            tone="overlay"
+            style={styles.halfCard}
+            onPress={() => router.push(Routes.forge)}
+          >
             <AppText variant="caption" color="energy" uppercase>{copy.chamber.labels.forge}</AppText>
             <AppText variant="body" color="secondary">{content.forgeChallenge}</AppText>
+            <AppText variant="caption" color="accent">{copy.forge.todaysObjective.accept} →</AppText>
           </AppCard>
         </SplitRow>
 
@@ -241,39 +261,21 @@ export function DailyChamberScreen() {
 
         {/* Complete / reward — gated: user must reveal the secret first */}
         {completed ? (
-          <AppCard tone="raised" border="gold">
-            <AppText variant="caption" color="energy" uppercase align="center">
-              Trial cleared
-            </AppText>
-            <AppText variant="subheading" align="center">{quest?.trial.name ?? `Day ${dayNumber}`}</AppText>
-            {quest ? (
-              <AppText variant="body" color="energy" align="center">
-                {`+${quest.trial.rewardEmbers} Embers`}
-                {quest.trial.rewardKeyId ? ' · Key earned' : ''}
-              </AppText>
-            ) : null}
-            {newHonors.length > 0 ? (
-              <View style={styles.newHonors}>
-                <AppText variant="caption" color="energy" uppercase align="center">
-                  {newHonors.length === 1 ? 'Honor unlocked' : 'Honors unlocked'}
-                </AppText>
-                {newHonors.map((h) => (
-                  <AppText key={h.id} variant="label" color="primary" align="center">
-                    {h.title}
-                  </AppText>
-                ))}
-              </View>
-            ) : null}
-            <AppText variant="caption" color="secondary" align="center" style={styles.body}>
-              {copy.chamber.complete.done}
-            </AppText>
-            <AppButton
-              label={copy.chamber.return}
-              variant="secondary"
-              fullWidth
-              onPress={() => router.back()}
-            />
-          </AppCard>
+          <CompletionReveal
+            trialName={quest?.trial.name ?? `Day ${dayNumber}`}
+            rewardEmbers={quest?.trial.rewardEmbers ?? 0}
+            hasKey={Boolean(quest?.trial.rewardKeyId)}
+            totalEmbers={honorsSummary?.totalEmbers ?? 0}
+            stationTitle={honorsSummary?.station?.title}
+            newHonors={newHonors}
+            tone={tone}
+            seal={
+              content.archetype
+                ? { kind: 'archetype', archetype: content.archetype }
+                : { kind: 'rite', day: dayNumber }
+            }
+            onReturn={() => router.back()}
+          />
         ) : secretRevealed ? (
           <>
             <AppButton
@@ -298,6 +300,93 @@ export function DailyChamberScreen() {
   );
 }
 
+/**
+ * The day-complete ritual beat. Composed from existing primitives — a seal
+ * blooming inside a halo, an embers count-up, and any honors unlocked. An
+ * affirmation of the return, never a score; honors Reduce Motion via the static
+ * Halo and the count-up's own snap behavior.
+ */
+function CompletionReveal({
+  trialName,
+  rewardEmbers,
+  hasKey,
+  totalEmbers,
+  stationTitle,
+  newHonors,
+  tone,
+  seal,
+  onReturn,
+}: {
+  trialName: string;
+  rewardEmbers: number;
+  hasKey: boolean;
+  totalEmbers: number;
+  stationTitle?: string;
+  newHonors: Achievement[];
+  tone: SurfaceTone;
+  seal: SealArtSource;
+  onReturn: () => void;
+}) {
+  const { colors } = useTheme();
+  const embersDisplay = useCountUp(totalEmbers, 1200);
+  return (
+    <AppCard tone="raised" border="gold">
+      <FadeInRise index={0}>
+        <View style={styles.revealSeal}>
+          <View style={styles.haloBox}>
+            <Halo color={tone.base} size={132} style={StyleSheet.absoluteFill} />
+            <SealArt source={seal} size={92} color={colors.gold} />
+          </View>
+        </View>
+      </FadeInRise>
+
+      <AppText variant="caption" color="energy" uppercase align="center">
+        {copy.chamber.complete.cleared}
+      </AppText>
+      <AppText variant="subheading" align="center">
+        {trialName}
+      </AppText>
+
+      <View style={styles.revealEmbers}>
+        <AppText variant="display" color="energy" align="center" numberOfLines={1} adjustsFontSizeToFit>
+          {embersDisplay.toString()}
+        </AppText>
+        <AppText variant="caption" color="muted" align="center" uppercase>
+          {`${copy.chamber.complete.embersEarned} · +${rewardEmbers}${hasKey ? ` · ${copy.chamber.complete.keyEarned}` : ''}`}
+        </AppText>
+      </View>
+
+      {newHonors.length > 0 ? (
+        <View style={styles.newHonors}>
+          <AppText variant="caption" color="energy" uppercase align="center">
+            {newHonors.length === 1
+              ? copy.chamber.complete.honorUnlocked
+              : copy.chamber.complete.honorsUnlocked}
+          </AppText>
+          {newHonors.map((h, i) => (
+            <FadeInRise key={h.id} index={i + 1}>
+              <AppText variant="label" color="primary" align="center">
+                {h.title}
+              </AppText>
+            </FadeInRise>
+          ))}
+        </View>
+      ) : null}
+
+      {stationTitle ? (
+        <AppText variant="caption" color="gold" align="center" uppercase>
+          {`${copy.chamber.complete.stationLabel} · ${stationTitle}`}
+        </AppText>
+      ) : null}
+
+      <AppText variant="caption" color="secondary" align="center" style={styles.body}>
+        {copy.chamber.complete.done}
+      </AppText>
+      <AppButton label={copy.chamber.return} variant="secondary" fullWidth onPress={onReturn} />
+    </AppCard>
+  );
+}
+
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
   body: { marginTop: theme.spacing.xs },
@@ -308,4 +397,7 @@ const styles = StyleSheet.create({
   objective: { flexDirection: 'row', alignItems: 'flex-start', gap: theme.spacing.xs },
   objectiveLabel: { flex: 1 },
   newHonors: { gap: theme.spacing.xs, marginVertical: theme.spacing.xs },
+  revealSeal: { alignItems: 'center', marginBottom: theme.spacing.sm },
+  haloBox: { width: 132, height: 132, alignItems: 'center', justifyContent: 'center' },
+  revealEmbers: { gap: 2, marginVertical: theme.spacing.xs },
 });

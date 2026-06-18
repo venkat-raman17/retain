@@ -15,6 +15,7 @@ export const copy = {
   tabs: {
     path: 'Path',
     forge: 'Forge',
+    trials: 'Trials',
     journal: 'Journal',
     codex: 'Codex',
     progress: 'Hall',
@@ -135,7 +136,7 @@ export const copy = {
       begin: 'Begin the practice',
     },
     vowAttribution: 'Your vow',
-    stats: { day: 'Day', streak: 'Streak', urges: 'Urges', forge: 'Forge' },
+    stats: { day: 'Day', streak: 'Streak', urges: 'Urges', forge: 'Forge', embers: 'Embers' },
     crown: {
       label: 'The Crown is earned',
       body: 'Ninety days. You have been formed. Receive the Crown.',
@@ -152,6 +153,28 @@ export const copy = {
       'The daily chambers are complete. Walk the Long Path — revisit any day from the map.',
     recordLapse: 'Lapse and return',
     feelTheFire: 'I Feel the Fire',
+    stationLabel: 'Station',
+  },
+
+  forge: {
+    todaysObjective: {
+      label: "Today's Forge",
+      hint: 'The fire has a destination today.',
+      accept: 'Accept & Log',
+      done: "The day's forge is recorded.",
+    },
+  },
+
+  trials: {
+    eyebrow: 'The Trials',
+    title: 'Every day, a trial.',
+    subtitle: 'Clear the day to earn its embers.',
+    today: "Today's Trial",
+    cleared: 'Cleared',
+    open: 'Open',
+    objectivesLabel: 'objectives',
+    recent: 'The days behind you',
+    locked: 'Not yet walked.',
   },
 
   daily: {
@@ -205,6 +228,12 @@ export const copy = {
     complete: {
       done: 'Day recorded. Well walked.',
       gate: 'Open the hidden instruction before completing the day.',
+      cleared: 'Trial cleared',
+      embersEarned: 'Embers earned',
+      keyEarned: 'Key earned',
+      honorUnlocked: 'Honor unlocked',
+      honorsUnlocked: 'Honors unlocked',
+      stationLabel: 'Station',
     },
   },
 
