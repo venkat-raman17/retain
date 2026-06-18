@@ -17,7 +17,7 @@ export const copy = {
     forge: 'Forge',
     journal: 'Journal',
     codex: 'Codex',
-    progress: 'Record',
+    progress: 'Hall',
   },
   actions: {
     begin: 'Begin',

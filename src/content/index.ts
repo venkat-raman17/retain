@@ -1,3 +1,4 @@
+import { achievements as achievementsData } from './bundled/achievements';
 import { archetypeProfiles as archetypeData } from './bundled/archetypes';
 import { arcs as arcsData } from './bundled/arcs';
 import { codexDays as codexData } from './bundled/codex';
@@ -9,8 +10,11 @@ import { journalPrompts as promptsData } from './bundled/prompts';
 import { rites as ritesData } from './bundled/rites';
 import { rituals as ritualsData } from './bundled/rituals';
 import { safetyContent as safetyData } from './bundled/safety';
+import { stations as stationsData } from './bundled/stations';
 import { studies as studiesData } from './bundled/studies';
+import { trials as trialsData } from './bundled/trials';
 import {
+  achievementsSchema,
   archetypeProfilesSchema,
   arcsSchema,
   codexSchema,
@@ -22,7 +26,10 @@ import {
   ritesSchema,
   ritualsSchema,
   safetyContentSchema,
+  stationsSchema,
   studiesSchema,
+  trialsSchema,
+  type Achievement,
   type Arc,
   type ArchetypeProfile,
   type CodexDay,
@@ -37,7 +44,9 @@ import {
   type Ritual,
   type SafetyDisclaimer,
   type SafetyResources,
+  type Station,
   type Study,
+  type Trial,
 } from './schemas';
 
 /**
@@ -58,6 +67,9 @@ export const journalPrompts: readonly JournalPrompt[] = journalPromptsSchema.par
 export const rites: readonly Rite[] = ritesSchema.parse(ritesData);
 export const onboardingSteps: readonly OnboardingStep[] = onboardingSchema.parse(onboardingData);
 const safety = safetyContentSchema.parse(safetyData);
+export const trials: readonly Trial[] = trialsSchema.parse(trialsData);
+export const achievements: readonly Achievement[] = achievementsSchema.parse(achievementsData);
+export const stations: readonly Station[] = stationsSchema.parse(stationsData);
 
 // --- Daily path loaders ---
 
@@ -156,9 +168,42 @@ export function getCrownCodexById(id: string): CrownCodexItem | undefined {
   return crownCodex.find((item) => item.id === id);
 }
 
+// --- Trials / quest loaders ---
+
+export function getAllTrials(): readonly Trial[] {
+  return trials;
+}
+
+export function getTrialForDay(dayNumber: number | 'crown'): Trial | undefined {
+  return trials.find((t) => t.dayNumber === dayNumber);
+}
+
+// --- Achievements loaders ---
+
+export function getAllAchievements(): readonly Achievement[] {
+  return achievements;
+}
+
+export function getAchievementById(id: string): Achievement | undefined {
+  return achievements.find((a) => a.id === id);
+}
+
+// --- Stations loaders ---
+
+export function getAllStations(): readonly Station[] {
+  return stations;
+}
+
+export function getStationForArcsCleared(cleared: number): Station | undefined {
+  return [...stations].reverse().find((s) => s.arcsCleared <= cleared);
+}
+
 export { copy } from './bundled/copy';
 export type { Copy } from './bundled/copy';
 export type {
+  Achievement,
+  AchievementCriteria,
+  AchievementCriteriaKind,
   Arc,
   Archetype,
   ArchetypeProfile,
@@ -166,10 +211,12 @@ export type {
   CrownCodexCategory,
   CrownCodexItem,
   DailyPathContent,
+  ObjectiveKind,
   PathSeason,
   SecretContentType,
   Principle,
   CodexDay,
+  Station,
   Study,
   StudyLineage,
   Ritual,
@@ -181,4 +228,7 @@ export type {
   SafetyResources,
   SafetyContent,
   OnboardingStep,
+  Trial,
+  TrialObjective,
+  TrialTier,
 } from './schemas';

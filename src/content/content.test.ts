@@ -1,13 +1,18 @@
 import { scanForUnsafeLanguage } from '@/testing/content-safety';
 
 import {
+  achievements,
   archetypeProfiles,
   arcs,
   codexDays,
   copy,
   crownCodex,
   dailyPath,
+  getAllAchievements,
+  getAllStations,
   getAllStudies,
+  getAllTrials,
+  getAchievementById,
   getArchetypeProfile,
   getDailyCodexDay,
   getDailyPathContent,
@@ -16,12 +21,16 @@ import {
   getPromptByType,
   getSafetyDisclaimer,
   getSafetyResources,
+  getStationForArcsCleared,
+  getTrialForDay,
   journalPrompts,
   onboardingSteps,
   principles,
   rites,
   rituals,
+  stations,
   studies,
+  trials,
 } from './index';
 
 function collectStrings(value: unknown, out: string[]): void {
@@ -186,6 +195,140 @@ describe('bundled content — structural integrity', () => {
   });
 });
 
+describe('bundled content — trials', () => {
+  it('has exactly 91 trials (90 days + crown)', () => {
+    expect(trials).toHaveLength(91);
+  });
+
+  it('has unique trial ids', () => {
+    const ids = trials.map((t) => t.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('covers days 1-90 and crown without gaps', () => {
+    const dayNumbers = new Set(trials.map((t) => t.dayNumber));
+    for (let d = 1; d <= 90; d++) {
+      expect(dayNumbers.has(d)).toBe(true);
+    }
+    expect(dayNumbers.has('crown')).toBe(true);
+  });
+
+  it('all day trials have a valid arcNumber (1-9)', () => {
+    const dayTrials = trials.filter((t) => t.dayNumber !== 'crown');
+    for (const trial of dayTrials) {
+      expect(trial.arcNumber).toBeGreaterThanOrEqual(1);
+      expect(trial.arcNumber).toBeLessThanOrEqual(9);
+    }
+  });
+
+  it('crown trial has arcNumber null', () => {
+    const crown = trials.find((t) => t.dayNumber === 'crown');
+    expect(crown?.arcNumber).toBeNull();
+  });
+
+  it('every trial has at least one objective', () => {
+    for (const trial of trials) {
+      expect(trial.objectives.length).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('milestone days grant a key', () => {
+    for (const day of [7, 14, 21, 30, 45, 60, 75, 90]) {
+      const trial = getTrialForDay(day);
+      expect(trial?.rewardKeyId).toBeTruthy();
+    }
+  });
+
+  it('crown trial grants 100 embers', () => {
+    const crown = getTrialForDay('crown');
+    expect(crown?.rewardEmbers).toBe(100);
+  });
+
+  it('getAllTrials returns all 91', () => {
+    expect(getAllTrials()).toHaveLength(91);
+  });
+
+  it('getTrialForDay returns the right trial', () => {
+    expect(getTrialForDay(1)?.dayNumber).toBe(1);
+    expect(getTrialForDay(90)?.dayNumber).toBe(90);
+    expect(getTrialForDay('crown')?.dayNumber).toBe('crown');
+    expect(getTrialForDay(91)).toBeUndefined();
+  });
+});
+
+describe('bundled content — achievements', () => {
+  it('has at least 10 achievements', () => {
+    expect(achievements.length).toBeGreaterThanOrEqual(10);
+  });
+
+  it('has unique achievement ids', () => {
+    const ids = achievements.map((a) => a.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('every achievement has a non-empty title and description', () => {
+    for (const a of achievements) {
+      expect(a.title.trim().length).toBeGreaterThan(0);
+      expect(a.description.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every achievement has a valid criteria kind', () => {
+    const VALID_KINDS = [
+      'days_completed', 'arc_cleared', 'arcs_cleared', 'pause_logged', 'forge_act_logged',
+      'forge_all_categories', 'return_recorded', 'boundary_kept', 'crown_received',
+      'journal_entries', 'embers_earned',
+    ];
+    for (const a of achievements) {
+      expect(VALID_KINDS).toContain(a.criteria.kind);
+    }
+  });
+
+  it('getAllAchievements returns the full set', () => {
+    expect(getAllAchievements()).toBe(achievements);
+  });
+
+  it('getAchievementById finds known achievements', () => {
+    const first = achievements[0];
+    if (first) {
+      expect(getAchievementById(first.id)?.id).toBe(first.id);
+    }
+    expect(getAchievementById('nonexistent')).toBeUndefined();
+  });
+});
+
+describe('bundled content — stations', () => {
+  it('has exactly 10 stations', () => {
+    expect(stations).toHaveLength(10);
+  });
+
+  it('has unique station ids', () => {
+    const ids = stations.map((s) => s.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('has a station for 0 arcs cleared (initiate)', () => {
+    const initiate = getStationForArcsCleared(0);
+    expect(initiate?.arcsCleared).toBe(0);
+  });
+
+  it('has a station for 9 arcs cleared (crowned)', () => {
+    const top = getStationForArcsCleared(9);
+    expect(top?.arcsCleared).toBe(9);
+  });
+
+  it('covers arcs 0-9 without gaps', () => {
+    const arcsValues = new Set(stations.map((s) => s.arcsCleared));
+    for (let i = 0; i <= 9; i++) {
+      expect(arcsValues.has(i)).toBe(true);
+    }
+  });
+
+  it('getAllStations returns all 10', () => {
+    expect(getAllStations()).toHaveLength(10);
+  });
+});
+
 describe('bundled content — safety scan', () => {
   it('contains no degrading or shaming language', () => {
     const strings: string[] = [];
@@ -207,7 +350,7 @@ describe('bundled content — safety scan', () => {
       strings,
     );
 
-    collectStrings([arcs, crownCodex], strings);
+    collectStrings([arcs, crownCodex, trials, achievements, stations], strings);
 
     const offenders = strings.flatMap((text) =>
       scanForUnsafeLanguage(text).map((term) => `"${term}" found in: ${text.slice(0, 80)}`),

@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import { StyleSheet, Switch, View } from 'react-native';
 
 import { copy } from '@/content';
+import { useReminders } from '@/features/reminders/hooks/use-reminders';
 import { AppText, AppButton, AppCard, AppDivider, AppScreen, AppHeader } from '@/shared/components';
 import { theme } from '@/shared/design';
 import { useTheme } from '@/shared/hooks/use-theme';
@@ -43,6 +44,9 @@ function ToggleRow({
 export function SettingsScreen() {
   const router = useRouter();
   const { preferences, update } = useSettings();
+  const { state: reminderState, enable: enableReminders, disable: disableReminders } = useReminders();
+
+  const remindersEnabled = reminderState?.enabled ?? preferences?.remindersEnabled ?? false;
 
   return (
     <AppScreen scroll>
@@ -59,17 +63,23 @@ export function SettingsScreen() {
             description="Subtle vibration feedback"
             value={preferences?.hapticsEnabled ?? true}
             onValueChange={(next) => {
-              setHapticsEnabled(next); // take effect immediately, before the async write
-              if (next) haptics.selection(); // a confirming tick when turning on
+              setHapticsEnabled(next);
+              if (next) haptics.selection();
               void update({ hapticsEnabled: next });
             }}
           />
           <AppDivider inset />
           <ToggleRow
             label="Gentle reminders"
-            description="Local nudges to return to the practice"
-            value={preferences?.remindersEnabled ?? false}
-            onValueChange={(next) => void update({ remindersEnabled: next })}
+            description="One gentle nudge each morning at 6 AM with today's focus"
+            value={remindersEnabled}
+            onValueChange={(next) => {
+              if (next) {
+                void enableReminders();
+              } else {
+                void disableReminders();
+              }
+            }}
           />
         </AppCard>
 

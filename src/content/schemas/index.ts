@@ -51,3 +51,24 @@ export { arcSchema, arcsSchema } from './arc.schema';
 export type { Arc } from './arc.schema';
 export { crownCodexItemSchema, crownCodexSchema, CROWN_CODEX_CATEGORIES } from './crown-codex.schema';
 export type { CrownCodexItem, CrownCodexCategory } from './crown-codex.schema';
+export {
+  trialSchema,
+  trialsSchema,
+  trialObjectiveSchema,
+  OBJECTIVE_KINDS,
+  TRIAL_TIERS,
+} from './trial.schema';
+export type { Trial, TrialObjective, ObjectiveKind, TrialTier } from './trial.schema';
+export {
+  achievementSchema,
+  achievementsSchema,
+  achievementCriteriaSchema,
+  ACHIEVEMENT_CRITERIA_KINDS,
+} from './achievement.schema';
+export type {
+  Achievement,
+  AchievementCriteria,
+  AchievementCriteriaKind,
+} from './achievement.schema';
+export { stationSchema, stationsSchema } from './station.schema';
+export type { Station } from './station.schema';

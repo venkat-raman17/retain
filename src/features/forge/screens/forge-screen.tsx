@@ -30,6 +30,7 @@ import {
   type ForgeCategory,
 } from '../domain/forge-act';
 import { useForge } from '../hooks/use-forge';
+import { useHonors } from '@/features/honors/hooks/use-honors';
 
 const CATEGORY_DESCRIPTIONS: Record<ForgeCategory, string> = {
   body: 'Train, move, breathwork, cold exposure.',
@@ -69,6 +70,7 @@ function actCountLabel(count: number): string {
 
 export function ForgeScreen() {
   const { acts, categoryCounts, loading, logAct } = useForge();
+  const { checkAndAward } = useHonors();
   const { colors } = useTheme();
   const tone = useSurfaceTone({ kind: 'semantic', name: 'primary' });
   const [showForm, setShowForm] = useState(false);
@@ -112,6 +114,7 @@ export function ForgeScreen() {
         note: reflection.trim() || null,
       };
       await logAct(draft);
+      void checkAndAward();
       resetForm();
       setShowForm(false);
     } finally {

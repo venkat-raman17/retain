@@ -28,6 +28,8 @@ import { usePath } from '../hooks/use-path';
 import { usePathProgress } from '../hooks/use-path-progress';
 import { useDailyPath } from '../hooks/use-daily-path';
 import { useDailyBrief } from '../hooks/use-daily-brief';
+import { useDayQuest } from '@/features/quest/hooks/use-day-quest';
+import { useHonors } from '@/features/honors/hooks/use-honors';
 
 export function PathScreen() {
   const router = useRouter();
@@ -38,12 +40,18 @@ export function PathScreen() {
   const { brief, refresh: refreshBrief } = useDailyBrief();
   const [themePickerOpen, setThemePickerOpen] = useState(false);
 
+  const day = currentDay > 0 ? currentDay : 1;
+  const { quest, refresh: refreshQuest } = useDayQuest(day);
+  const { summary: honorsSummary, refresh: refreshHonors } = useHonors();
+
   useFocusEffect(
     useCallback(() => {
       refreshPath();
       refreshProgress();
       refreshBrief();
-    }, [refreshPath, refreshProgress, refreshBrief]),
+      refreshQuest();
+      refreshHonors();
+    }, [refreshPath, refreshProgress, refreshBrief, refreshQuest, refreshHonors]),
   );
 
   const isCrownUnlocked = profile ? checkCrownUnlocked(profile, currentDay) : false;
@@ -52,7 +60,6 @@ export function PathScreen() {
   const arcNumber = isRunning && brief ? brief.arcNumber : 1;
   const tone = useSurfaceTone({ kind: 'arc', arcNumber });
 
-  const day = currentDay > 0 ? currentDay : 1;
   const hasMilestone = Boolean(brief?.milestoneRiteId);
 
   const openChamber = () =>
@@ -72,7 +79,7 @@ export function PathScreen() {
       }
     >
       <View style={styles.container}>
-        {/* Theme picker — a quiet control above the hero. */}
+        {/* Theme picker + Settings — quiet controls above the hero. */}
         <View style={styles.topBar}>
           <AppIconButton accessibilityLabel="Choose theme" onPress={() => setThemePickerOpen(true)} size={36}>
             <View style={styles.paletteIcon}>
@@ -80,6 +87,9 @@ export function PathScreen() {
                 <View key={i} style={[styles.paletteDot, { backgroundColor: c }]} />
               ))}
             </View>
+          </AppIconButton>
+          <AppIconButton accessibilityLabel="Settings" onPress={() => router.push(Routes.settings as never)} size={36}>
+            <AppText variant="caption" color="muted" style={styles.gearIcon}>{'⚙'}</AppText>
           </AppIconButton>
         </View>
 
@@ -112,17 +122,25 @@ export function PathScreen() {
               halo={false}
             >
               <PathPulse
-                currentDay={currentDay}
+                currentDay={brief?.isLongPath ? Math.min(currentDay, 90) : currentDay}
                 arcTitle={brief?.arcTitle}
                 litColor={tone.base}
                 size={208}
               />
             </AppHero>
 
+            {/* Quest dock — today's trial name + objective progress */}
+            {quest ? <QuestDock quest={quest} toneText={tone.text} onPress={openChamber} /> : null}
+
             {/* Vow — set in the arc tone. */}
             {vow ? (
               <SectionBand tone={tone}>
                 <AppQuoteBlock quote={vow} attribution={copy.path.vowAttribution} />
+                {honorsSummary?.station ? (
+                  <AppText variant="caption" style={{ color: tone.text }} uppercase>
+                    {`Station · ${honorsSummary.station.title}`}
+                  </AppText>
+                ) : null}
               </SectionBand>
             ) : null}
 
@@ -172,13 +190,17 @@ export function PathScreen() {
               </FadeInRise>
             ) : null}
 
-            {/* Primary action — the center of the daily experience. */}
-            {hasMilestone ? (
-              <AppText variant="caption" color="energy" align="center">
-                {copy.path.milestoneHint}
-              </AppText>
+            {/* Primary action — the center of the daily experience. Hidden on Long Path (no chambers 91+). */}
+            {!brief?.isLongPath ? (
+              <>
+                {hasMilestone ? (
+                  <AppText variant="caption" color="energy" align="center">
+                    {copy.path.milestoneHint}
+                  </AppText>
+                ) : null}
+                <AppButton label={copy.path.openChamber} fullWidth onPress={openChamber} />
+              </>
             ) : null}
-            <AppButton label={copy.path.openChamber} fullWidth onPress={openChamber} />
 
             {/* Compact stat band — Day now lives in the pulse, so show the rest. */}
             {summary ? (
@@ -207,6 +229,52 @@ export function PathScreen() {
   );
 }
 
+function QuestDock({
+  quest,
+  toneText,
+  onPress,
+}: {
+  quest: import('@/features/quest/domain/quest-evaluation').DayQuestResult;
+  toneText: string;
+  onPress: () => void;
+}) {
+  const completed = quest.objectives.filter((o) => o.complete).length;
+  const total = quest.objectives.filter((o) => !o.optional).length;
+  const allClear = quest.cleared;
+  return (
+    <AppCard tone="overlay" onPress={onPress}>
+      <View style={styles.questHeader}>
+        <AppText variant="caption" uppercase style={{ color: toneText }}>
+          {allClear ? 'Trial complete' : 'Today\'s Trial'}
+        </AppText>
+        <AppText variant="caption" color={allClear ? 'energy' : 'muted'}>
+          {`${completed}/${total}`}
+        </AppText>
+      </View>
+      <AppText variant="label" color="primary">{quest.trial.name}</AppText>
+      {quest.objectives.filter((o) => !o.optional).map((obj) => (
+        <View key={obj.id} style={styles.questObjective}>
+          <AppText variant="caption" color={obj.complete ? 'energy' : 'muted'}>
+            {obj.complete ? '✓' : '·'}
+          </AppText>
+          <AppText
+            variant="caption"
+            color={obj.complete ? 'primary' : 'muted'}
+            style={styles.questLabel}
+          >
+            {obj.label}
+          </AppText>
+        </View>
+      ))}
+      {allClear ? (
+        <AppText variant="caption" color="energy">
+          {`+${quest.trial.rewardEmbers} Embers earned`}
+        </AppText>
+      ) : null}
+    </AppCard>
+  );
+}
+
 function FocusCard({
   label,
   body,
@@ -232,10 +300,14 @@ function FocusCard({
 
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
-  topBar: { flexDirection: 'row', justifyContent: 'flex-end' },
+  topBar: { flexDirection: 'row', justifyContent: 'flex-end', gap: theme.spacing.xs },
+  gearIcon: { fontSize: 16, lineHeight: 20 },
   section: { gap: theme.spacing.sm },
   statsGrid: { flexDirection: 'row', gap: theme.spacing.sm },
   stat: { flex: 1, minWidth: 0 },
   paletteIcon: { flexDirection: 'row', gap: 3, alignItems: 'center' },
   paletteDot: { width: 5, height: 5, borderRadius: 2.5 },
+  questHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  questObjective: { flexDirection: 'row', alignItems: 'flex-start', gap: theme.spacing.xs },
+  questLabel: { flex: 1 },
 });

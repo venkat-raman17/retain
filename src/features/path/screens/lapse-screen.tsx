@@ -19,8 +19,10 @@ import { useSurfaceTone } from '@/shared/hooks';
 import { Routes } from '@/navigation';
 import { TRIGGER_LABELS, TRIGGER_TYPES, type TriggerType } from '@/features/pause/domain/urge-log';
 
+import type { Achievement } from '@/content/schemas';
 import type { LapseRecordDraft } from '../domain/lapse-record';
 import { usePath } from '../hooks/use-path';
+import { useHonors } from '@/features/honors/hooks/use-honors';
 
 type LapseStep = 'entry' | 'understand' | 'learn' | 'return';
 
@@ -32,6 +34,7 @@ const TRIGGER_OPTIONS: SelectOption<TriggerType>[] = TRIGGER_TYPES.map((t) => ({
 export function LapseScreen() {
   const router = useRouter();
   const { vow, recordLapse, recordReturn } = usePath();
+  const { checkAndAward } = useHonors();
 
   const [step, setStep] = useState<LapseStep>('entry');
   // The screen's tone shifts from rust (grave) to olive (return) as the man moves
@@ -44,6 +47,7 @@ export function LapseScreen() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [submittedMode, setSubmittedMode] = useState<'lapse' | 'return' | null>(null);
+  const [newHonors, setNewHonors] = useState<Achievement[]>([]);
 
   const goToReturn = () => setStep('return');
 
@@ -61,6 +65,8 @@ export function LapseScreen() {
       await recordLapse(draft);
       if (andReturn) {
         await recordReturn();
+        const awarded = await checkAndAward();
+        setNewHonors(awarded);
         setSubmittedMode('return');
       } else {
         setSubmittedMode('lapse');
@@ -220,6 +226,30 @@ export function LapseScreen() {
               quote="Command is trained in the return."
               attribution="Manforge principle"
             />
+
+            {saved && submittedMode === 'return' ? (
+              <AppCard tone="overlay">
+                <AppText variant="body" color="energy" align="center">
+                  {'The return is itself the practice.'}
+                </AppText>
+                <AppText variant="caption" color="secondary" align="center" style={styles.spacing}>
+                  {'A lapse ends a streak. It does not end the practice.'}
+                </AppText>
+              </AppCard>
+            ) : null}
+
+            {saved && submittedMode === 'return' && newHonors.length > 0 ? (
+              <AppCard tone="raised" border="gold">
+                <AppText variant="caption" color="energy" uppercase align="center">
+                  {newHonors.length === 1 ? 'Honor unlocked' : 'Honors unlocked'}
+                </AppText>
+                {newHonors.map((h) => (
+                  <AppText key={h.id} variant="label" color="primary" align="center">
+                    {h.title}
+                  </AppText>
+                ))}
+              </AppCard>
+            ) : null}
 
             {saved && submittedMode ? (
               <View style={styles.nav}>

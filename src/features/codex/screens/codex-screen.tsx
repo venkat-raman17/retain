@@ -47,27 +47,57 @@ const TABS: { id: CodexTab; label: string }[] = [
 
 function DailyPathTab() {
   const router = useRouter();
+  const [expanded, setExpanded] = useState<string | null>(null);
+
   return (
     <View style={styles.list}>
       <AppText variant="body" color="secondary">
         Nine arcs. Ninety chambers. One opens each day.
       </AppText>
-      {arcs.map((arc) => (
-        <AppCard key={arc.id} tone="overlay">
-          <View style={styles.arcHeader}>
-            <AppText variant="caption" color="muted" uppercase style={styles.arcLabel}>
-              {`Arc ${arc.arcNumber} · Days ${arc.dayStart}–${arc.dayEnd}`}
+      {arcs.map((arc) => {
+        const isOpen = expanded === arc.id;
+        const color = arcTone(arc.arcNumber);
+        return (
+          <AppCard
+            key={arc.id}
+            tone={isOpen ? 'raised' : 'overlay'}
+            onPress={() => setExpanded(isOpen ? null : arc.id)}
+          >
+            <View style={styles.arcHeader}>
+              <AppText variant="caption" color="muted" uppercase style={styles.arcLabel}>
+                {`Arc ${arc.arcNumber} · Days ${arc.dayStart}–${arc.dayEnd}`}
+              </AppText>
+              <ArcSeal arcNumber={arc.arcNumber} size={36} color={color} strokeWidth={symbolStroke(36)} />
+            </View>
+            <AppText variant="label" color="primary" style={styles.body}>
+              {arc.title}
             </AppText>
-            <ArcSeal arcNumber={arc.arcNumber} size={36} color={arcTone(arc.arcNumber)} strokeWidth={symbolStroke(36)} />
-          </View>
-          <AppText variant="label" color="primary" style={styles.body}>
-            {arc.title}
-          </AppText>
-          <AppText variant="caption" color="secondary" numberOfLines={2} style={styles.body}>
-            {arc.description}
-          </AppText>
-        </AppCard>
-      ))}
+            {isOpen ? (
+              <FadeInRise>
+                <AppText variant="body" color="secondary" style={styles.body}>
+                  {arc.description}
+                </AppText>
+                <AppText variant="caption" color="muted" uppercase style={styles.spacing}>
+                  The question
+                </AppText>
+                <AppText variant="body" color="accent" style={styles.body}>
+                  {arc.centralQuestion}
+                </AppText>
+                <AppText variant="caption" color="muted" uppercase style={styles.spacing}>
+                  On completion
+                </AppText>
+                <AppText variant="caption" color="calm" style={styles.body}>
+                  {arc.completionCopy}
+                </AppText>
+              </FadeInRise>
+            ) : (
+              <AppText variant="caption" color="secondary" numberOfLines={2} style={styles.body}>
+                {arc.description}
+              </AppText>
+            )}
+          </AppCard>
+        );
+      })}
       <AppButton
         label="View the Path Map"
         variant="secondary"

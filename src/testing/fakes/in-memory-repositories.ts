@@ -1,6 +1,8 @@
 import type {
+  AchievementsRepository,
   BoundaryRepository,
   ContentProgressRepository,
+  EarnedAchievement,
   ForgeCategoryCount,
   ForgeRepository,
   JournalRepository,
@@ -38,7 +40,6 @@ import {
   type AppPreferencesPatch,
 } from '@/features/settings/domain/settings';
 import { createId } from '@/shared/lib';
-
 /**
  * In-memory implementations of the repository ports. They let services, hooks,
  * and screens be tested without a native SQLite database — the same interfaces,
@@ -213,6 +214,9 @@ class InMemoryBoundaryRepository implements BoundaryRepository {
   async countCheckinsSince(iso: string): Promise<number> {
     return this.checkins.filter((checkin) => checkin.checkedAt >= iso).length;
   }
+  async countKeptCheckinsSince(iso: string): Promise<number> {
+    return this.checkins.filter((c) => c.checkedAt >= iso && c.status === 'kept').length;
+  }
 }
 
 class InMemoryContentProgressRepository implements ContentProgressRepository {
@@ -297,6 +301,27 @@ class InMemorySettingsRepository implements SettingsRepository {
   }
 }
 
+class InMemoryAchievementsRepository implements AchievementsRepository {
+  private readonly earned = new Map<string, EarnedAchievement>();
+
+  async markEarned(achievementId: string, at: string): Promise<void> {
+    if (!this.earned.has(achievementId)) {
+      this.earned.set(achievementId, { id: createId(), achievementId, earnedAt: at });
+    }
+  }
+  async getEarned(): Promise<EarnedAchievement[]> {
+    return [...this.earned.values()].sort((a, b) =>
+      b.earnedAt.localeCompare(a.earnedAt),
+    );
+  }
+  async isEarned(achievementId: string): Promise<boolean> {
+    return this.earned.has(achievementId);
+  }
+  async filterNotYetEarned(achievementIds: string[]): Promise<string[]> {
+    return achievementIds.filter((id) => !this.earned.has(id));
+  }
+}
+
 export function createFakeRepositories(): Repositories {
   return {
     profile: new InMemoryUserProfileRepository(),
@@ -308,5 +333,6 @@ export function createFakeRepositories(): Repositories {
     boundary: new InMemoryBoundaryRepository(),
     contentProgress: new InMemoryContentProgressRepository(),
     settings: new InMemorySettingsRepository(),
+    achievements: new InMemoryAchievementsRepository(),
   };
 }

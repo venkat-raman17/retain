@@ -1,4 +1,8 @@
 import type { AppDatabase } from '../database';
+import {
+  SqliteAchievementsRepository,
+  type AchievementsRepository,
+} from './achievements-repository';
 import { SqliteBoundaryRepository, type BoundaryRepository } from './boundary-repository';
 import {
   SqliteContentProgressRepository,
@@ -26,6 +30,7 @@ export interface Repositories {
   boundary: BoundaryRepository;
   contentProgress: ContentProgressRepository;
   settings: SettingsRepository;
+  achievements: AchievementsRepository;
 }
 
 export function createRepositories(db: AppDatabase): Repositories {
@@ -39,6 +44,7 @@ export function createRepositories(db: AppDatabase): Repositories {
     boundary: new SqliteBoundaryRepository(db),
     contentProgress: new SqliteContentProgressRepository(db),
     settings: new SqliteSettingsRepository(db),
+    achievements: new SqliteAchievementsRepository(db),
   };
 }
 
@@ -52,5 +58,7 @@ export type {
   BoundaryRepository,
   ContentProgressRepository,
   SettingsRepository,
+  AchievementsRepository,
 };
 export type { ForgeCategoryCount } from './forge-repository';
+export type { EarnedAchievement } from './achievements-repository';
