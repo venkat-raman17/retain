@@ -15,6 +15,7 @@ export interface BoundaryRepository {
   addCheckin(checkin: BoundaryCheckin): Promise<void>;
   listCheckins(boundaryId: string, limit?: number): Promise<BoundaryCheckin[]>;
   countCheckinsSince(iso: string): Promise<number>;
+  countKeptCheckinsSince(iso: string): Promise<number>;
 }
 
 interface BoundaryRow {
@@ -120,6 +121,14 @@ export class SqliteBoundaryRepository implements BoundaryRepository {
   async countCheckinsSince(iso: string): Promise<number> {
     const row = await this.db.getFirst<{ n: number }>(
       'SELECT COUNT(*) AS n FROM boundary_checkins WHERE checked_at >= ?;',
+      [iso],
+    );
+    return row?.n ?? 0;
+  }
+
+  async countKeptCheckinsSince(iso: string): Promise<number> {
+    const row = await this.db.getFirst<{ n: number }>(
+      "SELECT COUNT(*) AS n FROM boundary_checkins WHERE status = 'kept' AND checked_at >= ?;",
       [iso],
     );
     return row?.n ?? 0;

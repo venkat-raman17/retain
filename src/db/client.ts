@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import * as SQLite from 'expo-sqlite';
 
 import { createLogger } from '@/shared/lib';
@@ -58,17 +59,35 @@ export interface InitializedDatabase {
   repositories: Repositories;
 }
 
-let initPromise: Promise<InitializedDatabase> | null = null;
+/**
+ * The init Promise is cached on `globalThis`, not a module-local binding, so it
+ * survives Metro Fast Refresh re-evaluating this module during development. On
+ * web (OPFS) only one sync access handle may exist per file; a module-local cache
+ * would be dropped on hot reload while the previous handle stayed open, causing
+ * "Access Handles cannot be created…" on the re-open. The global cache keeps a
+ * single open per page load.
+ */
+const INIT_KEY = '__retainDbInit__';
+type GlobalWithDb = typeof globalThis & {
+  [INIT_KEY]?: Promise<InitializedDatabase> | null;
+};
+const globalRef = globalThis as GlobalWithDb;
 
 /**
  * Open the database, run migrations, seed singleton rows, and build the
- * repositories. Caches the Promise so concurrent callers share one
- * initialization (important on web where OPFS allows only one access handle).
+ * repositories. Caches the Promise so concurrent callers (and hot reloads)
+ * share one initialization (important on web where OPFS allows only one access
+ * handle per file).
  */
 export function initializeRetainDatabase(): Promise<InitializedDatabase> {
-  initPromise ??= (async () => {
+  globalRef[INIT_KEY] ??= (async () => {
     const sqlite = await SQLite.openDatabaseAsync(DB_NAME);
-    await sqlite.execAsync('PRAGMA journal_mode = WAL;');
+    // WAL improves write concurrency on native. On web the single-connection
+    // OPFS VFS gains nothing from it and its extra file handles can collide with
+    // OPFS sync access handles, so use the default rollback journal there.
+    if (Platform.OS !== 'web') {
+      await sqlite.execAsync('PRAGMA journal_mode = WAL;');
+    }
     await sqlite.execAsync('PRAGMA foreign_keys = ON;');
 
     const db = new SqliteAppDatabase(sqlite);
@@ -80,7 +99,7 @@ export function initializeRetainDatabase(): Promise<InitializedDatabase> {
     log.info('database ready');
     return { db, repositories };
   })();
-  return initPromise;
+  return globalRef[INIT_KEY];
 }
 
 /**
@@ -99,5 +118,5 @@ export async function resetLocalDataForTestingOnly(): Promise<void> {
 
 /** Drop the cached promise (used by tooling/tests). */
 export function clearDatabaseInstanceForTesting(): void {
-  initPromise = null;
+  globalRef[INIT_KEY] = null;
 }

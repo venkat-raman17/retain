@@ -22,6 +22,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { theme } from '@/shared/design';
 import { HapticsHydrator } from '@/features/settings';
 import { AppDataProvider, ThemeProvider } from '@/shared/storage';
+import { RemindersHydrator } from '@/features/reminders/components/reminders-hydrator';
 
 // Hold the native splash so the first frame the user sees is already in the
 // bundled Cinzel/Inter typefaces, with the database open — never a flash of
@@ -69,6 +70,7 @@ export default function RootLayout() {
         <AppDataProvider onSettled={handleDataSettled}>
           <ThemeProvider>
           <HapticsHydrator />
+          <RemindersHydrator />
           <StatusBar style="light" />
           <Stack
             screenOptions={{

@@ -17,7 +17,9 @@ export type {
   BoundaryRepository,
   ContentProgressRepository,
   SettingsRepository,
+  AchievementsRepository,
   ForgeCategoryCount,
+  EarnedAchievement,
 } from './repositories';
 export { runMigrations, migrations } from './migrations';
 export type { Migration } from './migrations';

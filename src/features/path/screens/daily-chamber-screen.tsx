@@ -11,6 +11,7 @@ import {
   AppQuoteBlock,
   AppScreen,
   AppText,
+  PressableScale,
   SealArt,
   SectionBand,
   SplitRow,
@@ -18,6 +19,9 @@ import {
 import { theme, type ArchetypeTone } from '@/shared/design';
 import { useSurfaceTone } from '@/shared/hooks';
 import { Routes } from '@/navigation';
+import { useDayQuest } from '@/features/quest/hooks/use-day-quest';
+import { useHonors } from '@/features/honors/hooks/use-honors';
+import type { Achievement } from '@/content/schemas';
 
 import { useDailyPath } from '../hooks/use-daily-path';
 
@@ -27,9 +31,12 @@ export function DailyChamberScreen() {
   const dayNumber = params.day ? parseInt(params.day, 10) : 1;
 
   const { markDayOpened, markDayCompleted } = useDailyPath();
+  const { quest, refresh: refreshQuest } = useDayQuest(dayNumber);
+  const { checkAndAward } = useHonors();
 
   const [secretRevealed, setSecretRevealed] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [newHonors, setNewHonors] = useState<Achievement[]>([]);
 
   useEffect(() => {
     void markDayOpened(dayNumber);
@@ -44,9 +51,11 @@ export function DailyChamberScreen() {
 
   const completeDay = useCallback(async () => {
     await markDayCompleted(dayNumber);
+    refreshQuest();
+    const awarded = await checkAndAward();
+    setNewHonors(awarded);
     setCompleted(true);
-    setTimeout(() => router.back(), 400);
-  }, [markDayCompleted, dayNumber, router]);
+  }, [markDayCompleted, dayNumber, refreshQuest, checkAndAward]);
 
   if (!content) {
     return (
@@ -174,6 +183,41 @@ export function DailyChamberScreen() {
           </AppCard>
         ) : null}
 
+        {/* Quest objectives */}
+        {quest ? (
+          <SectionBand tone={tone}>
+            <AppText variant="caption" uppercase style={{ color: tone.text }}>
+              {quest.cleared ? 'Trial complete' : 'Trial objectives'}
+            </AppText>
+            {quest.objectives.filter((o) => !o.optional).map((obj) => {
+              const actionable = obj.kind === 'boundary_checkin' && !obj.complete;
+              return (
+                <PressableScale
+                  key={obj.id}
+                  disabled={!actionable}
+                  onPress={actionable ? () => router.push(Routes.boundaries as never) : undefined}
+                >
+                  <View style={styles.objective}>
+                    <AppText variant="caption" color={obj.complete ? 'energy' : 'muted'}>
+                      {obj.complete ? '✓' : '·'}
+                    </AppText>
+                    <AppText
+                      variant="caption"
+                      color={obj.complete ? 'primary' : 'muted'}
+                      style={styles.objectiveLabel}
+                    >
+                      {obj.label}
+                    </AppText>
+                    {actionable ? (
+                      <AppText variant="caption" color="accent">→</AppText>
+                    ) : null}
+                  </View>
+                </PressableScale>
+              );
+            })}
+          </SectionBand>
+        ) : null}
+
         {/* Evening account */}
         <AppCard tone="overlay">
           <AppText variant="caption" color="muted" uppercase>{copy.chamber.labels.eveningAccount}</AppText>
@@ -195,26 +239,60 @@ export function DailyChamberScreen() {
           </AppText>
         </View>
 
-        {/* Complete button — gated: user must open the hidden instruction first */}
+        {/* Complete / reward — gated: user must reveal the secret first */}
         {completed ? (
-          <AppText variant="body" color="calm" align="center">
-            {copy.chamber.complete.done}
-          </AppText>
-        ) : secretRevealed ? (
-          <AppButton
-            label={`Complete Day ${dayNumber}`}
-            fullWidth
-            onPress={() => void completeDay()}
-          />
-        ) : (
-          <AppCard tone="overlay">
-            <AppText variant="caption" color="muted" align="center">
-              {copy.chamber.complete.gate}
+          <AppCard tone="raised" border="gold">
+            <AppText variant="caption" color="energy" uppercase align="center">
+              Trial cleared
             </AppText>
+            <AppText variant="subheading" align="center">{quest?.trial.name ?? `Day ${dayNumber}`}</AppText>
+            {quest ? (
+              <AppText variant="body" color="energy" align="center">
+                {`+${quest.trial.rewardEmbers} Embers`}
+                {quest.trial.rewardKeyId ? ' · Key earned' : ''}
+              </AppText>
+            ) : null}
+            {newHonors.length > 0 ? (
+              <View style={styles.newHonors}>
+                <AppText variant="caption" color="energy" uppercase align="center">
+                  {newHonors.length === 1 ? 'Honor unlocked' : 'Honors unlocked'}
+                </AppText>
+                {newHonors.map((h) => (
+                  <AppText key={h.id} variant="label" color="primary" align="center">
+                    {h.title}
+                  </AppText>
+                ))}
+              </View>
+            ) : null}
+            <AppText variant="caption" color="secondary" align="center" style={styles.body}>
+              {copy.chamber.complete.done}
+            </AppText>
+            <AppButton
+              label={copy.chamber.return}
+              variant="secondary"
+              fullWidth
+              onPress={() => router.back()}
+            />
           </AppCard>
+        ) : secretRevealed ? (
+          <>
+            <AppButton
+              label={`Complete Day ${dayNumber}`}
+              fullWidth
+              onPress={() => void completeDay()}
+            />
+            <AppButton label={copy.chamber.return} variant="ghost" fullWidth onPress={() => router.back()} />
+          </>
+        ) : (
+          <>
+            <AppCard tone="overlay">
+              <AppText variant="caption" color="muted" align="center">
+                {copy.chamber.complete.gate}
+              </AppText>
+            </AppCard>
+            <AppButton label={copy.chamber.return} variant="ghost" fullWidth onPress={() => router.back()} />
+          </>
         )}
-
-        <AppButton label={copy.chamber.return} variant="ghost" fullWidth onPress={() => router.back()} />
       </View>
     </AppScreen>
   );
@@ -227,4 +305,7 @@ const styles = StyleSheet.create({
   archetypeHead: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
   flex: { flex: 1 },
   sealWrap: { paddingVertical: theme.spacing.md },
+  objective: { flexDirection: 'row', alignItems: 'flex-start', gap: theme.spacing.xs },
+  objectiveLabel: { flex: 1 },
+  newHonors: { gap: theme.spacing.xs, marginVertical: theme.spacing.xs },
 });

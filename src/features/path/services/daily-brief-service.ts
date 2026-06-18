@@ -10,7 +10,7 @@ import { dayOfYearIndex, timeOfDay, type TimeOfDay } from '@/content/daily/time-
 import type { UserProfileRepository } from '@/db';
 import type { Clock } from '@/shared/lib';
 
-import { currentPathDay, isPathRunning } from '../domain/practice';
+import { currentPathDay, daysSince, isPathRunning } from '../domain/practice';
 
 export interface DailyFocus {
   label: string;
@@ -37,6 +37,10 @@ export interface DailyBrief {
   season: PathSeason | null;
   timeOfDay: TimeOfDay;
   greeting: string;
+  /** True once the Crown is received and the man walks the Long Path. */
+  isLongPath: boolean;
+  /** Days elapsed since the Long Path began (1-indexed); 0 during initiation_90. */
+  longPathDay: number;
   focus: DailyFocus | null;
   teaching: DailyTeaching | null;
   seal: string | null;
@@ -60,29 +64,50 @@ export class DailyBriefService {
     const running = isPathRunning(profile);
     const day = currentPathDay(profile, this.clock);
     const tod = timeOfDay(this.clock);
-    const content = running ? getDailyPathContent(day) : undefined;
-    const arc = content ? getArcByNumber(content.arcNumber) : undefined;
     const dailyCopy = copy.daily;
 
-    // Rotate the daily codex by path day while running, else by calendar day, so
-    // the "Today's teaching" card is never static.
-    const codexDay = getCodexDayByIndex(running ? day : dayOfYearIndex(this.clock));
+    const isLongPath = profile.currentPathPhase === 'crowned_long_path';
+    const longPathDay = isLongPath ? daysSince(profile.longPathStartedAt, this.clock) + 1 : 0;
+
+    // Codex rotation: long path rotates by long-path day, initiation by path day,
+    // idle by calendar day — so the teaching is never static.
+    const codexIndex = isLongPath ? longPathDay : running ? day : dayOfYearIndex(this.clock);
+    const codexDay = getCodexDayByIndex(codexIndex);
+
+    // Daily chambers only exist for days 1–90; skip on the long path.
+    const content = running && !isLongPath ? getDailyPathContent(day) : undefined;
+    const arc = content ? getArcByNumber(content.arcNumber) : undefined;
 
     return {
       running,
       day,
       arcNumber: content?.arcNumber ?? arc?.arcNumber ?? 1,
-      arcTitle: content?.arcTitle || arc?.title || '',
+      arcTitle: isLongPath ? 'Long Path' : (content?.arcTitle || arc?.title || ''),
       season: content?.season ?? null,
       timeOfDay: tod,
-      greeting: dailyCopy.greeting[tod],
-      focus: content ? this.focusFor(tod, content) : null,
+      greeting: isLongPath ? `Long Path · Day ${longPathDay}` : dailyCopy.greeting[tod],
+      isLongPath,
+      longPathDay,
+      focus: isLongPath && codexDay
+        ? { label: dailyCopy.focus[this.focusKey(tod)], body: codexDay.theme }
+        : content ? this.focusFor(tod, content) : null,
       teaching: codexDay
         ? { eyebrow: dailyCopy.teachingEyebrow, title: codexDay.title, body: codexDay.teaching }
         : null,
       seal: content?.seal ?? null,
       milestoneRiteId: content?.milestoneRiteId ?? null,
     };
+  }
+
+  /** Map time-of-day to the focus copy key (dawn collapses to morning). */
+  private focusKey(tod: TimeOfDay): keyof typeof copy.daily.focus {
+    switch (tod) {
+      case 'dawn':
+      case 'morning': return 'morning';
+      case 'midday': return 'midday';
+      case 'evening': return 'evening';
+      case 'night': return 'night';
+    }
   }
 
   /** Pick a focus from today's content based on the part of the day. */
@@ -98,8 +123,6 @@ export class DailyBriefService {
         return { label: f.evening, body: content.eveningAccount };
       case 'night':
         return { label: f.night, body: content.journalPrompt };
-      default:
-        return { label: f.morning, body: content.command };
     }
   }
 }

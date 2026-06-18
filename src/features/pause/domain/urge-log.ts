@@ -29,7 +29,7 @@ export const TRIGGER_LABELS: Record<TriggerType, string> = {
   unknown: "I don't know yet",
 };
 
-const intensity = z.number().int().min(1).max(5);
+const intensity = z.number().int().transform((v) => Math.min(5, Math.max(1, v)));
 
 export const urgeLogSchema = z.object({
   id: z.string().min(1),
