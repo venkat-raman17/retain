@@ -1,4 +1,3 @@
-export { TrialsScreen } from './screens/trials-screen';
 export { useDayQuest } from './hooks/use-day-quest';
 export type { UseDayQuest } from './hooks/use-day-quest';
 export { useTrialsOverview } from './hooks/use-trials-overview';

@@ -1,12 +1,15 @@
 import { type ReactNode, useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 
 import type { Achievement } from '@/content/schemas';
 import type { EarnedAchievement } from '@/db';
 import { copy } from '@/content';
 import { useProgressSummary } from '@/features/progress/hooks/use-progress-summary';
-import { MILESTONE_DAYS } from '@/features/progress/domain/progression';
+import { MILESTONE_DAYS, isMilestoneDay } from '@/features/progress/domain/progression';
+import { usePath } from '@/features/path/hooks/use-path';
+import { useTrialsOverview } from '@/features/quest';
+import type { DayQuestResult } from '@/features/quest';
 import type {
   PathArc,
   PracticeRhythm,
@@ -15,6 +18,7 @@ import type {
 } from '@/features/progress/services/progress-service';
 import {
   AppCard,
+  AppEmptyState,
   AppHero,
   AppScreen,
   AppText,
@@ -23,9 +27,12 @@ import {
   Bento,
   BentoItem,
   EmberSigil,
+  FadeInRise,
   GateSigil,
   PillarsSigil,
+  PressableScale,
   SealArt,
+  type SealArtSource,
   SectionBand,
   symbolStroke,
   useCountUp,
@@ -35,6 +42,20 @@ import { useSurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 
 import { useHonors } from '../hooks/use-honors';
+
+// ─── Trial helpers (the day-quest surface, merged into the Hall) ───────────────
+
+/** Seal for a day: the rite medallion on milestone days, the arc seal otherwise. */
+function daySeal(dayNumber: number, arcNumber: number | null): SealArtSource {
+  return isMilestoneDay(dayNumber)
+    ? { kind: 'rite', day: dayNumber }
+    : { kind: 'arc', arcNumber: arcNumber ?? 1 };
+}
+
+function requiredProgress(quest: DayQuestResult): { done: number; total: number } {
+  const required = quest.objectives.filter((o) => !o.optional);
+  return { done: required.filter((o) => o.complete).length, total: required.length };
+}
 
 type InsightColor = 'accent' | 'energy' | 'calm' | 'secondary';
 
@@ -320,18 +341,33 @@ function KeyRow({ completedDays }: { completedDays: number[] }) {
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
 export function HallScreen() {
+  const router = useRouter();
+  const { colors } = useTheme();
   const { summary, refresh: refreshHonors } = useHonors();
   const { record, refresh: refreshRecord } = useProgressSummary();
+  const { currentDay, isRunning } = usePath();
+  const day = currentDay > 0 ? currentDay : 1;
+  const { quests, refresh: refreshQuests } = useTrialsOverview(day, 12);
 
   useFocusEffect(
     useCallback(() => {
       refreshHonors();
       refreshRecord();
-    }, [refreshHonors, refreshRecord]),
+      refreshQuests();
+    }, [refreshHonors, refreshRecord, refreshQuests]),
   );
 
   const tone = useSurfaceTone({ kind: 'semantic', name: 'primary' });
   const embersDisplay = useCountUp(summary?.totalEmbers ?? 0, 1200);
+
+  const numericQuests = quests.filter(
+    (q): q is DayQuestResult & { trial: { dayNumber: number } } =>
+      typeof q.trial.dayNumber === 'number',
+  );
+  const [todayTrial, ...recentTrials] = numericQuests;
+
+  const openDay = (dayNumber: number) =>
+    router.push({ pathname: '/chamber', params: { day: dayNumber.toString() } });
 
   if (!summary) {
     return (
@@ -370,6 +406,99 @@ export function HallScreen() {
             )
           }
         />
+
+        {/* Trials — today's quest + the days behind you, merged from the old tab */}
+        {!isRunning ? (
+          <AppEmptyState title={copy.trials.locked} message={copy.path.notStarted.body} />
+        ) : null}
+
+        {todayTrial ? (
+          <SectionBand tone={tone}>
+            <View style={styles.todayHead}>
+              <AppText variant="caption" uppercase style={{ color: tone.text }}>
+                {copy.trials.today}
+              </AppText>
+              <AppText variant="caption" color={todayTrial.cleared ? 'energy' : 'muted'}>
+                {todayTrial.cleared
+                  ? copy.trials.cleared
+                  : `${requiredProgress(todayTrial).done}/${requiredProgress(todayTrial).total}`}
+              </AppText>
+            </View>
+            <PressableScale onPress={() => openDay(todayTrial.trial.dayNumber)}>
+              <View style={styles.todayBody}>
+                <SealArt
+                  source={daySeal(todayTrial.trial.dayNumber, todayTrial.trial.arcNumber)}
+                  size={56}
+                  color={todayTrial.cleared ? colors.gold : tone.base}
+                />
+                <View style={styles.todayText}>
+                  <AppText variant="subheading" color="primary">
+                    {todayTrial.trial.name}
+                  </AppText>
+                  <AppText variant="caption" color="muted">
+                    {`Day ${todayTrial.trial.dayNumber} · +${todayTrial.trial.rewardEmbers} ${copy.path.stats.embers}`}
+                  </AppText>
+                </View>
+              </View>
+            </PressableScale>
+            {todayTrial.objectives
+              .filter((o) => !o.optional)
+              .map((obj) => (
+                <View key={obj.id} style={styles.objectiveRow}>
+                  <AppText variant="caption" color={obj.complete ? 'energy' : 'muted'}>
+                    {obj.complete ? '✓' : '·'}
+                  </AppText>
+                  <AppText
+                    variant="caption"
+                    color={obj.complete ? 'primary' : 'muted'}
+                    style={styles.objectiveLabel}
+                  >
+                    {obj.label}
+                  </AppText>
+                </View>
+              ))}
+          </SectionBand>
+        ) : null}
+
+        {recentTrials.length > 0 ? (
+          <View style={styles.section}>
+            <AppText variant="caption" color="muted" uppercase>
+              {copy.trials.recent}
+            </AppText>
+            <View style={styles.gallery}>
+              {recentTrials.map((quest, index) => {
+                const earned = quest.cleared;
+                const { done, total } = requiredProgress(quest);
+                return (
+                  <FadeInRise key={quest.trial.id} index={Math.min(index, 8)}>
+                    <PressableScale onPress={() => openDay(quest.trial.dayNumber)}>
+                      <AppCard tone={earned ? 'raised' : 'overlay'} style={styles.dayRow}>
+                        <SealArt
+                          source={daySeal(quest.trial.dayNumber, quest.trial.arcNumber)}
+                          size={36}
+                          color={earned ? colors.gold : colors.textMuted}
+                        />
+                        <View style={styles.dayRowText}>
+                          <AppText variant="label" color={earned ? 'primary' : 'secondary'}>
+                            {`Day ${quest.trial.dayNumber} · ${quest.trial.name}`}
+                          </AppText>
+                          <AppText variant="caption" color={earned ? 'energy' : 'muted'}>
+                            {earned
+                              ? copy.trials.cleared
+                              : `${done}/${total} ${copy.trials.objectivesLabel}`}
+                          </AppText>
+                        </View>
+                        <AppText variant="caption" color="muted">
+                          {copy.trials.open}
+                        </AppText>
+                      </AppCard>
+                    </PressableScale>
+                  </FadeInRise>
+                );
+              })}
+            </View>
+          </View>
+        ) : null}
 
         {/* Embers + arcs */}
         <SectionBand tone={tone}>
@@ -472,6 +601,15 @@ export function HallScreen() {
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
   section: { gap: theme.spacing.md },
+  // trials (today + recent gallery)
+  todayHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  todayBody: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md },
+  todayText: { flex: 1, gap: 2 },
+  objectiveRow: { flexDirection: 'row', alignItems: 'flex-start', gap: theme.spacing.xs },
+  objectiveLabel: { flex: 1 },
+  gallery: { gap: theme.spacing.sm },
+  dayRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.md },
+  dayRowText: { flex: 1, gap: 2 },
   // stat band
   statsRow: { flexDirection: 'row', alignItems: 'center' },
   stat: { flex: 1 },

@@ -15,7 +15,6 @@ export const copy = {
   tabs: {
     path: 'Path',
     forge: 'Forge',
-    trials: 'Trials',
     journal: 'Journal',
     codex: 'Codex',
     progress: 'Hall',
