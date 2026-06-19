@@ -26,7 +26,6 @@ type HonorsRepos = Pick<
   Repositories,
   | 'forge'
   | 'urge'
-  | 'journal'
   | 'boundary'
   | 'contentProgress'
   | 'path'
@@ -88,7 +87,6 @@ export class HonorsService {
       forgeCategoryCounts,
       returnCount,
       boundaryKeptCount,
-      journalEntryCount,
       profile,
     ] = await Promise.all([
       this.getCompletedDays(),
@@ -97,7 +95,6 @@ export class HonorsService {
       this.repos.forge.categoryCounts(),
       this.repos.path.countByType('return_recorded'),
       this.repos.boundary.countKeptCheckinsSince(new Date(0).toISOString()),
-      this.repos.journal.count(),
       this.repos.profile.get(),
     ]);
 
@@ -116,7 +113,6 @@ export class HonorsService {
       returnCount,
       boundaryKeptCount,
       crownReceived,
-      journalEntryCount,
       totalEmbers,
     };
   }

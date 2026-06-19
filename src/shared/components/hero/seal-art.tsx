@@ -1,14 +1,16 @@
 import { type ReactNode } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { ArcSeal, ArchetypeSigil, RiteMedallion, symbolStroke } from '../symbols';
+import { ArcSeal, ArchetypeSigil, DaySigil, RiteMedallion, symbolStroke } from '../symbols';
 import { Halo } from './halo';
 
 /** Which bundled symbol family to render, plus its lookup key. */
 export type SealArtSource =
   | { kind: 'arc'; arcNumber: number }
   | { kind: 'archetype'; archetype: string }
-  | { kind: 'rite'; day: number };
+  | { kind: 'rite'; day: number }
+  | { kind: 'day'; day: number; archetype: string; arcNumber: number; accentColor?: string }
+  | { kind: 'crown' };
 
 export interface SealArtProps {
   source: SealArtSource;
@@ -31,6 +33,20 @@ function renderSymbol(source: SealArtSource, size: number, color: string, stroke
       return <ArchetypeSigil archetype={source.archetype} size={size} color={color} strokeWidth={stroke} />;
     case 'rite':
       return <RiteMedallion day={source.day} size={size} color={color} strokeWidth={stroke} />;
+    case 'day':
+      return (
+        <DaySigil
+          day={source.day}
+          archetype={source.archetype}
+          arcNumber={source.arcNumber}
+          size={size}
+          color={color}
+          accentColor={source.accentColor}
+          strokeWidth={stroke}
+        />
+      );
+    case 'crown':
+      return <DaySigil day={91} archetype="sovereign" arcNumber={9} crown size={size} color={color} strokeWidth={stroke} />;
     default:
       return null;
   }

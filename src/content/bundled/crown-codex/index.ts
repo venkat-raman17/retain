@@ -1,11 +1,11 @@
-import type { CrownCodexItem } from '../../schemas/crown-codex.schema';
+import type { CrownCodexItemInput } from '../../schemas/crown-codex.schema';
 
 /**
  * Post-90 Long Path content. Unlocked after the Crown is received.
  * This content is evergreen — not daily unlocks, but permanent reference material
  * for the man who has completed the rite and carries the fire into ordinary days.
  */
-export const crownCodex: readonly CrownCodexItem[] = [
+export const crownCodex: readonly CrownCodexItemInput[] = [
   {
     id: 'crown-you-are-not-done',
     title: 'You Are Not Done',

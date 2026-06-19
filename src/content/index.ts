@@ -4,9 +4,9 @@ import { arcs as arcsData } from './bundled/arcs';
 import { codexDays as codexData } from './bundled/codex';
 import { crownCodex as crownCodexData } from './bundled/crown-codex';
 import { dailyPathContent as dailyPathData } from './bundled/daily-path';
+import { lineagePassages as lineageData } from './bundled/lineage';
 import { onboardingSteps as onboardingData } from './bundled/onboarding';
 import { principles as principlesData } from './bundled/principles';
-import { journalPrompts as promptsData } from './bundled/prompts';
 import { rites as ritesData } from './bundled/rites';
 import { rituals as ritualsData } from './bundled/rituals';
 import { safetyContent as safetyData } from './bundled/safety';
@@ -20,7 +20,7 @@ import {
   codexSchema,
   crownCodexSchema,
   dailyPathContentsSchema,
-  journalPromptsSchema,
+  lineagePassagesSchema,
   onboardingSchema,
   principlesSchema,
   ritesSchema,
@@ -35,11 +35,10 @@ import {
   type CodexDay,
   type CrownCodexItem,
   type DailyPathContent,
-  type JournalPrompt,
+  type LineagePassage,
   type OnboardingStep,
   type PathSeason,
   type Principle,
-  type PromptType,
   type Rite,
   type Ritual,
   type SafetyDisclaimer,
@@ -60,10 +59,10 @@ export const archetypeProfiles: readonly ArchetypeProfile[] =
 export const codexDays: readonly CodexDay[] = codexSchema.parse(codexData);
 export const dailyPath: readonly DailyPathContent[] = dailyPathContentsSchema.parse(dailyPathData);
 export const arcs: readonly Arc[] = arcsSchema.parse(arcsData);
+export const lineagePassages: readonly LineagePassage[] = lineagePassagesSchema.parse(lineageData);
 export const crownCodex: readonly CrownCodexItem[] = crownCodexSchema.parse(crownCodexData);
 export const studies: readonly Study[] = studiesSchema.parse(studiesData);
 export const rituals: readonly Ritual[] = ritualsSchema.parse(ritualsData);
-export const journalPrompts: readonly JournalPrompt[] = journalPromptsSchema.parse(promptsData);
 export const rites: readonly Rite[] = ritesSchema.parse(ritesData);
 export const onboardingSteps: readonly OnboardingStep[] = onboardingSchema.parse(onboardingData);
 const safety = safetyContentSchema.parse(safetyData);
@@ -101,6 +100,16 @@ export function getArcByNumber(arcNumber: number): Arc | undefined {
   return arcs.find((a) => a.arcNumber === arcNumber);
 }
 
+// --- Lineage loaders ---
+
+export function getAllLineagePassages(): readonly LineagePassage[] {
+  return lineagePassages;
+}
+
+export function getLineagePassage(id: string): LineagePassage | undefined {
+  return lineagePassages.find((p) => p.id === id);
+}
+
 // --- Codex loaders ---
 
 export function getAllCodexDays(): readonly CodexDay[] {
@@ -136,10 +145,6 @@ export function getAllRituals(): readonly Ritual[] {
 
 export function getRitualById(id: string): Ritual | undefined {
   return rituals.find((ritual) => ritual.id === id);
-}
-
-export function getPromptByType(type: PromptType): readonly JournalPrompt[] {
-  return journalPrompts.filter((prompt) => prompt.type === type);
 }
 
 export function getMilestoneRite(dayNumber: number): Rite | undefined {
@@ -218,6 +223,8 @@ export type {
   CrownCodexCategory,
   CrownCodexItem,
   DailyPathContent,
+  LineagePassage,
+  LineageTradition,
   ObjectiveKind,
   PathSeason,
   SecretContentType,
@@ -228,8 +235,6 @@ export type {
   StudyLineage,
   Ritual,
   RitualTime,
-  JournalPrompt,
-  PromptType,
   Rite,
   SafetyDisclaimer,
   SafetyResources,

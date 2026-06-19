@@ -5,7 +5,6 @@ import type {
   EarnedAchievement,
   ForgeCategoryCount,
   ForgeRepository,
-  JournalRepository,
   LapseRepository,
   PathRepository,
   Repositories,
@@ -22,7 +21,6 @@ import {
   type ContentType,
 } from '@/features/codex/domain/content-progress';
 import type { ForgeAct, ForgeCategory } from '@/features/forge/domain/forge-act';
-import type { JournalEntry, JournalType } from '@/features/journal/domain/journal-entry';
 import type { LapseRecord } from '@/features/path/domain/lapse-record';
 import type { PathEvent, PathEventType } from '@/features/path/domain/path-event';
 import {
@@ -137,33 +135,6 @@ class InMemoryForgeRepository implements ForgeRepository {
     return [...counts.entries()]
       .map(([category, count]) => ({ category, count }))
       .sort((a, b) => b.count - a.count);
-  }
-}
-
-class InMemoryJournalRepository implements JournalRepository {
-  private readonly entries = new Map<string, JournalEntry>();
-
-  async list(limit = 100): Promise<JournalEntry[]> {
-    return [...this.entries.values()]
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
-      .slice(0, limit);
-  }
-  async listByType(type: JournalType, limit = 100): Promise<JournalEntry[]> {
-    return (await this.list(Number.MAX_SAFE_INTEGER))
-      .filter((entry) => entry.type === type)
-      .slice(0, limit);
-  }
-  async getById(id: string): Promise<JournalEntry | null> {
-    return this.entries.get(id) ?? null;
-  }
-  async save(entry: JournalEntry): Promise<void> {
-    this.entries.set(entry.id, entry);
-  }
-  async remove(id: string): Promise<void> {
-    this.entries.delete(id);
-  }
-  async count(): Promise<number> {
-    return this.entries.size;
   }
 }
 
@@ -328,7 +299,6 @@ export function createFakeRepositories(): Repositories {
     path: new InMemoryPathRepository(),
     urge: new InMemoryUrgeRepository(),
     forge: new InMemoryForgeRepository(),
-    journal: new InMemoryJournalRepository(),
     lapse: new InMemoryLapseRepository(),
     boundary: new InMemoryBoundaryRepository(),
     contentProgress: new InMemoryContentProgressRepository(),

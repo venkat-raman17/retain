@@ -9,7 +9,6 @@ import {
   type ContentProgressRepository,
 } from './content-progress-repository';
 import { SqliteForgeRepository, type ForgeRepository } from './forge-repository';
-import { SqliteJournalRepository, type JournalRepository } from './journal-repository';
 import { SqliteLapseRepository, type LapseRepository } from './lapse-repository';
 import { SqlitePathRepository, type PathRepository } from './path-repository';
 import { SqliteSettingsRepository, type SettingsRepository } from './settings-repository';
@@ -25,7 +24,6 @@ export interface Repositories {
   path: PathRepository;
   urge: UrgeRepository;
   forge: ForgeRepository;
-  journal: JournalRepository;
   lapse: LapseRepository;
   boundary: BoundaryRepository;
   contentProgress: ContentProgressRepository;
@@ -39,7 +37,6 @@ export function createRepositories(db: AppDatabase): Repositories {
     path: new SqlitePathRepository(db),
     urge: new SqliteUrgeRepository(db),
     forge: new SqliteForgeRepository(db),
-    journal: new SqliteJournalRepository(db),
     lapse: new SqliteLapseRepository(db),
     boundary: new SqliteBoundaryRepository(db),
     contentProgress: new SqliteContentProgressRepository(db),
@@ -53,7 +50,6 @@ export type {
   PathRepository,
   UrgeRepository,
   ForgeRepository,
-  JournalRepository,
   LapseRepository,
   BoundaryRepository,
   ContentProgressRepository,

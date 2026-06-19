@@ -1,18 +1,13 @@
-import { createJournalEntry, type JournalEntry } from '@/features/journal/domain/journal-entry';
 import { createUrgeLog, type UrgeLog } from '@/features/pause/domain/urge-log';
 import { fixedClock } from '@/shared/lib';
 
-import { buildMoodTrend, buildUrgeTrend } from './trends';
+import { buildUrgeTrend } from './trends';
 
 const NOW = '2026-06-19T12:00:00.000Z';
 const clock = fixedClock(new Date(NOW));
 
 function urgeAt(dateISO: string, intensityBefore = 3): UrgeLog {
   return createUrgeLog({ triggerType: 'stress', intensityBefore }, fixedClock(new Date(dateISO)));
-}
-
-function moodAt(dateISO: string, mood: number | null): JournalEntry {
-  return createJournalEntry({ body: 'A reflection.', mood }, fixedClock(new Date(dateISO)));
 }
 
 describe('buildUrgeTrend', () => {
@@ -87,50 +82,5 @@ describe('buildUrgeTrend', () => {
     // A week later the same urge has slid into an earlier bucket.
     expect(aWeekLater.buckets[5]?.count).toBe(0);
     expect(aWeekLater.buckets[4]?.count).toBe(1);
-  });
-});
-
-describe('buildMoodTrend', () => {
-  it('is empty with no trend when no moods are logged', () => {
-    const trend = buildMoodTrend([], clock);
-    expect(trend.buckets).toHaveLength(6);
-    expect(trend.hasEnoughData).toBe(false);
-    expect(trend.direction).toBeNull();
-  });
-
-  it('excludes entries with no mood from the average and the count', () => {
-    const trend = buildMoodTrend(
-      [moodAt('2026-06-16T12:00:00.000Z', 4), moodAt('2026-06-16T13:00:00.000Z', null)],
-      clock,
-    );
-    expect(trend.buckets[5]?.count).toBe(1);
-    expect(trend.buckets[5]?.average).toBe(4);
-  });
-
-  it('reads as rising when mood climbs over the window', () => {
-    const entries = [
-      moodAt('2026-05-12T12:00:00.000Z', 2),
-      moodAt('2026-05-19T12:00:00.000Z', 2),
-      moodAt('2026-06-16T12:00:00.000Z', 5),
-    ];
-    const trend = buildMoodTrend(entries, clock);
-    expect(trend.hasEnoughData).toBe(true);
-    expect(trend.direction).toBe('rising');
-  });
-
-  it('reads as easing (heavier) when mood falls over the window', () => {
-    const entries = [
-      moodAt('2026-05-12T12:00:00.000Z', 5),
-      moodAt('2026-05-19T12:00:00.000Z', 4),
-      moodAt('2026-06-16T12:00:00.000Z', 2),
-    ];
-    const trend = buildMoodTrend(entries, clock);
-    expect(trend.direction).toBe('easing');
-  });
-
-  it('needs at least two moods to declare a trend', () => {
-    const trend = buildMoodTrend([moodAt('2026-06-16T12:00:00.000Z', 4)], clock);
-    expect(trend.hasEnoughData).toBe(false);
-    expect(trend.direction).toBeNull();
   });
 });

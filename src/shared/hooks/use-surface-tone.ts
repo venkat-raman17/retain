@@ -46,7 +46,7 @@ export interface SurfaceTone {
 }
 
 /** Build a tone from an arbitrary hex base, deriving theme-safe variants. */
-function fromBase(base: string, theme: AppTheme): SurfaceTone {
+export function surfaceToneFromBase(base: string, theme: AppTheme): SurfaceTone {
   return {
     base,
     wash: withAlpha(base, 0.14),
@@ -85,13 +85,13 @@ function resolveSemantic(name: SemanticToneName, theme: AppTheme): SurfaceTone {
 export function resolveSurfaceTone(source: SurfaceToneSource, theme: AppTheme): SurfaceTone {
   switch (source.kind) {
     case 'arc':
-      return fromBase(arcTone(source.arcNumber), theme);
+      return surfaceToneFromBase(arcTone(source.arcNumber), theme);
     case 'archetype':
-      return fromBase(theme.archetype[source.id], theme);
+      return surfaceToneFromBase(theme.archetype[source.id], theme);
     case 'semantic':
       return resolveSemantic(source.name, theme);
     default:
-      return fromBase(theme.colors.primary, theme);
+      return surfaceToneFromBase(theme.colors.primary, theme);
   }
 }
 

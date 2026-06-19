@@ -10,7 +10,6 @@ export const ACHIEVEMENT_CRITERIA_KINDS = [
   'return_recorded',
   'boundary_kept',
   'crown_received',
-  'journal_entries',
   'embers_earned',
 ] as const;
 export type AchievementCriteriaKind = (typeof ACHIEVEMENT_CRITERIA_KINDS)[number];

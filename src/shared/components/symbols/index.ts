@@ -37,6 +37,9 @@ export {
   ArcSeal,
 } from './arc-seals';
 
+export { DaySigil, daySigilParams } from './day-sigil';
+export type { DaySigilParams, DaySigilProps, DayAccentStyle } from './day-sigil';
+
 export {
   MonkSigil,
   WarriorSigil,

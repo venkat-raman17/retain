@@ -4,8 +4,6 @@ export const OBJECTIVE_KINDS = [
   'reveal_secret',
   'forge_act',
   'log_pause',
-  'journal_entry',
-  'evening_account',
   'boundary_checkin',
 ] as const;
 export type ObjectiveKind = (typeof OBJECTIVE_KINDS)[number];

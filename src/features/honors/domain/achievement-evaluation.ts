@@ -9,7 +9,6 @@ export interface AchievementSignals {
   returnCount: number;
   boundaryKeptCount: number;
   crownReceived: boolean;
-  journalEntryCount: number;
   totalEmbers: number;
 }
 
@@ -55,8 +54,6 @@ function isCriteriaMet(
       return signals.boundaryKeptCount >= (params['count'] ?? 1);
     case 'crown_received':
       return signals.crownReceived;
-    case 'journal_entries':
-      return signals.journalEntryCount >= (params['count'] ?? 1);
     case 'embers_earned':
       return signals.totalEmbers >= (params['count'] ?? 1);
   }

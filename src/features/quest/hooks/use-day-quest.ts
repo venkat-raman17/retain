@@ -20,7 +20,6 @@ export function useDayQuest(dayNumber: number): UseDayQuest {
       new QuestService(
         repos.forge,
         repos.urge,
-        repos.journal,
         repos.boundary,
         repos.contentProgress,
         systemClock,

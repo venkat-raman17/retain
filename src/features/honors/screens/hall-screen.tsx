@@ -190,7 +190,6 @@ function RhythmCard({ practiceRhythm }: { practiceRhythm: PracticeRhythm }) {
       <View style={styles.rhythmGrid}>
         <RhythmItem label={copy.record.rhythm.activeDays} value={practiceRhythm.activeDaysThisWeek} />
         <RhythmItem label={copy.record.rhythm.urges} value={practiceRhythm.urgesThisWeek} />
-        <RhythmItem label={copy.record.rhythm.journal} value={practiceRhythm.journalEntriesThisWeek} />
         <RhythmItem label={copy.record.rhythm.forge} value={practiceRhythm.forgeActsThisWeek} />
       </View>
       <AppText variant="caption" color="muted" style={styles.rhythmNote}>
@@ -583,12 +582,6 @@ export function HallScreen() {
             <ArcCard arc={record.arc} />
             <RhythmCard practiceRhythm={record.practiceRhythm} />
             <TrendCard series={record.urgeTrend} text={copy.record.urgeTrend} kind="count" />
-            <TrendCard
-              series={record.moodTrend}
-              text={copy.record.moodTrend}
-              kind="average"
-              color={colors.calm}
-            />
             <RevealCard reveal={record.reveal} />
             <FireMapCard triggerCounts={record.triggerCounts} />
             <ForgeBalanceCard

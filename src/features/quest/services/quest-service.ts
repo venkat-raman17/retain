@@ -3,7 +3,6 @@ import type {
   BoundaryRepository,
   ContentProgressRepository,
   ForgeRepository,
-  JournalRepository,
   UrgeRepository,
 } from '@/db';
 import type { Clock } from '@/shared/lib';
@@ -24,7 +23,6 @@ export class QuestService {
   constructor(
     private readonly forge: ForgeRepository,
     private readonly urge: UrgeRepository,
-    private readonly journal: JournalRepository,
     private readonly boundary: BoundaryRepository,
     private readonly contentProgress: ContentProgressRepository,
     private readonly clock: Clock,
@@ -36,29 +34,20 @@ export class QuestService {
 
     const todayStart = toIsoDateTime(startOfUtcDay(this.clock.now()));
 
-    const [forgeActsToday, allUrges, allJournal, boundaryCheckinsToday, progress] =
+    const [forgeActsToday, allUrges, boundaryCheckinsToday, progress] =
       await Promise.all([
         this.forge.countSince(todayStart),
         this.urge.list(200),
-        this.journal.list(200),
         this.boundary.countCheckinsSince(todayStart),
         this.contentProgress.get('daily_path', `day-${dayNumber}`),
       ]);
 
     const pausesToday = allUrges.filter((u) => u.occurredAt >= todayStart).length;
-    const journalEntriesToday = allJournal.filter(
-      (e) => e.createdAt >= todayStart && e.type === 'morning',
-    ).length;
-    const eveningEntriesToday = allJournal.filter(
-      (e) => e.createdAt >= todayStart && e.type === 'evening',
-    ).length;
 
     const signals: DayQuestSignals = {
       secretRevealed: progress?.status === 'completed',
       forgeActsToday,
       pausesToday,
-      journalEntriesToday,
-      eveningEntriesToday,
       boundaryCheckinsToday,
     };
 

@@ -2,7 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { copy, getDailyPathContent, getMilestoneRiteById, getArchetypeProfile } from '@/content';
+import {
+  copy,
+  getDailyPathContent,
+  getMilestoneRiteById,
+  getArchetypeProfile,
+  getLineagePassage,
+} from '@/content';
 import {
   AppButton,
   AppCard,
@@ -21,7 +27,7 @@ import {
   useCountUp,
 } from '@/shared/components';
 import { theme, type ArchetypeTone } from '@/shared/design';
-import { useSurfaceTone, type SurfaceTone } from '@/shared/hooks';
+import { useDayTheme, type SurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { haptics } from '@/shared/lib';
 import { Routes } from '@/navigation';
@@ -52,9 +58,15 @@ export function DailyChamberScreen() {
   const content = getDailyPathContent(dayNumber);
   const archetype = content?.archetype ? getArchetypeProfile(content.archetype) : null;
   const milestoneRite = content?.milestoneRiteId ? getMilestoneRiteById(content.milestoneRiteId) : null;
+  const lineage = content?.lineagePassageId ? getLineagePassage(content.lineagePassageId) : null;
 
-  // The chamber takes the day's archetype as its identity color.
-  const tone = useSurfaceTone({ kind: 'archetype', id: (content?.archetype ?? 'monk') as ArchetypeTone });
+  // Each day carries its OWN tone — the archetype hue, shifted deterministically
+  // per day — so consecutive days, even of one archetype, look distinct.
+  const tone = useDayTheme({
+    day: dayNumber,
+    archetype: (content?.archetype ?? 'monk') as ArchetypeTone,
+    arcNumber: content?.arcNumber ?? 1,
+  });
   const { colors } = useTheme();
   const isMilestone = isMilestoneDay(dayNumber);
   const milestoneGold = colors.gold;
@@ -99,10 +111,56 @@ export function DailyChamberScreen() {
             isMilestone ? (
               <SealArt source={{ kind: 'rite', day: dayNumber }} size={104} color={milestoneGold} />
             ) : content.archetype ? (
-              <SealArt source={{ kind: 'archetype', archetype: content.archetype }} size={92} color={tone.text} />
+              <SealArt
+                source={{
+                  kind: 'day',
+                  day: dayNumber,
+                  archetype: content.archetype,
+                  arcNumber: content.arcNumber,
+                  accentColor: tone.base,
+                }}
+                size={104}
+                color={tone.text}
+              />
             ) : undefined
           }
         />
+
+        {/* Archetype spine — the day's mode of formation, led by the investiture
+            and the day-specific reason this archetype governs today. */}
+        {archetype ? (
+          <SectionBand tone={tone} style={styles.spineBand}>
+            <AppText variant="caption" uppercase style={{ color: tone.text }}>
+              {`${copy.chamber.archetypeSpine.lead} ${archetype.name}`}
+            </AppText>
+            <AppText variant="body" color="secondary">
+              {content.archetypeExpression || content.invocation || archetype.essence}
+            </AppText>
+            <SplitRow>
+              <AppCard tone="overlay" style={styles.halfCard}>
+                <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.light}</AppText>
+                <AppText variant="caption" color="secondary">{archetype.light}</AppText>
+              </AppCard>
+              <AppCard tone="overlay" style={styles.halfCard}>
+                <AppText variant="caption" color="energy" uppercase>{copy.chamber.labels.shadow}</AppText>
+                <AppText variant="caption" color="secondary">{archetype.shadow}</AppText>
+              </AppCard>
+            </SplitRow>
+            <SplitRow>
+              <AppCard tone="overlay" style={styles.halfCard}>
+                <AppText variant="caption" color="muted" uppercase>{copy.chamber.labels.discipline}</AppText>
+                <AppText variant="caption" color="secondary">{archetype.discipline}</AppText>
+              </AppCard>
+              <AppCard tone="overlay" style={styles.halfCard}>
+                <AppText variant="caption" color="muted" uppercase>{copy.chamber.labels.temptation}</AppText>
+                <AppText variant="caption" color="secondary">{archetype.temptation}</AppText>
+              </AppCard>
+            </SplitRow>
+            <AppText variant="body" color="primary" align="center">
+              {archetype.retainLine}
+            </AppText>
+          </SectionBand>
+        ) : null}
 
         {/* Teaching */}
         <AppCard>
@@ -111,6 +169,20 @@ export function DailyChamberScreen() {
             {content.teachingBody}
           </AppText>
         </AppCard>
+
+        {/* Lineage — a passage from the traditions the practice draws on. */}
+        {lineage ? (
+          <AppCard tone="overlay">
+            <AppText variant="caption" color="muted" uppercase>{copy.chamber.labels.lineage}</AppText>
+            <AppQuoteBlock
+              quote={lineage.text}
+              attribution={lineage.verbatim ? `${lineage.attribution} · ${lineage.work}` : lineage.attribution}
+            />
+            {lineage.verbatim ? (
+              <AppText variant="caption" color="muted">{copy.chamber.lineage.inspiration}</AppText>
+            ) : null}
+          </AppCard>
+        ) : null}
 
         {/* Secret — revealed on tap */}
         <AppCard
@@ -159,35 +231,6 @@ export function DailyChamberScreen() {
             <AppText variant="caption" color="accent">{copy.forge.todaysObjective.accept} →</AppText>
           </AppCard>
         </SplitRow>
-
-        {/* Journal prompt */}
-        <AppCard>
-          <AppText variant="caption" color="accent" uppercase>{copy.chamber.labels.journalPrompt}</AppText>
-          <AppText variant="body" color="secondary">{content.journalPrompt}</AppText>
-          <AppButton
-            label={copy.chamber.labels.openJournal}
-            variant="ghost"
-            onPress={() =>
-              router.push({
-                pathname: Routes.journal,
-                params: { initialType: 'morning', initialPrompt: content.journalPrompt },
-              })
-            }
-          />
-        </AppCard>
-
-        {/* Archetype */}
-        {archetype ? (
-          <AppCard tone="overlay">
-            <View style={styles.archetypeHead}>
-              <AppText variant="caption" color="muted" uppercase style={styles.flex}>
-                {`Archetype · ${archetype.name}`}
-              </AppText>
-              <SealArt source={{ kind: 'archetype', archetype: archetype.id }} size={40} color={tone.base} />
-            </View>
-            <AppText variant="body" color="secondary">{archetype.retainLine}</AppText>
-          </AppCard>
-        ) : null}
 
         {/* Milestone rite */}
         {milestoneRite ? (
@@ -271,9 +314,16 @@ export function DailyChamberScreen() {
             tone={tone}
             seal={
               content.archetype
-                ? { kind: 'archetype', archetype: content.archetype }
+                ? {
+                    kind: 'day',
+                    day: dayNumber,
+                    archetype: content.archetype,
+                    arcNumber: content.arcNumber,
+                    accentColor: tone.base,
+                  }
                 : { kind: 'rite', day: dayNumber }
             }
+            identityLine={archetype ? `${copy.chamber.complete.identity} ${archetype.name}.` : undefined}
             onReturn={() => router.back()}
           />
         ) : secretRevealed ? (
@@ -315,6 +365,7 @@ function CompletionReveal({
   newHonors,
   tone,
   seal,
+  identityLine,
   onReturn,
 }: {
   trialName: string;
@@ -325,6 +376,7 @@ function CompletionReveal({
   newHonors: Achievement[];
   tone: SurfaceTone;
   seal: SealArtSource;
+  identityLine?: string;
   onReturn: () => void;
 }) {
   const { colors } = useTheme();
@@ -346,6 +398,11 @@ function CompletionReveal({
       <AppText variant="subheading" align="center">
         {trialName}
       </AppText>
+      {identityLine ? (
+        <AppText variant="body" color="gold" align="center">
+          {identityLine}
+        </AppText>
+      ) : null}
 
       <View style={styles.revealEmbers}>
         <AppText variant="display" color="energy" align="center" numberOfLines={1} adjustsFontSizeToFit>
@@ -391,8 +448,7 @@ const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
   body: { marginTop: theme.spacing.xs },
   halfCard: { flex: 1, gap: theme.spacing.xs },
-  archetypeHead: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
-  flex: { flex: 1 },
+  spineBand: { gap: theme.spacing.md },
   sealWrap: { paddingVertical: theme.spacing.md },
   objective: { flexDirection: 'row', alignItems: 'flex-start', gap: theme.spacing.xs },
   objectiveLabel: { flex: 1 },

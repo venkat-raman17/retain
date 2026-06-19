@@ -13,7 +13,6 @@ export type {
   PathRepository,
   UrgeRepository,
   ForgeRepository,
-  JournalRepository,
   LapseRepository,
   BoundaryRepository,
   ContentProgressRepository,

@@ -1,10 +1,14 @@
-import type { DailyPathContent } from '../../schemas';
+import type { DailyPathContentInput } from '../../schemas';
 
-export const days01to15: readonly DailyPathContent[] = [
+export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-01', dayNumber: 1, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Vow', theme: 'beginning, identity, intention',
     season: 'the_vow', archetype: 'pilgrim',
+    invocation: 'Today you walk as the Pilgrim: a man who begins not because the road is clear, but because he has chosen it.',
+    archetypeExpression:
+      'The Pilgrim does not wait for the perfect morning; he takes the step in front of him. Today that step is your vow — spoken plainly, before the conditions feel ready. Let his patience with the long road steady you: you are not finishing anything today, only beginning, and beginning is enough.',
+    lineagePassageId: 'tao-64-single-step',
     openingLine: 'A man begins not when conditions are perfect, but when he chooses a word and means it.',
     teachingBody:
       'The vow is not a performance. It is the act of addressing yourself honestly: I am choosing to change the relationship between my will and my impulse. It does not require purity, a fresh month, or an ideal morning. It requires the moment you are in and a word you are willing to hold.\n\nMost men wait to begin. They say: when things settle, when I am less tired, when the season changes. But the compulsion does not wait. It arrives in the exact gap between intention and action. The vow fills that gap with something stronger than mood.\n\nBegin with the smallest possible gesture of truth: name what you are choosing, and choose it.',
@@ -25,12 +29,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-02', dayNumber: 2, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Fire Is Not the Enemy', theme: 'energy, direction, misdirection',
     season: 'the_vow', archetype: 'healer',
+    invocation: 'Today you walk as the Healer: a man who tends the fire rather than wages war on it.',
+    archetypeExpression:
+      'The Healer knows that what is alive in you is not a wound to be cut out. He meets desire without contempt and asks where it can go, never how to kill it. Let his refusal to hate the body keep you from the oldest mistake — splitting yourself in two and calling half of you the enemy.',
+    lineagePassageId: 'synthesis-watch-the-cloud',
     openingLine: 'What you are learning to govern is the same force that builds men, fills art, and founds families.',
     teachingBody:
       'The first mistake of the practice is to declare war on desire itself. That war cannot be won, and trying to win it produces something worse: a man split in half, ashamed of his own aliveness.\n\nManforge begins somewhere different. The fire — the drive, the appetite, the force that rises — is not the problem. The compulsion is the problem: the automatic, the unconscious, the habituated discharge that spends energy before it can become anything.\n\nThe energy itself is clean. It is the same force that makes a man build a company, train for something hard, or love deeply. The practice is not to extinguish it. The practice is to stop letting it be hijacked by the cheapest available outlet.',
     secretContentType: 'hidden_teaching', secretTitle: 'Hidden Teaching',
     secretBody: 'In yogic tradition, brahmacharya is not the suppression of desire but the conservation and wise redirection of *shakti* — the primal creative power. The same force that drives the urge also drives the artist, the athlete, and the teacher. The monk who holds the fire and the warrior who trains at dawn are practicing the same discipline in different clothes. They are not killing the flame. They are becoming worthy of it.',
-    crownFragment: null,
+    crownFragment: 'The fire is not the enemy. The unconscious spending of it is.',
     command: 'Today, do not fight what you feel. Name it, and then decide where it goes.',
     practice: 'When desire rises today, pause for thirty seconds and ask: "Where could this go if I give it direction?"',
     forgeChallenge: 'Find one hour of sustained work — physical, creative, or service — and give it the energy that would otherwise be spent.',
@@ -46,12 +54,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-03', dayNumber: 3, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The First Pause', theme: 'pause, the gap, command',
     season: 'the_vow', archetype: 'sovereign',
+    invocation: 'Today you walk as the Sovereign: the one who governs the gap between the urge and the act.',
+    archetypeExpression:
+      'The Sovereign does not deny that the impulse arrives; he denies that it rules. His authority lives in the half-second of assent that is always his to give or withhold. Today, find that half-second and take the throne inside it — the urge may speak first, but it does not get the last word.',
+    lineagePassageId: 'epictetus-ench-5-opinions',
     openingLine: 'The pause is not a moment of weakness. It is the moment when the man is most fully himself.',
     teachingBody:
       "In Stoic thought, the impression and the assent are two different things. The impulse arrives — the image, the pull, the want. But the assent is yours. You are not required to agree with what your appetite proposes. You are not ruled by it simply because it speaks loudly.\n\nThis is the first pause: the gap between the urge arriving and the action following. It is tiny at first — a half-second of awareness before the hand moves. But that half-second is the whole game. Everything the practice builds lives in that gap.\n\nThe pause is not suppression. It is the moment you step into the driver's seat and feel the wheel.",
     secretContentType: 'ancient_key', secretTitle: 'Ancient Key',
     secretBody: "The Stoics called it *prohairesis* — the faculty of choice, the only thing truly in your power. Epictetus said: 'Men are disturbed not by things but by the judgments they form about things.' The urge is a thing. The assent is a judgment. The pause is the moment between them. Every second you spend inside that pause is a second you are practicing what the Stoics spent their lives teaching.",
-    crownFragment: null,
+    crownFragment: 'The impulse is not yours to command. The assent always is.',
     command: 'When the first urge appears today, pause for one breath before responding to it.',
     practice: 'Practice deliberate delay: when you want to reach for the phone, pause for sixty seconds first. See what the urge does.',
     forgeChallenge: 'Take one strong urge today and redirect it within five minutes into a Forge act. Record it.',
@@ -67,12 +79,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-04', dayNumber: 4, arcNumber: 1, arcTitle: 'The Vow',
     title: 'Guard the Eyes', theme: 'visual attention, first spark',
     season: 'the_vow', archetype: 'guardian',
+    invocation: 'Today you walk as the Guardian: the keeper of the first gate, the eye.',
+    archetypeExpression:
+      'The Guardian wins early or not at all. He does not fight the flame at its height; he catches the spark at the threshold and turns it away. Today, guard the gaze — not from hatred of beauty, but because attention is the ground on which every siege begins.',
+    lineagePassageId: 'tao-12-five-colours',
     openingLine: 'Most battles are won or lost long before the moment of temptation.',
     teachingBody:
       "The Buddhist teaching on *indriya-saṃvara* — guarding the sense doors — begins at the eye. Not because sight is shameful, but because attention is where desire begins. The moment a man's gaze is captured by something that feeds the compulsion, the battle has already started. Guarding the eye means catching it earlier.\n\nThis is not avoidance of beauty or of women or of life. It is the trained discipline of noticing where the attention is being led, and choosing differently at the first step rather than the tenth.\n\nThe first victory is often the simplest: look away. Scroll past. Close the tab. Leave the room. These acts seem small. They are not small. They are the gates of the inner castle, and holding them prevents the siege.",
     secretContentType: 'night_warning', secretTitle: 'Night Warning',
     secretBody: 'The eye is most dangerous between 9 PM and 2 AM. The mind is tired. The body is warm. The defenses have been standing all day and they want to stand down. This is when the screen offers itself as comfort and the scroll becomes a drift. Guard the night gate before it opens. A lit screen in the dark is an invitation; a closed phone in another room is a decision already made.',
-    crownFragment: null,
+    crownFragment: 'Most battles are decided at the gate, long before the wall.',
     command: 'Today, practice one deliberate "look away." Notice the first spark and redirect before it becomes a flame.',
     practice: 'Audit your first thirty minutes online today. Where did your eyes go that they did not need to go?',
     forgeChallenge: 'Remove or block one source of visual temptation from your environment today.',
@@ -88,12 +104,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-05', dayNumber: 5, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Body Must Move', theme: 'physical energy, outlet, training',
     season: 'the_vow', archetype: 'warrior',
+    invocation: 'Today you walk as the Warrior: a man who carries the fire into the contest instead of into fantasy.',
+    archetypeExpression:
+      'The Warrior does not store pressure in a vessel with no outlet. He trains. He gives the restless body something hard to do before the mind can bargain its way back to the easy thing. Today, let the energy move through muscle first — move before you negotiate.',
+    lineagePassageId: 'dhammapada-103-conquer-self',
     openingLine: 'A disordered body will ask for false comfort. A trained body asks for something harder.',
     teachingBody:
       "Sexual energy does not only live in the mind. It lives in the body — in tension, in restlessness, in the legs that want to move and the hands that want to work. A man who practices retention and does not give the body a physical outlet is storing pressure in a vessel with no release valve.\n\nThis is why every tradition that practices conservation also practices rigorous physical discipline: monastic traditions train, martial arts schools train, brahmacharya students follow demanding physical regimens. The body is not the enemy of the practice — it is one of its instruments.\n\nWhen the fire rises today, don't first ask your mind to hold it. Ask your body to carry it somewhere. Train. Walk hard. Work with your hands. Let the energy move through muscle before it becomes compulsion in the mind.",
     secretContentType: 'forge_assignment', secretTitle: 'Forge Assignment',
     secretBody: "Today's assignment: when the next urge arrives, give yourself exactly three minutes to begin a physical act. Not after the urge peaks. Before. The act does not need to be heroic. Twenty push-ups. A cold-water face wash. A brisk walk outside. What matters is that you move before the body has bargained itself into stillness. The man who moves in the first three minutes rarely needs to fight in the next thirty.",
-    crownFragment: null,
+    crownFragment: 'Move the body before the mind begins to bargain.',
     command: 'Today, move the body before you entertain any strong urge.',
     practice: 'Complete one demanding physical act today — not for appearance, but for the feeling of energy well-spent.',
     forgeChallenge: 'Train for at least twenty minutes at an intensity that requires focus.',
@@ -109,12 +129,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-06', dayNumber: 6, arcNumber: 1, arcTitle: 'The Vow',
     title: "The Lie of 'Just Once'", theme: 'bargaining, the compulsion voice',
     season: 'the_vow', archetype: 'sage',
+    invocation: 'Today you walk as the Sage: the one who knows the voice by its hour, not its argument.',
+    archetypeExpression:
+      'The Sage studies the pattern instead of arguing with it. He hears "just once" and sees a mechanism, not a reason — and a mechanism, once named, loses its spell. Today, name the voice the moment it speaks. Understanding is the discipline that ends the bargain.',
+    lineagePassageId: 'analects-2-17-knowledge',
     openingLine: "The compulsion has one argument it repeats with every face: 'Just this once will not matter.'",
     teachingBody:
       "The voice of compulsion is not stupid. It does not say: give up the practice, abandon the vow, stop caring. It says: tonight is fine. Just once. You've been doing well. You deserve a release. It won't affect anything.\n\nThis is the lie. Not because pleasure is evil — it is not — but because the line between a deliberate choice and an automated discharge has been erased. 'Just once' is how the groove re-cuts. It is how the old pattern reclaims territory the man had won.\n\nThe Sage knows this voice by its style, not its content. The content changes. The voice is always the same: reasonable, intimate, whispering at the hour when the defenses are lowest. Learning to hear the style — not the words — is how you stay ahead of it.",
     secretContentType: 'hidden_teaching', secretTitle: 'Hidden Teaching',
     secretBody: "Neuroscience has confirmed what the traditions always knew: a single act of the old pattern re-activates the neural pathway with nearly the same potency as continuous practice. 'Just once' is not a break from the groove — it is the groove. The man who understands this is not fighting a craving; he is seeing a mechanism. Mechanisms can be named and understood. That understanding changes everything.",
-    crownFragment: null,
+    crownFragment: 'Know the voice by its hour, not its argument.',
     command: "When you hear 'just once' today, name it. Say inwardly: 'I know this voice.'",
     practice: 'Identify the three hours when you are most vulnerable to this argument. Name them. Plan for them.',
     forgeChallenge: "Tonight, when the lie arrives — and it may — refuse not by fighting it but by beginning a Forge act before it can finish speaking.",
@@ -130,6 +154,10 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-07', dayNumber: 7, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The First Gate', theme: 'milestone, proof, deepening',
     season: 'the_vow', archetype: 'guardian',
+    invocation: 'Today you stand as the Guardian at the first gate, accounting for a week held.',
+    archetypeExpression:
+      'The Guardian does not boast at the threshold; he takes stock. Seven days has cut a groove in a new direction — not a finished character, but a proof. Today his task is reckoning, not celebration: name what the week proved, then walk into day eight with the intention of day one.',
+    lineagePassageId: 'dhammapada-33-straighten',
     openingLine: 'Seven days. The pause is real. The gate is real. You are real.',
     teachingBody:
       'At the end of the first week, a man who has been honest knows something that cannot be given to him from outside: the practice is possible. Not easy — possible. The urges came, and the world did not end when he did not follow them. The fire rose, and he gave it somewhere to go. The voice spoke, and he recognized it.\n\nThis is the end of the theoretical and the beginning of the actual. A week of pauses has already carved something. Not a completed character — that takes time — but a groove running in a new direction. The task now is to deepen it.\n\nThe first gate is not the end of the battle. It is the proof that the man can stand and fight. That proof is now his.',
@@ -151,12 +179,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-08', dayNumber: 8, arcNumber: 1, arcTitle: 'The Vow',
     title: 'Desire Is Energy Seeking Form', theme: 'transmutation, the builder',
     season: 'guard_the_gates', archetype: 'builder',
+    invocation: 'Today you walk as the Builder: a man who gives the fire a furnace instead of an exit.',
+    archetypeExpression:
+      'The Builder does not ask how to be rid of desire; he asks what desire could become. He hands the restless energy a project before it finds the default. Today, name one thing worth building and give the fire its destination — lead is not wasted in the forge, it is transmuted.',
+    lineagePassageId: 'synthesis-forge-the-fire',
     openingLine: 'Raw desire is not asking to be satisfied. It is asking to be shaped.',
     teachingBody:
       'In Daoist thought, *jing* — the vital essence — is not something to be destroyed or denied. It is something to be refined: transformed from raw vitality into focused energy (*qi*) and eventually into clarity of spirit (*shen*). The alchemical metaphor is exact: lead is not wasted, it is transmuted. The fire is not put out, it is given a furnace.\n\nThe question is always: what form is this energy seeking? When a man is restless, the compulsion offers one answer: discharge. The practice offers another: direction. Training. Work. Art. Prayer. Brotherhood. These are not replacements for desire — they are places desire can become something that lasts.\n\nThe Builder understands this. He is not running away from desire. He is looking for the worthiest possible form it can take.',
     secretContentType: 'ancient_key', secretTitle: 'Ancient Key',
     secretBody: "The Daoist masters spoke of *shen*, *qi*, and *jing* — spirit, breath-energy, and vital essence — as a three-stage hierarchy of refinement. The raw energy of the body (*jing*) is not wasted but purified upward into vitality (*qi*) and clarity of mind (*shen*). This is not mysticism. It is a practical observation: a man who conserves and redirects sexual energy reports greater mental clarity and creative drive. The classics call this *neidan* — inner alchemy. The practice calls it the Forge.",
-    crownFragment: null,
+    crownFragment: 'Desire is not asking to be satisfied. It is asking to be shaped.',
     command: 'Find the form today. Do not let desire wait. Give it a project.',
     practice: 'Name one thing you want to build this month. Today, spend thirty minutes beginning it.',
     forgeChallenge: 'Give a strong urge today its most creative possible outlet. What did you make?',
@@ -172,12 +204,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-09', dayNumber: 9, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Phone Is a Gate', theme: 'attention architecture, structural discipline',
     season: 'guard_the_gates', archetype: 'guardian',
+    invocation: 'Today you walk as the Guardian of the gate you carry in your pocket.',
+    archetypeExpression:
+      'The Guardian does not trust raw willpower against an architecture built to capture it. He removes the temptation from his kingdom rather than out-fighting it at the door. Today, redesign the gate: the phone is a tool to be used with intention, not a companion to be reached for.',
+    lineagePassageId: 'synthesis-guard-the-doors',
     openingLine: "The most dangerous gate in most men's lives has a screen and a notification.",
     teachingBody:
       'The phone is not neutral. It is an architecture designed by people with significant resources to maximize the amount of time your attention stays on it. Every notification is a request for your impulse to fire. Every feed is designed to keep the eyes moving and the dopamine cycling.\n\nThis is not a conspiracy theory. It is engineering. And a man practicing attention discipline is training in the exact terrain these tools exploit.\n\nGuarding the phone gate means: not looking at it first in the morning. Not keeping it in the bedroom. Not opening it when lonely or restless. Not using it as a default comfort. These rules are simple. They are not easy. But they are the gates through which most compulsive triggers enter.',
     secretContentType: 'archetype_trial', secretTitle: "The Guardian's Trial",
     secretBody: "Trial: for the next three days, remove your phone from the room where you sleep. Place it on a charger in another room before 9 PM. This is a test of the gate you carry in your pocket. The Guardian does not win by being stronger than the temptation. He wins by removing the temptation from his kingdom before it can knock at the inner door.",
-    crownFragment: null,
+    crownFragment: 'The strongest gate is the one you close before the knock.',
     command: 'Today, the phone is a tool, not a companion. Use it with intention, not as a default reach.',
     practice: 'For the first thirty minutes of your morning, do not look at the phone. Reclaim the opening hour.',
     forgeChallenge: 'Identify and close the specific phone behavior most linked to your temptation pattern.',
@@ -193,6 +229,10 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-10', dayNumber: 10, arcNumber: 1, arcTitle: 'The Vow',
     title: 'Solitude Without Fantasy', theme: 'loneliness, solitude, structure',
     season: 'guard_the_gates', archetype: 'monk',
+    invocation: 'Today you walk as the Monk: a man whose solitude has a shape.',
+    archetypeExpression:
+      'The Monk knows the difference between solitude that feeds the practice and solitude that feeds the compulsion, and the difference is structure. Today, give every empty hour a form before the restlessness arrives — the cell is kept bare so that what fills it is chosen, not stumbled into.',
+    lineagePassageId: 'synthesis-stillness',
     openingLine: 'A man can be completely alone and still not be present.',
     teachingBody:
       "There is a kind of solitude that feeds the practice: quiet, without intrusion, with the mind resting or working on something real. And there is a kind of solitude that feeds the compulsion: alone, phone available, tired, bored, and drifting into fantasy.\n\nThe Monk's discipline is learning the difference and designing accordingly. Fantasy — the indulgence of the imagination in scenes that feed the urge without spending it — is not neutral. It is preparation. It fills the magazine before the trigger is pulled.\n\nLoneliness is real. Solitude becomes lonely when it has no structure. The practice: give solitude a form. A ritual. A task. A book. A silence with intention. Lonely and drifting becomes an incubator. Alone and engaged becomes a forge.",
@@ -214,12 +254,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-11', dayNumber: 11, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'The Fire as Messenger', theme: 'reading the urge, deeper need',
     season: 'guard_the_gates', archetype: 'sage',
+    invocation: 'Today you walk as the Sage: the one who reads the fire instead of obeying it.',
+    archetypeExpression:
+      'The Sage does not take the urge at its word. He asks what hunger it is translating — body, solitude, work, or connection — and answers that instead. Today, stop at the first interpretation and ask for the truer one beneath it.',
+    lineagePassageId: 'synthesis-halt',
     openingLine: 'The urge is not always asking for release. Sometimes it is announcing unused life.',
     teachingBody:
       'When the fire rises, ask what part of you has gone unfed. Is it the body needing movement? The soul needing silence? The mind needing work? The heart needing brotherhood? Compulsion offers one answer to every form of discomfort: discharge. A man learns to hear more deeply.\n\nAnger wants training. Loneliness wants connection. Boredom wants a real task. Grief wants acknowledgment. When the compulsion speaks, it is often translating one of these underlying hungers into its own language — offering its solution before the man can ask a better question.\n\nThe Sage\'s practice is to stop at the first interpretation and ask for the second. Not "how do I stop feeling this?" but "what is this feeling actually about, and what would genuinely address it?"',
     secretContentType: 'lapse_medicine', secretTitle: 'Lapse Medicine',
     secretBody: "If the fire rose strongly today and you negotiated with it: study the state before the urge peaked. Were you hungry, angry, lonely, or tired? These four states — the old acronym HALT — are almost always present when the compulsion wins. The medicine is to address the real state. Not to fight the urge, but to recognize that the body is asking for food, rest, connection, or movement — not for discharge. Address the real need. The urge often dissolves.",
-    crownFragment: null,
+    crownFragment: 'The fire is a messenger. Read it before you answer.',
     command: 'Do not obey the first interpretation of the urge.',
     practice: 'When desire rises today, ask: "What is this energy really asking me to build, face, clean, move, or repair?"',
     forgeChallenge: 'Turn one urge today into twenty minutes of physical movement or meaningful work.',
@@ -235,12 +279,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-12', dayNumber: 12, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Clean the Vessel', theme: 'order, environment, inner command',
     season: 'guard_the_gates', archetype: 'king',
+    invocation: 'Today you walk as the King: a man whose inner rule shows in the order around him.',
+    archetypeExpression:
+      'The King governs inward first, but the inward command becomes visible in the kingdom he keeps. A cleared desk and a made bed are not tidiness; they are sovereignty made plain. Today, govern one space and leave it better than you found it.',
+    lineagePassageId: 'synthesis-order-is-command',
     openingLine: 'A disordered environment is a vote for a disordered interior.',
     teachingBody:
       "The ancient traditions of inner alchemy understood something that modern men often miss: the inner and outer are not separate systems. The state of a man's room, his schedule, his desk, his relationship to physical chaos — all of these feed or drain the practice. A man who cannot govern the space he inhabits is already practicing a certain kind of surrender.\n\nOrder is not aesthetics. Order is command made visible. When a man cleans his room, makes his bed, removes the debris that accumulated while he was not paying attention, he is practicing the same discipline as the pause: choosing how the space is used instead of letting entropy use it for him.\n\nThe King's first act is always inward. But the inward command expresses itself outward, in the ordered kingdom that surrounds him.",
     secretContentType: 'ancient_key', secretTitle: 'Ancient Key',
     secretBody: "The Stoic Marcus Aurelius wrote in his private journal: 'When you wake, ask yourself: what work am I here to do?' The first work of the morning — before the screen, before the world — is to order the kingdom. A made bed, a cleared desk, a dressed body. These are not habits of neatness. They are declarations of sovereignty over the space you inhabit. The man who governs his room at 6 AM has already practiced self-rule before the first urge speaks.",
-    crownFragment: null,
+    crownFragment: 'Outer order is the visible shape of inner command.',
     command: 'Today, govern one space. Do not leave it in the state you found it.',
     practice: 'Spend fifteen minutes restoring one area of visible order.',
     forgeChallenge: 'Identify and remove one source of environmental temptation or disorder from your life today.',
@@ -256,12 +304,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-13', dayNumber: 13, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Beauty Without Consumption', theme: 'presence, reverence, non-grasping',
     season: 'guard_the_gates', archetype: 'lover',
+    invocation: 'Today you walk as the Lover: a man fully alive to beauty without being captured by it.',
+    archetypeExpression:
+      'The Lover sees deeply and reveres what he sees, but trains the second move: not grasping, not converting beauty into appetite. Today, behold one beautiful thing and let the reaching pass — appreciation without the transaction is its own kind of freedom.',
+    lineagePassageId: 'synthesis-behold-not-grasp',
     openingLine: 'There is a way of seeing that does not require owning.',
     teachingBody:
       "The Lover's discipline is the most subtle of all: to be fully alive to beauty without being captured by it. This is not indifference — that is the Monk's path. The Lover sees deeply, feels fully, and appreciates with real reverence. What he trains is the second move: not grasping, not consuming, not converting every beautiful thing into an object of appetite.\n\nThis matters for the practice because much of what feeds the compulsion is not ugliness — it is beauty that has been hijacked by appetite. The training: learn to behold without the reaching. Notice the desire to possess and let it pass without following it. This is different from repression. It is the discipline of presence without consumption.\n\nA man who can appreciate without grasping has learned something most men never do.",
     secretContentType: 'hidden_teaching', secretTitle: 'Hidden Teaching',
     secretBody: "The Japanese concept of *mono no aware* — the bittersweet awareness of impermanence — teaches that beauty is most fully experienced when not grasped. The cherry blossom is beautiful because it falls. The moment the hand reaches for it, something of the beauty is already gone. This is not mysticism. It is a description of perception: the man who is always reaching cannot truly behold. The practice trains the eyes to rest on beauty without the transaction. This is a form of freedom.",
-    crownFragment: null,
+    crownFragment: 'To behold without grasping is its own freedom.',
     command: 'Today, appreciate one beautiful thing without trying to own or record it.',
     practice: 'When you notice something beautiful today — in nature, a person, a moment — stay with the appreciation for five seconds without immediately doing anything with it.',
     forgeChallenge: 'Find one act of genuine service or giving today — something that gives rather than takes.',
@@ -277,6 +329,10 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-14', dayNumber: 14, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'The Gatekeeper', theme: 'intelligence, structure, two-week milestone',
     season: 'guard_the_gates', archetype: 'guardian',
+    invocation: 'Today you stand as the Guardian who now knows his enemy by name.',
+    archetypeExpression:
+      'Two weeks in, the Guardian fights specifically, not in the abstract. He knows the hour, the mood, the gate the army uses — and positions the defense there with structure, not raw willpower. Today, name your known gate and meet it with a plan already made.',
+    lineagePassageId: 'epictetus-ench-1-power',
     openingLine: 'After two weeks, a man begins to know his enemy by name.',
     teachingBody:
       "The second week teaches the specifics. Not temptation in the abstract, but the particular trigger that comes for you. The hour. The mood. The state — tired, lonely, bored, frustrated, or even elated. The app. The content. The thought that arrives just before the compulsion speaks.\n\nThis knowledge is not defeat — it is intelligence. The gatekeeper's power comes from knowing exactly where the army enters. Not from pretending the army does not exist, not from being overwhelmed by it, but from positioning the defense at the right gate, at the right hour, with the right structure.\n\nYou know your gates now. That is a form of command the man two weeks ago did not have.",
@@ -298,12 +354,16 @@ export const days01to15: readonly DailyPathContent[] = [
     id: 'day-15', dayNumber: 15, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Train the Animal', theme: 'physical discipline, body as ally',
     season: 'body_must_be_included', archetype: 'warrior',
+    invocation: 'Today you walk as the Warrior: a man who makes the body an ally by training it.',
+    archetypeExpression:
+      'The Warrior does not let an untrained body become a demanding master. He gives it hard, honest work so its restlessness has somewhere to go. Today, train — not for appearance, but to fashion the animal into a partner that carries the fire.',
+    lineagePassageId: 'dhammapada-145-fashion',
     openingLine: 'The body is not the enemy. But an untrained body makes a demanding master.',
     teachingBody:
       "This week enters a new territory: the body must be deliberately included in the practice, not merely dragged along behind the mind's intentions. The body has its own rhythms, its own hungers, its own demands — and when those demands go unmet, the compulsion finds fertile ground.\n\nSleep-deprived men are more vulnerable to urge. Sedentary bodies store tension that becomes compulsion. Underfed or overcaffeinated nervous systems cannot hold the pause with the same stability as rested, trained ones. This is not moral weakness — it is physiology, and the practice must account for it.\n\nThe Warrior's discipline is to treat the body as an ally in the training, not as an obstacle. Train it, rest it, feed it well, give it physical demands worthy of its capacity.",
     secretContentType: 'forge_assignment', secretTitle: 'Forge Assignment',
     secretBody: "Assignment for the next seven days: before any urge reaches intensity 6 or higher, train. Do not wait to feel motivated. The assignment is preventive: morning movement that burns energy before it accumulates into compulsion. Even fifteen minutes of effort — a run, push-ups, a brisk walk — resets the nervous system. Make this your first gate. Train it like one.",
-    crownFragment: null,
+    crownFragment: 'A trained body is a practiced will.',
     command: 'Train the body today with the same intentionality you bring to the mind.',
     practice: 'Assess your physical state: sleep, food, movement. Address one area where you are working against the practice.',
     forgeChallenge: 'Complete a demanding physical training session — something that requires you to want to stop and choose not to.',

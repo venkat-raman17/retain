@@ -155,15 +155,6 @@ export const achievements: readonly Achievement[] = [
     criteria: { kind: 'days_completed', params: { count: 30 } },
   },
   {
-    id: 'the-scribe',
-    title: 'The Scribe',
-    description:
-      'Earned after ten journal entries — a man who writes what he sees knows his patterns and cannot be ambushed by them.',
-    sealSource: 'archetype',
-    sealId: 'sage',
-    criteria: { kind: 'journal_entries', params: { count: 10 } },
-  },
-  {
     id: 'gates-kept',
     title: 'Gates Kept',
     description:

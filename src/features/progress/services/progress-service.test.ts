@@ -4,7 +4,6 @@ import {
   FORGE_CATEGORY_LABELS,
   type ForgeCategory,
 } from '@/features/forge/domain/forge-act';
-import { createJournalEntry } from '@/features/journal/domain/journal-entry';
 import { createPathEvent } from '@/features/path/domain/path-event';
 import type { UserProfile } from '@/features/path/domain/user-profile';
 import { createUrgeLog, type TriggerType } from '@/features/pause/domain/urge-log';
@@ -174,7 +173,6 @@ describe('ProgressService.getRecord (end-to-end against fake repos)', () => {
     expect(record.nextCommand.title).toBe('Build the record.');
     expect(record.urgeTrend.buckets).toHaveLength(6);
     expect(record.urgeTrend.hasEnoughData).toBe(false);
-    expect(record.moodTrend.hasEnoughData).toBe(false);
   });
 
   it('resolves with a populated record once data exists', async () => {
@@ -186,7 +184,6 @@ describe('ProgressService.getRecord (end-to-end against fake repos)', () => {
     });
     await repos.urge.add(createUrgeLog({ triggerType: 'loneliness', intensityBefore: 4 }, clock));
     await repos.forge.add(createForgeAct({ category: 'body', title: 'Cold shower' }, clock));
-    await repos.journal.save(createJournalEntry({ body: 'A reflection.' }, clock));
     await repos.path.addEvent(createPathEvent('path_started', clock));
 
     const record = await service.getRecord();

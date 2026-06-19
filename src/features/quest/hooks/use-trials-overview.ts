@@ -26,7 +26,6 @@ export function useTrialsOverview(currentDay: number, count = 10): UseTrialsOver
       new QuestService(
         repos.forge,
         repos.urge,
-        repos.journal,
         repos.boundary,
         repos.contentProgress,
         systemClock,

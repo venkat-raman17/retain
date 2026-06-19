@@ -13,7 +13,6 @@ const emptySignals: AchievementSignals = {
   returnCount: 0,
   boundaryKeptCount: 0,
   crownReceived: false,
-  journalEntryCount: 0,
   totalEmbers: 0,
 };
 
@@ -25,7 +24,6 @@ const allSignals: AchievementSignals = {
   returnCount: 2,
   boundaryKeptCount: 10,
   crownReceived: true,
-  journalEntryCount: 12,
   totalEmbers: 2500,
 };
 

@@ -16,7 +16,6 @@ import {
   PathPulse,
   SealArt,
   SectionBand,
-  SplitRow,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
 import { useSurfaceTone } from '@/shared/hooks';
@@ -227,17 +226,7 @@ export function PathScreen() {
             ) : null}
 
             {/* Secondary actions */}
-            <SplitRow>
-              <AppButton label={copy.path.logForge} variant="secondary" fullWidth onPress={() => router.push(Routes.forge)} />
-              <AppButton
-                label={copy.path.journalTonight}
-                variant="secondary"
-                fullWidth
-                onPress={() =>
-                  router.push({ pathname: Routes.journal, params: { initialType: 'evening' } })
-                }
-              />
-            </SplitRow>
+            <AppButton label={copy.path.logForge} variant="secondary" fullWidth onPress={() => router.push(Routes.forge)} />
             <AppButton label={copy.path.viewMap} variant="ghost" fullWidth onPress={() => router.push(Routes.pathMap)} />
 
             {/* Record a lapse — quiet, never shaming */}

@@ -15,7 +15,6 @@ export const copy = {
   tabs: {
     path: 'Path',
     forge: 'Forge',
-    journal: 'Journal',
     codex: 'Codex',
     progress: 'Hall',
   },
@@ -106,7 +105,7 @@ export const copy = {
       subtitle: 'Read and acknowledge.',
       cardTitle: 'A note before the practice',
       paragraphs: [
-        'Manforge is a philosophical self-mastery, journaling, and discipline app. It is not medical advice, therapy, diagnosis, or a mental health service.',
+        'Manforge is a philosophical self-mastery and discipline app. It is not medical advice, therapy, diagnosis, or a mental health service.',
         'Manforge does not diagnose, treat, cure, or prevent any condition. It makes no claims about testosterone, fertility, attraction, disease, depression, anxiety, or athletic performance.',
         'The teaching draws from philosophical and historical traditions only. It is not religious authority, medical fact, or sexual technique.',
         'Desire is not evil. The body is not dirty. The practice is about pause, reflection, discipline, and direction.',
@@ -152,7 +151,6 @@ export const copy = {
     milestoneHint: "A milestone rite awaits within today's chamber.",
     openChamber: "Open Today's Chamber",
     logForge: 'Log a Forge Act',
-    journalTonight: 'Journal Tonight',
     viewMap: 'View the Map',
     previewCommand: "Today's command",
     previewEvening: 'Evening account',
@@ -213,12 +211,23 @@ export const copy = {
       command: "Today's command",
       practice: 'Practice',
       forge: 'Forge',
-      journalPrompt: 'Journal prompt',
-      openJournal: 'Open journal',
       eveningAccount: 'Evening account',
       milestoneRite: 'Milestone rite',
       vowRenewal: 'Vow renewal',
       keyEarned: 'Key earned',
+      light: 'Light',
+      shadow: 'Shadow',
+      discipline: 'Discipline',
+      temptation: 'Temptation',
+      lineage: 'Lineage',
+    },
+    archetypeSpine: {
+      /** Rendered as "{lead} {archetype.name}." — e.g. "Today you walk as The Sage." */
+      lead: 'Today you walk as',
+    },
+    lineage: {
+      /** Shown under a verbatim public-domain passage; never an authority or medical claim. */
+      inspiration: 'Philosophical inspiration, not authority.',
     },
     secret: {
       defaultLabel: 'Hidden Instruction',
@@ -242,6 +251,8 @@ export const copy = {
       honorUnlocked: 'Honor unlocked',
       honorsUnlocked: 'Honors unlocked',
       stationLabel: 'Station',
+      /** Rendered as "{identity} {archetype.name}." — e.g. "Today you were The Sage." */
+      identity: 'Today you were',
     },
   },
 
@@ -275,15 +286,6 @@ export const copy = {
       steady: 'The fire holds steady. Keep meeting it as it comes.',
       rising: 'The fire has risen lately. Meet it with the Pause — that is the rep.',
       empty: 'Log a few urges and the shape of the fire over time will form here.',
-    },
-
-    moodTrend: {
-      label: 'How the days have felt',
-      caption: 'Average mood each week',
-      rising: 'The days have felt lighter lately.',
-      steady: 'Your days have felt steady.',
-      easing: 'Heavier days lately. Be gentle with yourself, and keep the practice.',
-      empty: 'Add a mood when you journal and the felt shape of your weeks will appear here.',
     },
 
     pattern: {
@@ -321,7 +323,6 @@ export const copy = {
       note: 'This week',
       activeDays: 'Active days',
       urges: 'Urges met',
-      journal: 'Journal',
       forge: 'Forge acts',
     },
 
@@ -366,13 +367,13 @@ export const copy = {
     restartPath: 'Restart the path',
     restartConfirmTitle: 'Restart the path?',
     restartConfirmBody:
-      'This begins a new Day one, now. Your practice history — urges, forge acts, journals, returns — is kept.',
+      'This begins a new Day one, now. Your practice history — urges, forge acts, returns — is kept.',
     restartConfirm: 'Begin a new Day one',
     dataLabel: 'Your data',
     deleteAll: 'Delete all data',
     deleteConfirmTitle: 'Delete everything?',
     deleteConfirmBody:
-      'This erases all data on this device — vow, path, journal, and history — and returns to the start. It cannot be undone.',
+      'This erases all data on this device — vow, path, and history — and returns to the start. It cannot be undone.',
     deleteConfirm: 'Delete everything',
     cancel: 'Cancel',
     vowModal: {

@@ -5,7 +5,6 @@ import {
   type ForgeAct,
   type ForgeCategory,
 } from '@/features/forge/domain/forge-act';
-import type { JournalEntry } from '@/features/journal/domain/journal-entry';
 import type { PathEvent } from '@/features/path/domain/path-event';
 import { currentPathDay, daysSince } from '@/features/path/domain/practice';
 import type { UserProfile } from '@/features/path/domain/user-profile';
@@ -19,7 +18,7 @@ import type { Repositories } from '@/db';
 import { createLogger, type Clock } from '@/shared/lib';
 import { addDays, differenceInDays, startOfWeek, toIsoDateTime } from '@/shared/utils';
 
-import { buildMoodTrend, buildUrgeTrend, type TrendSeries } from '../domain/trends';
+import { buildUrgeTrend, type TrendSeries } from '../domain/trends';
 
 const log = createLogger('progress');
 
@@ -40,7 +39,6 @@ export interface ProgressSummary {
 export interface WeeklySummary {
   forgeActsThisWeek: number;
   urgesThisWeek: number;
-  journalEntriesThisWeek: number;
 }
 
 export interface TriggerCount {
@@ -75,7 +73,6 @@ export interface ReturnRecord {
 export interface PracticeRhythm {
   activeDaysThisWeek: number;
   urgesThisWeek: number;
-  journalEntriesThisWeek: number;
   forgeActsThisWeek: number;
 }
 
@@ -122,8 +119,6 @@ export interface RecordData {
   nextCommand: NextCommand;
   /** Urge frequency + intensity over recent weeks — is the fire easing? */
   urgeTrend: TrendSeries;
-  /** Felt mood over recent weeks (from journal moods). */
-  moodTrend: TrendSeries;
 }
 
 // ─── Pure helpers (no DB access) ─────────────────────────────────────────────
@@ -237,12 +232,10 @@ function countActiveDays(
   now: Date,
   urgeLogs: UrgeLog[],
   forgeActs: ForgeAct[],
-  journalEntries: JournalEntry[],
 ): number {
   const active = new Set<string>();
   for (const log of urgeLogs) active.add(log.occurredAt.slice(0, 10));
   for (const act of forgeActs) active.add(act.occurredAt.slice(0, 10));
-  for (const entry of journalEntries) active.add(entry.createdAt.slice(0, 10));
 
   const from = weekStart.toISOString().slice(0, 10);
   const to = now.toISOString().slice(0, 10);
@@ -345,7 +338,7 @@ export function buildNextCommand(
   if (!hasData) {
     return {
       title: 'Build the record.',
-      body: 'Use the Pause, Journal, and Forge tools for seven days. The pattern will begin to speak.',
+      body: 'Use the Pause and Forge tools for seven days. The pattern will begin to speak.',
     };
   }
 
@@ -457,16 +450,14 @@ export class ProgressService {
   async getWeeklySummary(): Promise<WeeklySummary> {
     const iso = startOfWeek(this.clock.now()).toISOString();
 
-    const [forgeActsThisWeek, urgeLogs, journalEntries] = await Promise.all([
+    const [forgeActsThisWeek, urgeLogs] = await Promise.all([
       this.repos.forge.countSince(iso),
       this.repos.urge.list(200),
-      this.repos.journal.list(200),
     ]);
 
     return {
       forgeActsThisWeek,
       urgesThisWeek: urgeLogs.filter((l) => l.occurredAt >= iso).length,
-      journalEntriesThisWeek: journalEntries.filter((e) => e.createdAt >= iso).length,
     };
   }
 
@@ -476,22 +467,20 @@ export class ProgressService {
     const weekStart = startOfWeek(now);
     const weekISO = weekStart.toISOString();
 
-    const [profile, urgeLogs, forgeActs, journalEntries, pathEvents] = await Promise.all([
+    const [profile, urgeLogs, forgeActs, pathEvents] = await Promise.all([
       this.repos.profile.get().catch((error) => {
         log.warn('getRecord: profile load failed, treating the arc as not started', error);
         return null;
       }),
       this.repos.urge.list(500),
       this.repos.forge.list(500),
-      this.repos.journal.list(500),
       this.repos.path.listEvents(500),
     ]);
 
-    const hasEnoughData = urgeLogs.length + forgeActs.length + journalEntries.length >= 3;
+    const hasEnoughData = urgeLogs.length + forgeActs.length >= 3;
 
     const weekUrgeLogs = urgeLogs.filter((l) => l.occurredAt >= weekISO);
     const weekForgeActs = forgeActs.filter((a) => a.occurredAt >= weekISO);
-    const weekJournalEntries = journalEntries.filter((e) => e.createdAt >= weekISO);
 
     const triggerCounts = buildTriggerCounts(urgeLogs);
     const forgeCategoryCounts = buildForgeCategoryCounts(forgeActs);
@@ -499,9 +488,8 @@ export class ProgressService {
     const returnRecord = buildReturnRecord(pathEvents);
 
     const practiceRhythm: PracticeRhythm = {
-      activeDaysThisWeek: countActiveDays(weekStart, now, weekUrgeLogs, weekForgeActs, weekJournalEntries),
+      activeDaysThisWeek: countActiveDays(weekStart, now, weekUrgeLogs, weekForgeActs),
       urgesThisWeek: weekUrgeLogs.length,
-      journalEntriesThisWeek: weekJournalEntries.length,
       forgeActsThisWeek: weekForgeActs.length,
     };
 
@@ -514,7 +502,6 @@ export class ProgressService {
     const forgeBalance = buildForgeBalanceInsight(forgeCategoryCounts);
     const nextCommand = buildNextCommand(hasEnoughData, weeklyPattern, forgeCategoryCounts);
     const urgeTrend = buildUrgeTrend(urgeLogs, this.clock);
-    const moodTrend = buildMoodTrend(journalEntries, this.clock);
 
     return {
       hasEnoughData,
@@ -528,7 +515,6 @@ export class ProgressService {
       practiceRhythm,
       nextCommand,
       urgeTrend,
-      moodTrend,
     };
   }
 }

@@ -18,7 +18,6 @@ const ALL_TABLES = [
   'content_progress',
   'forge_acts',
   'urge_logs',
-  'journal_entries',
   'lapse_records',
   'path_events',
   'settings',

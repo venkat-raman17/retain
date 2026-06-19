@@ -1,4 +1,3 @@
-import type { JournalEntry } from '@/features/journal/domain/journal-entry';
 import type { UrgeLog } from '@/features/pause/domain/urge-log';
 import type { Clock } from '@/shared/lib';
 import { addDays, differenceInDays, startOfUtcDay, toIsoDateTime } from '@/shared/utils';
@@ -143,41 +142,3 @@ export function buildUrgeTrend(logs: UrgeLog[], clock: Clock, options?: TrendOpt
   return { buckets, hasEnoughData, direction };
 }
 
-/**
- * Mood trend: mean journal mood (1–5) per bucket. Only entries that recorded a
- * mood count; buckets with no mood logged stay null and are skipped in the
- * direction. Rising mood → `'rising'` (lighter days), falling → `'easing'`.
- */
-export function buildMoodTrend(
-  entries: JournalEntry[],
-  clock: Clock,
-  options?: TrendOptions,
-): TrendSeries {
-  const bucketCount = options?.bucketCount ?? DEFAULT_BUCKET_COUNT;
-  const bucketDays = options?.bucketDays ?? DEFAULT_BUCKET_DAYS;
-
-  const buckets = buildBuckets(
-    entries
-      .filter((e) => e.mood !== null)
-      .map((e) => ({ occurredAt: e.createdAt, value: e.mood })),
-    clock,
-    bucketCount,
-    bucketDays,
-  );
-
-  const averages = buckets
-    .map((b) => b.average)
-    .filter((v): v is number => v !== null);
-  const hasEnoughData = averages.length >= 2;
-
-  let direction: TrendDirection | null = null;
-  if (hasEnoughData) {
-    const means = halfMeans(averages);
-    if (means) {
-      const delta = means.second - means.first;
-      direction = delta >= 0.25 ? 'rising' : delta <= -0.25 ? 'easing' : 'steady';
-    }
-  }
-
-  return { buckets, hasEnoughData, direction };
-}

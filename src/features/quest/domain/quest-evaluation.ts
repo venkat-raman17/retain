@@ -6,8 +6,6 @@ export interface DayQuestSignals {
   secretRevealed: boolean;
   forgeActsToday: number;
   pausesToday: number;
-  journalEntriesToday: number;
-  eveningEntriesToday: number;
   boundaryCheckinsToday: number;
 }
 
@@ -36,10 +34,6 @@ function isObjectiveMet(kind: TrialObjective['kind'], signals: DayQuestSignals):
       return signals.forgeActsToday > 0;
     case 'log_pause':
       return signals.pausesToday > 0;
-    case 'journal_entry':
-      return signals.journalEntriesToday > 0;
-    case 'evening_account':
-      return signals.eveningEntriesToday > 0;
     case 'boundary_checkin':
       return signals.boundaryCheckinsToday > 0;
   }

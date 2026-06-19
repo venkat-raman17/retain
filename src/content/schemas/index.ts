@@ -13,7 +13,7 @@ export {
   PATH_SEASON_RANGES,
   seasonForDay,
 } from './daily-path.schema';
-export type { DailyPathContent, PathSeason } from './daily-path.schema';
+export type { DailyPathContent, DailyPathContentInput, PathSeason } from './daily-path.schema';
 export { principleSchema, principlesSchema } from './principle.schema';
 export type { Principle } from './principle.schema';
 export { codexDaySchema, codexSchema } from './codex.schema';
@@ -22,13 +22,6 @@ export { studySchema, studiesSchema, studyLineageSchema, STUDY_LINEAGES } from '
 export type { Study, StudyLineage } from './study.schema';
 export { ritualSchema, ritualsSchema, ritualTimeSchema, RITUAL_TIMES } from './ritual.schema';
 export type { Ritual, RitualTime } from './ritual.schema';
-export {
-  journalPromptSchema,
-  journalPromptsSchema,
-  promptTypeSchema,
-  PROMPT_TYPES,
-} from './prompt.schema';
-export type { JournalPrompt, PromptType } from './prompt.schema';
 export { riteSchema, ritesSchema } from './rite.schema';
 export type { Rite } from './rite.schema';
 export {
@@ -49,8 +42,16 @@ export {
 export type { SecretContentType, ContentStatus } from './daily-path.schema';
 export { arcSchema, arcsSchema } from './arc.schema';
 export type { Arc } from './arc.schema';
+export {
+  lineagePassageSchema,
+  lineagePassagesSchema,
+  lineageTraditionSchema,
+  LINEAGE_TRADITIONS,
+  PUBLIC_DOMAIN_SOURCE_HOSTS,
+} from './lineage.schema';
+export type { LineagePassage, LineageTradition } from './lineage.schema';
 export { crownCodexItemSchema, crownCodexSchema, CROWN_CODEX_CATEGORIES } from './crown-codex.schema';
-export type { CrownCodexItem, CrownCodexCategory } from './crown-codex.schema';
+export type { CrownCodexItem, CrownCodexItemInput, CrownCodexCategory } from './crown-codex.schema';
 export {
   trialSchema,
   trialsSchema,

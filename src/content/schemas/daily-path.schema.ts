@@ -64,6 +64,10 @@ export const dailyPathContentSchema = z.object({
   arcTitle: z.string().default(''),
   theme: z.string().default(''),
   archetype: archetypeSchema,
+  /** Second-person investiture: "Today you walk as the {Archetype}…". */
+  invocation: z.string().default(''),
+  /** Why THIS archetype today + how it bends the day's command/practice. */
+  archetypeExpression: z.string().default(''),
   openingLine: z.string().min(1),
   teachingBody: z.string().min(1),
   /** The secret revealed only on the day. */
@@ -80,11 +84,20 @@ export const dailyPathContentSchema = z.object({
   crownFragment: z.string().nullable().default(null),
   /** 'draft' entries are structural placeholders awaiting full writing. */
   contentStatus: contentStatusSchema.default('final'),
+  /** A bundled public-domain lineage passage tied to this day's theme/archetype. */
+  lineagePassageId: z.string().nullable().default(null),
   relatedStudyIds: z.array(z.string()).default([]),
   relatedPrincipleIds: z.array(z.string()).default([]),
   milestoneRiteId: z.string().nullable().default(null),
   safetyGuardrail: z.string().nullable().default(null),
 });
 export type DailyPathContent = z.infer<typeof dailyPathContentSchema>;
+/**
+ * Pre-parse shape of a day entry: fields with a Zod `.default(...)` are optional
+ * here. Bundled day arrays are typed with this so newly-added fields can be
+ * authored incrementally (arc by arc) while the loader's `.parse()` fills
+ * defaults and validates. A test enforces the fields are actually authored.
+ */
+export type DailyPathContentInput = z.input<typeof dailyPathContentSchema>;
 
 export const dailyPathContentsSchema = z.array(dailyPathContentSchema).min(1);

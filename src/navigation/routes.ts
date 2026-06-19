@@ -8,7 +8,6 @@ export const Routes = {
   onboarding: '/onboarding',
   path: '/path',
   forge: '/forge',
-  journal: '/journal',
   codex: '/codex',
   progress: '/progress',
   pause: '/pause',

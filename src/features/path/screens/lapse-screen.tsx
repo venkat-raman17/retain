@@ -261,21 +261,6 @@ export function LapseScreen() {
             {saved && submittedMode ? (
               <View style={styles.nav}>
                 <AppButton
-                  label={
-                    submittedMode === 'return'
-                      ? 'Journal this return'
-                      : 'Journal this lapse'
-                  }
-                  variant="ghost"
-                  fullWidth
-                  onPress={() =>
-                    router.push({
-                      pathname: Routes.journal,
-                      params: { initialType: submittedMode },
-                    })
-                  }
-                />
-                <AppButton
                   label="Continue to the Path"
                   fullWidth
                   onPress={() => router.replace(Routes.path)}

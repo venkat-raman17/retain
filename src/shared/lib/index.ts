@@ -7,3 +7,4 @@ export type { Clock } from './clock';
 export { createLogger } from './logger';
 export type { Logger } from './logger';
 export { haptics, setHapticsEnabled } from './haptics';
+export { daySeed } from './seed';

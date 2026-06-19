@@ -48,6 +48,75 @@ export function mix(a: string, b: string, ratio: number): string {
   });
 }
 
+export interface Hsl {
+  /** Hue in degrees, 0–360. */
+  h: number;
+  /** Saturation, 0–1. */
+  s: number;
+  /** Lightness, 0–1. */
+  l: number;
+}
+
+/** Convert a hex color to HSL. */
+export function hexToHsl(hex: string): Hsl {
+  const { r, g, b } = hexToRgb(hex);
+  const rn = r / 255;
+  const gn = g / 255;
+  const bn = b / 255;
+  const max = Math.max(rn, gn, bn);
+  const min = Math.min(rn, gn, bn);
+  const l = (max + min) / 2;
+  const d = max - min;
+  let h = 0;
+  let s = 0;
+  if (d !== 0) {
+    s = d / (1 - Math.abs(2 * l - 1));
+    switch (max) {
+      case rn:
+        h = ((gn - bn) / d) % 6;
+        break;
+      case gn:
+        h = (bn - rn) / d + 2;
+        break;
+      default:
+        h = (rn - gn) / d + 4;
+    }
+    h *= 60;
+    if (h < 0) h += 360;
+  }
+  return { h, s, l };
+}
+
+/** Convert HSL back to a hex color. */
+export function hslToHex({ h, s, l }: Hsl): string {
+  const c = (1 - Math.abs(2 * l - 1)) * s;
+  const hp = (((h % 360) + 360) % 360) / 60;
+  const x = c * (1 - Math.abs((hp % 2) - 1));
+  let r1 = 0;
+  let g1 = 0;
+  let b1 = 0;
+  if (hp >= 0 && hp < 1) [r1, g1, b1] = [c, x, 0];
+  else if (hp < 2) [r1, g1, b1] = [x, c, 0];
+  else if (hp < 3) [r1, g1, b1] = [0, c, x];
+  else if (hp < 4) [r1, g1, b1] = [0, x, c];
+  else if (hp < 5) [r1, g1, b1] = [x, 0, c];
+  else [r1, g1, b1] = [c, 0, x];
+  const m = l - c / 2;
+  return rgbToHex({ r: (r1 + m) * 255, g: (g1 + m) * 255, b: (b1 + m) * 255 });
+}
+
+/** Rotate a color's hue by `degrees` (keeps saturation + lightness). */
+export function shiftHue(hex: string, degrees: number): string {
+  const hsl = hexToHsl(hex);
+  return hslToHex({ ...hsl, h: hsl.h + degrees });
+}
+
+/** Nudge a color's lightness by `delta` (−1…1), clamped to a readable band. */
+export function adjustLightness(hex: string, delta: number): string {
+  const hsl = hexToHsl(hex);
+  return hslToHex({ ...hsl, l: Math.max(0.12, Math.min(0.9, hsl.l + delta)) });
+}
+
 function channelLuminance(c: number): number {
   const s = c / 255;
   return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;

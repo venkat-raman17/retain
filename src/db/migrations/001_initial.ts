@@ -67,22 +67,6 @@ export const migration001: Migration = {
     await db.execute(`CREATE INDEX idx_forge_acts_occurred_at ON forge_acts (occurred_at DESC);`);
 
     await db.execute(`
-      CREATE TABLE journal_entries (
-        id TEXT PRIMARY KEY NOT NULL,
-        created_at TEXT NOT NULL,
-        updated_at TEXT NOT NULL,
-        type TEXT NOT NULL,
-        prompt_id TEXT,
-        title TEXT,
-        body TEXT NOT NULL,
-        mood INTEGER
-      );
-    `);
-    await db.execute(
-      `CREATE INDEX idx_journal_entries_created_at ON journal_entries (created_at DESC);`,
-    );
-
-    await db.execute(`
       CREATE TABLE lapse_records (
         id TEXT PRIMARY KEY NOT NULL,
         occurred_at TEXT NOT NULL,

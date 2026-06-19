@@ -22,7 +22,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-02-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-02-2', kind: 'journal_entry', label: 'Write one line about why you began' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -50,7 +49,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-04-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-04-2', kind: 'journal_entry', label: 'Describe one moment of clarity today' },
       { id: 'obj-04-3', kind: 'log_pause', label: 'Complete one Pause session', optional: true },
     ],
     rewardEmbers: 25,
@@ -79,7 +77,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-06-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-06-2', kind: 'journal_entry', label: 'Name the voice that pulls you toward ease' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -94,7 +91,6 @@ export const trials = [
     objectives: [
       { id: 'obj-07-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-07-2', kind: 'forge_act', label: 'Complete one Forge Act in body or mind' },
-      { id: 'obj-07-3', kind: 'journal_entry', label: 'Reflect on your first week' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-7',
@@ -122,7 +118,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-09-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-09-2', kind: 'journal_entry', label: 'Write one intention for tomorrow' },
       { id: 'obj-09-3', kind: 'log_pause', label: 'Complete one Pause session', optional: true },
     ],
     rewardEmbers: 25,
@@ -137,7 +132,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-10-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-10-2', kind: 'journal_entry', label: 'Summarize what the first arc revealed about you' },
     ],
     rewardEmbers: 35,
     rewardKeyId: null,
@@ -197,7 +191,6 @@ export const trials = [
     objectives: [
       { id: 'obj-14-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-14-2', kind: 'forge_act', label: 'Complete one Forge Act of your choice' },
-      { id: 'obj-14-3', kind: 'journal_entry', label: 'Reflect on what guarding the gates has cost and given' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-14',
@@ -240,7 +233,6 @@ export const trials = [
     objectives: [
       { id: 'obj-17-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-17-2', kind: 'boundary_checkin', label: 'Check in on your evening environment' },
-      { id: 'obj-17-3', kind: 'journal_entry', label: 'Write about one gate that needs more attention', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -282,7 +274,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-20-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-20-2', kind: 'journal_entry', label: 'Describe the boundary that protected you most this arc' },
     ],
     rewardEmbers: 35,
     rewardKeyId: null,
@@ -299,7 +290,6 @@ export const trials = [
     objectives: [
       { id: 'obj-21-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-21-2', kind: 'forge_act', label: 'Complete one physical Forge Act' },
-      { id: 'obj-21-3', kind: 'journal_entry', label: 'Note how your body felt before and after' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-21',
@@ -371,7 +361,6 @@ export const trials = [
     objectives: [
       { id: 'obj-26-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-26-2', kind: 'forge_act', label: 'Do one act that requires physical discomfort' },
-      { id: 'obj-26-3', kind: 'journal_entry', label: 'Write one line about what the discomfort taught', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -413,7 +402,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-29-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-29-2', kind: 'journal_entry', label: 'Describe one physical change you have noticed' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -428,7 +416,6 @@ export const trials = [
     objectives: [
       { id: 'obj-30-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-30-2', kind: 'forge_act', label: 'Complete one significant Forge Act to mark the month' },
-      { id: 'obj-30-3', kind: 'journal_entry', label: 'Write a letter to the man who started on day one' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-30',
@@ -473,7 +460,6 @@ export const trials = [
     objectives: [
       { id: 'obj-33-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-33-2', kind: 'log_pause', label: 'Use the Pause to widen the gap before responding' },
-      { id: 'obj-33-3', kind: 'journal_entry', label: 'Record what you noticed in that space', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -516,7 +502,6 @@ export const trials = [
     objectives: [
       { id: 'obj-36-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-36-2', kind: 'log_pause', label: 'Say no to one habitual pull today and log it' },
-      { id: 'obj-36-3', kind: 'journal_entry', label: 'Write what that no made possible', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -572,7 +557,6 @@ export const trials = [
     tier: 'discipline',
     objectives: [
       { id: 'obj-40-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-40-2', kind: 'journal_entry', label: 'Describe one area where your discipline has genuinely grown' },
     ],
     rewardEmbers: 35,
     rewardKeyId: null,
@@ -602,7 +586,6 @@ export const trials = [
     tier: 'discipline',
     objectives: [
       { id: 'obj-42-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-42-2', kind: 'journal_entry', label: 'List the values that govern your kingdom' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -617,7 +600,6 @@ export const trials = [
     objectives: [
       { id: 'obj-43-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-43-2', kind: 'forge_act', label: 'Complete one act of order or creation' },
-      { id: 'obj-43-3', kind: 'journal_entry', label: 'Reflect on what you are building', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -631,7 +613,6 @@ export const trials = [
     tier: 'discipline',
     objectives: [
       { id: 'obj-44-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-44-2', kind: 'journal_entry', label: 'Write one long-term vision for the man you are building' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -646,7 +627,6 @@ export const trials = [
     objectives: [
       { id: 'obj-45-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-45-2', kind: 'forge_act', label: 'Complete one meaningful Forge Act to mark the midpoint' },
-      { id: 'obj-45-3', kind: 'journal_entry', label: 'Write to your future self at day ninety' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-45',
@@ -674,7 +654,6 @@ export const trials = [
     tier: 'discipline',
     objectives: [
       { id: 'obj-47-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-47-2', kind: 'journal_entry', label: 'Name three things the practice has given you so far' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -689,7 +668,6 @@ export const trials = [
     objectives: [
       { id: 'obj-48-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-48-2', kind: 'forge_act', label: 'Write, read, or study something that sharpens the mind' },
-      { id: 'obj-48-3', kind: 'journal_entry', label: 'Note one idea that changed your thinking today', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -717,7 +695,6 @@ export const trials = [
     tier: 'discipline',
     objectives: [
       { id: 'obj-50-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-50-2', kind: 'journal_entry', label: 'Write about the inner kingdom you have been building' },
     ],
     rewardEmbers: 35,
     rewardKeyId: null,
@@ -805,7 +782,6 @@ export const trials = [
     objectives: [
       { id: 'obj-56-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-56-2', kind: 'forge_act', label: 'Complete one mental and one physical Forge Act' },
-      { id: 'obj-56-3', kind: 'evening_account', label: 'Complete the evening account to close the day', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -862,7 +838,6 @@ export const trials = [
     objectives: [
       { id: 'obj-60-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-60-2', kind: 'forge_act', label: 'Complete one significant Forge Act to mark the arc' },
-      { id: 'obj-60-3', kind: 'journal_entry', label: 'Describe what the Forge has produced in you so far' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-60',
@@ -878,7 +853,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-61-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-61-2', kind: 'journal_entry', label: 'Write about one man who has strengthened your path' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -906,7 +880,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-63-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-63-2', kind: 'journal_entry', label: 'Describe one way you served someone else this week' },
       { id: 'obj-63-3', kind: 'boundary_checkin', label: 'Review one boundary around your time and energy', optional: true },
     ],
     rewardEmbers: 25,
@@ -921,7 +894,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-64-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-64-2', kind: 'journal_entry', label: 'Reflect on who you would trust to speak truth to you' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -949,7 +921,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-66-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-66-2', kind: 'journal_entry', label: 'Describe one gift your practice has made available to others' },
       { id: 'obj-66-3', kind: 'boundary_checkin', label: 'Check one external boundary', optional: true },
     ],
     rewardEmbers: 25,
@@ -978,7 +949,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-68-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-68-2', kind: 'journal_entry', label: 'Write one line about the kind of man you want to be remembered as' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -992,7 +962,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-69-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-69-2', kind: 'journal_entry', label: 'Reflect on the community of practice you belong to or are building' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1006,7 +975,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-70-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-70-2', kind: 'journal_entry', label: 'Write about what brotherhood in practice has meant to you this arc' },
     ],
     rewardEmbers: 35,
     rewardKeyId: null,
@@ -1022,7 +990,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-71-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-71-2', kind: 'journal_entry', label: 'Name one pattern you keep returning to that you want to understand' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1050,7 +1017,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-73-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-73-2', kind: 'journal_entry', label: 'Write honestly about a hard stretch in the practice' },
       { id: 'obj-73-3', kind: 'log_pause', label: 'Pause with whatever discomfort you find there', optional: true },
     ],
     rewardEmbers: 25,
@@ -1065,7 +1031,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-74-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-74-2', kind: 'journal_entry', label: 'Describe one thing the practice has shown you about yourself' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1080,7 +1045,6 @@ export const trials = [
     objectives: [
       { id: 'obj-75-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-75-2', kind: 'forge_act', label: 'Complete a Forge Act as an act of return and recommitment' },
-      { id: 'obj-75-3', kind: 'journal_entry', label: 'Write about what returning to the practice means to you' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-75',
@@ -1108,7 +1072,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-77-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-77-2', kind: 'journal_entry', label: 'Write about one shadow you have begun to integrate' },
       { id: 'obj-77-3', kind: 'log_pause', label: 'Sit with the complexity without trying to resolve it', optional: true },
     ],
     rewardEmbers: 25,
@@ -1137,7 +1100,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-79-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-79-2', kind: 'journal_entry', label: 'Write a note of reconciliation to a part of yourself you have been at war with' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1151,7 +1113,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-80-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-80-2', kind: 'journal_entry', label: 'Describe the shadow arc: what you met, named, and began to integrate' },
     ],
     rewardEmbers: 35,
     rewardKeyId: null,
@@ -1181,7 +1142,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-82-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-82-2', kind: 'journal_entry', label: 'Write about what you carried through all nine arcs' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1210,7 +1170,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-84-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-84-2', kind: 'journal_entry', label: 'Describe the man you are now compared to the man who started' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1238,8 +1197,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-86-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-86-2', kind: 'evening_account', label: 'Complete a thorough evening account of the day' },
-      { id: 'obj-86-3', kind: 'journal_entry', label: 'Note one thing you would carry into the life beyond ninety days', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1268,7 +1225,6 @@ export const trials = [
     objectives: [
       { id: 'obj-88-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-88-2', kind: 'boundary_checkin', label: 'Stand at the boundary you have built and affirm it' },
-      { id: 'obj-88-3', kind: 'journal_entry', label: 'Write what lies beyond day ninety for you', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1282,7 +1238,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-89-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-89-2', kind: 'journal_entry', label: 'Write to the man you will be tomorrow' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1297,7 +1252,6 @@ export const trials = [
     objectives: [
       { id: 'obj-90-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-90-2', kind: 'forge_act', label: 'Complete one defining Forge Act on this final arc day' },
-      { id: 'obj-90-3', kind: 'journal_entry', label: 'Write the full account of what ninety days built in you' },
     ],
     rewardEmbers: 50,
     rewardKeyId: 'rite-day-90',
@@ -1314,7 +1268,6 @@ export const trials = [
     objectives: [
       { id: 'obj-crown-1', kind: 'reveal_secret', label: 'Reveal the crown teaching' },
       { id: 'obj-crown-2', kind: 'forge_act', label: 'Complete one sovereign Forge Act: your highest contribution' },
-      { id: 'obj-crown-3', kind: 'journal_entry', label: 'Write the vow you carry beyond this practice into your life' },
     ],
     rewardEmbers: 100,
     rewardKeyId: null,

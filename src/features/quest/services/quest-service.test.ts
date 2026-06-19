@@ -10,7 +10,6 @@ function makeService() {
   const service = new QuestService(
     repos.forge,
     repos.urge,
-    repos.journal,
     repos.boundary,
     repos.contentProgress,
     CLOCK,

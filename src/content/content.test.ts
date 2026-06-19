@@ -1,5 +1,6 @@
 import { scanForUnsafeLanguage } from '@/testing/content-safety';
 
+import { PUBLIC_DOMAIN_SOURCE_HOSTS } from './schemas';
 import {
   achievements,
   archetypeProfiles,
@@ -8,6 +9,8 @@ import {
   copy,
   crownCodex,
   dailyPath,
+  getLineagePassage,
+  lineagePassages,
   getAllAchievements,
   getAllStations,
   getAllStudies,
@@ -18,12 +21,10 @@ import {
   getDailyPathContent,
   getMilestoneRite,
   getMilestoneRiteById,
-  getPromptByType,
   getSafetyDisclaimer,
   getSafetyResources,
   getStationForArcsCleared,
   getTrialForDay,
-  journalPrompts,
   onboardingSteps,
   principles,
   rites,
@@ -51,7 +52,6 @@ describe('bundled content — basic counts', () => {
     expect(dailyPath.length).toBe(90);
     expect(studies).toHaveLength(11);
     expect(rituals).toHaveLength(3);
-    expect(journalPrompts.length).toBeGreaterThanOrEqual(12);
     expect(rites).toHaveLength(8);
     expect(getSafetyDisclaimer().version).toBeGreaterThanOrEqual(1);
     expect(getSafetyResources().items.length).toBeGreaterThan(0);
@@ -102,14 +102,6 @@ describe('bundled content — loaders', () => {
     const ids = archetypeProfiles.map((a) => a.id);
     for (const id of ids) {
       expect(getArchetypeProfile(id)).toBeDefined();
-    }
-  });
-
-  it('getPromptByType returns prompts of the right type', () => {
-    const lapsePrompts = getPromptByType('lapse');
-    expect(lapsePrompts.length).toBeGreaterThan(0);
-    for (const prompt of lapsePrompts) {
-      expect(prompt.type).toBe('lapse');
     }
   });
 
@@ -277,7 +269,7 @@ describe('bundled content — achievements', () => {
     const VALID_KINDS = [
       'days_completed', 'arc_cleared', 'arcs_cleared', 'pause_logged', 'forge_act_logged',
       'forge_all_categories', 'return_recorded', 'boundary_kept', 'crown_received',
-      'journal_entries', 'embers_earned',
+      'embers_earned',
     ];
     for (const a of achievements) {
       expect(VALID_KINDS).toContain(a.criteria.kind);
@@ -329,6 +321,71 @@ describe('bundled content — stations', () => {
   });
 });
 
+describe('bundled content — daily enrichment', () => {
+  it('every day has a non-empty invocation and archetypeExpression', () => {
+    for (const day of dailyPath) {
+      expect(day.invocation.trim().length).toBeGreaterThan(0);
+      expect(day.archetypeExpression.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('every day has a non-empty crownFragment', () => {
+    for (const day of dailyPath) {
+      expect(day.crownFragment?.trim().length ?? 0).toBeGreaterThan(0);
+    }
+  });
+
+  it('night_warning and lapse_medicine days carry a safety guardrail', () => {
+    for (const day of dailyPath) {
+      if (day.secretContentType === 'night_warning' || day.secretContentType === 'lapse_medicine') {
+        expect(day.safetyGuardrail?.trim().length ?? 0).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('every day maps to a lineage passage', () => {
+    for (const day of dailyPath) {
+      expect(day.lineagePassageId).toBeTruthy();
+    }
+  });
+});
+
+describe('bundled content — lineage passages', () => {
+  it('has unique ids', () => {
+    const ids = lineagePassages.map((p) => p.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('every day lineagePassageId resolves to a passage', () => {
+    for (const day of dailyPath) {
+      if (day.lineagePassageId) {
+        expect(getLineagePassage(day.lineagePassageId)).toBeDefined();
+      }
+    }
+  });
+
+  it('verbatim passages cite a public-domain source on the allowlist', () => {
+    const allow = PUBLIC_DOMAIN_SOURCE_HOSTS;
+    for (const p of lineagePassages) {
+      if (p.verbatim) {
+        expect(p.sourceUrl).toBeTruthy();
+        expect(p.work.length).toBeGreaterThan(0);
+        const host = new URL(p.sourceUrl as string).host;
+        expect(allow.some((h) => host === h || host.endsWith(`.${h}`))).toBe(true);
+      }
+    }
+  });
+
+  it('synthesis passages are never presented as a sourced quotation', () => {
+    for (const p of lineagePassages) {
+      if (!p.verbatim) {
+        expect(p.sourceUrl).toBeNull();
+        expect(p.attribution.length).toBeGreaterThan(0);
+      }
+    }
+  });
+});
+
 describe('bundled content — safety scan', () => {
   it('contains no degrading or shaming language', () => {
     const strings: string[] = [];
@@ -340,7 +397,6 @@ describe('bundled content — safety scan', () => {
         dailyPath,
         studies,
         rituals,
-        journalPrompts,
         rites,
         onboardingSteps,
         getSafetyDisclaimer(),
@@ -350,7 +406,7 @@ describe('bundled content — safety scan', () => {
       strings,
     );
 
-    collectStrings([arcs, crownCodex, trials, achievements, stations], strings);
+    collectStrings([arcs, crownCodex, trials, achievements, stations, lineagePassages], strings);
 
     const offenders = strings.flatMap((text) =>
       scanForUnsafeLanguage(text).map((term) => `"${term}" found in: ${text.slice(0, 80)}`),

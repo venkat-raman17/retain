@@ -258,12 +258,6 @@ export function PauseScreen() {
               router.back();
               router.push(Routes.forge);
             }}
-            onJournal={() =>
-              router.push({
-                pathname: Routes.journal,
-                params: { initialType: 'urge' },
-              })
-            }
           />
         )}
       </ScrollView>
@@ -508,12 +502,10 @@ function StepComplete({
   urgeId,
   onDone,
   onForge,
-  onJournal,
 }: {
   urgeId: string | null;
   onDone: () => void;
   onForge: () => void;
-  onJournal: () => void;
 }) {
   return (
     <View style={styles.step}>
@@ -541,7 +533,6 @@ function StepComplete({
             fullWidth
             onPress={onForge}
           />
-          <AppButton label="Record in journal" variant="ghost" fullWidth onPress={onJournal} />
           <AppButton label="Done" variant="ghost" fullWidth onPress={onDone} />
         </View>
       ) : (

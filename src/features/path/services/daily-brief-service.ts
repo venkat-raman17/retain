@@ -136,7 +136,7 @@ export class DailyBriefService {
       case 'evening':
         return { label: f.evening, body: content.eveningAccount };
       case 'night':
-        return { label: f.night, body: content.journalPrompt };
+        return { label: f.night, body: content.eveningAccount };
     }
   }
 }

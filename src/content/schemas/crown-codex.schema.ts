@@ -20,7 +20,11 @@ export const crownCodexItemSchema = z.object({
   practice: z.string().min(1),
   reflectionPrompt: z.string().min(1),
   seal: z.string().min(1),
+  /** One-line daily prompt surfaced on the Long Path home (post-crown). */
+  longPathTouchpoint: z.string().default(''),
 });
 export type CrownCodexItem = z.infer<typeof crownCodexItemSchema>;
+/** Pre-parse shape — `.default(...)` fields optional, for incremental authoring. */
+export type CrownCodexItemInput = z.input<typeof crownCodexItemSchema>;
 
 export const crownCodexSchema = z.array(crownCodexItemSchema).min(1);
