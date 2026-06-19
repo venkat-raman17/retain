@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import type { ForgeCategoryCount } from '@/db';
+import { useAsyncResource } from '@/shared/hooks';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
@@ -19,29 +20,14 @@ export function useForge(): UseForge {
   const { forge: forgeRepo } = useRepositories();
   const service = useMemo(() => new ForgeService(forgeRepo, systemClock), [forgeRepo]);
 
-  const [acts, setActs] = useState<ForgeAct[]>([]);
-  const [categoryCounts, setCategoryCounts] = useState<ForgeCategoryCount[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [reloadToken, setReloadToken] = useState(0);
-  const refresh = useCallback(() => setReloadToken((t) => t + 1), []);
-
-  useEffect(() => {
-    let active = true;
-    Promise.all([service.listRecent(50), service.categoryCounts()])
-      .then(([recentActs, counts]) => {
-        if (active) {
-          setActs(recentActs);
-          setCategoryCounts(counts);
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [service, reloadToken]);
+  const load = useCallback(
+    () =>
+      Promise.all([service.listRecent(50), service.categoryCounts()]).then(
+        ([acts, categoryCounts]) => ({ acts, categoryCounts }),
+      ),
+    [service],
+  );
+  const { data, loading, refresh } = useAsyncResource(load, { scope: 'forge' });
 
   const logAct = useCallback(
     async (draft: ForgeActDraft) => {
@@ -51,5 +37,11 @@ export function useForge(): UseForge {
     [service, refresh],
   );
 
-  return { acts, categoryCounts, loading, logAct, refresh };
+  return {
+    acts: data?.acts ?? [],
+    categoryCounts: data?.categoryCounts ?? [],
+    loading,
+    logAct,
+    refresh,
+  };
 }

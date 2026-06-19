@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useAsyncResource } from '@/shared/hooks';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
@@ -15,29 +16,7 @@ export interface UsePathProgress {
 export function usePathProgress(): UsePathProgress {
   const repos = useRepositories();
   const service = useMemo(() => new ProgressService(repos, systemClock), [repos]);
-
-  const [summary, setSummary] = useState<ProgressSummary | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [reloadToken, setReloadToken] = useState(0);
-  const refresh = useCallback(() => setReloadToken((t) => t + 1), []);
-
-  useEffect(() => {
-    let active = true;
-    service
-      .getSummary()
-      .then((value) => {
-        if (active) {
-          setSummary(value);
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [service, reloadToken]);
-
+  const load = useCallback(() => service.getSummary(), [service]);
+  const { data: summary, loading, refresh } = useAsyncResource(load, { scope: 'progress' });
   return { summary, loading, refresh };
 }

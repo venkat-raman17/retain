@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useAsyncResource } from '@/shared/hooks';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
@@ -27,27 +28,7 @@ export function useDayQuest(dayNumber: number): UseDayQuest {
     [repos],
   );
 
-  const [quest, setQuest] = useState<DayQuestResult | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [reloadToken, setReloadToken] = useState(0);
-  const refresh = useCallback(() => setReloadToken((t) => t + 1), []);
-
-  useEffect(() => {
-    let active = true;
-    service
-      .getDayQuest(dayNumber)
-      .then((result) => {
-        if (!active) return;
-        setQuest(result);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [service, dayNumber, reloadToken]);
-
+  const load = useCallback(() => service.getDayQuest(dayNumber), [service, dayNumber]);
+  const { data: quest, loading, refresh } = useAsyncResource(load, { scope: 'quest' });
   return { quest, loading, refresh };
 }

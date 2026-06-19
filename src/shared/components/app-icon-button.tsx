@@ -23,10 +23,14 @@ export function AppIconButton({
 }: AppIconButtonProps) {
   const { colors } = useTheme();
 
+  // Extend the touch area to at least 44px without growing the visual circle.
+  const hit = Math.max(0, Math.round((44 - size) / 2));
+
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
+      hitSlop={hit}
       style={({ pressed }) => [
         styles.base,
         { width: size, height: size, borderRadius: size / 2 },

@@ -52,6 +52,7 @@ export function AppChip({ label, selected = false, onPress, tone = 'neutral', st
         onPress();
       }}
       accessibilityRole="button"
+      accessibilityLabel={label}
       accessibilityState={{ selected }}
     >
       {content}

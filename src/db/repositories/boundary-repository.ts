@@ -5,6 +5,7 @@ import {
 } from '@/features/boundaries/domain/boundary-checkin';
 
 import type { AppDatabase } from '../database';
+import { parseRows } from './parse-rows';
 
 export interface BoundaryRepository {
   list(activeOnly?: boolean): Promise<Boundary[]>;
@@ -65,7 +66,7 @@ export class SqliteBoundaryRepository implements BoundaryRepository {
         ? 'SELECT * FROM boundaries WHERE is_active = 1 ORDER BY created_at ASC;'
         : 'SELECT * FROM boundaries ORDER BY created_at ASC;',
     );
-    return rows.map(toBoundary);
+    return parseRows('boundaries', rows, toBoundary);
   }
 
   async getById(id: string): Promise<Boundary | null> {
@@ -115,7 +116,7 @@ export class SqliteBoundaryRepository implements BoundaryRepository {
       'SELECT * FROM boundary_checkins WHERE boundary_id = ? ORDER BY checked_at DESC LIMIT ?;',
       [boundaryId, limit],
     );
-    return rows.map(toCheckin);
+    return parseRows('boundary_checkins', rows, toCheckin);
   }
 
   async countCheckinsSince(iso: string): Promise<number> {

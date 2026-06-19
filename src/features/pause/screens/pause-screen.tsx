@@ -14,7 +14,9 @@ import {
   FlameCircleGlyph,
   symbolStroke,
 } from '@/shared/components';
+import { copy } from '@/content';
 import { theme } from '@/shared/design';
+import { useReducedMotion } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { haptics } from '@/shared/lib';
 import { Routes } from '@/navigation';
@@ -74,6 +76,7 @@ export function PauseScreen() {
   const { recordUrge } = usePause();
   const { phase, cycles, start, stop, setPhase, completeCycle } = usePauseSession();
   const [scale] = useState(() => new Animated.Value(0.6));
+  const reduceMotion = useReducedMotion();
 
   const [step, setStep] = useState<PauseStep>('entry');
   const [triggerType, setTriggerType] = useState<TriggerType | null>(null);
@@ -95,12 +98,19 @@ export function PauseScreen() {
     haptics.impact('light');
     const ms = phaseDuration(phase);
     if (phase === 'inhale' || phase === 'exhale') {
-      Animated.timing(scale, {
-        toValue: phase === 'inhale' ? 1 : 0.6,
-        duration: ms,
-        easing: Easing.inOut(Easing.ease),
-        useNativeDriver: true,
-      }).start();
+      const toValue = phase === 'inhale' ? 1 : 0.6;
+      // Reduce Motion: snap the circle between sizes; the breath pacing + haptic
+      // beat below still guide the rhythm, without the smooth scaling.
+      if (reduceMotion) {
+        scale.setValue(toValue);
+      } else {
+        Animated.timing(scale, {
+          toValue,
+          duration: ms,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }).start();
+      }
     }
     const timer = setTimeout(() => {
       if (phase === 'inhale') setPhase('hold');
@@ -108,7 +118,7 @@ export function PauseScreen() {
       else { completeCycle(); setPhase('inhale'); }
     }, ms);
     return () => clearTimeout(timer);
-  }, [step, phase, scale, setPhase, completeCycle]);
+  }, [step, phase, scale, setPhase, completeCycle, reduceMotion]);
 
   // Start breathing when entering the breathing step.
   useEffect(() => {
@@ -171,7 +181,11 @@ export function PauseScreen() {
         showsVerticalScrollIndicator={false}
       >
         {step === 'entry' && (
-          <StepEntry onContinue={() => setStep('trigger')} onDismiss={() => router.back()} />
+          <StepEntry
+            onContinue={() => setStep('trigger')}
+            onDismiss={() => router.back()}
+            onSupport={() => router.push(Routes.safety)}
+          />
         )}
 
         {step === 'trigger' && (
@@ -259,7 +273,15 @@ export function PauseScreen() {
 
 // ── Sub-steps ────────────────────────────────────────────────────────────────
 
-function StepEntry({ onContinue, onDismiss }: { onContinue: () => void; onDismiss: () => void }) {
+function StepEntry({
+  onContinue,
+  onDismiss,
+  onSupport,
+}: {
+  onContinue: () => void;
+  onDismiss: () => void;
+  onSupport: () => void;
+}) {
   const { colors } = useTheme();
   return (
     <View style={styles.step}>
@@ -283,6 +305,7 @@ function StepEntry({ onContinue, onDismiss }: { onContinue: () => void; onDismis
       <View style={styles.nav}>
         <AppButton label="Enter the pause" fullWidth onPress={onContinue} />
         <AppButton label="I rode it out" variant="ghost" fullWidth onPress={onDismiss} />
+        <AppButton label={copy.safety.link} variant="ghost" fullWidth onPress={onSupport} />
       </View>
     </View>
   );

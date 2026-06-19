@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { StyleSheet, Switch, View } from 'react-native';
+import { Alert, StyleSheet, Switch, View } from 'react-native';
 
 import { copy } from '@/content';
 import { useReminders } from '@/features/reminders/hooks/use-reminders';
@@ -10,6 +11,8 @@ import { haptics, setHapticsEnabled } from '@/shared/lib';
 import { Routes } from '@/navigation';
 
 import { useSettings } from '../hooks/use-settings';
+import { useAccount } from '../hooks/use-account';
+import { VowEditorModal } from './vow-editor-modal';
 
 function ToggleRow({
   label,
@@ -45,8 +48,33 @@ export function SettingsScreen() {
   const router = useRouter();
   const { preferences, update } = useSettings();
   const { state: reminderState, enable: enableReminders, disable: disableReminders } = useReminders();
+  const { profile, setVow, restartPath, resetAll } = useAccount();
+  const [vowOpen, setVowOpen] = useState(false);
 
   const remindersEnabled = reminderState?.enabled ?? preferences?.remindersEnabled ?? false;
+
+  const confirmRestart = () => {
+    Alert.alert(copy.settings.restartConfirmTitle, copy.settings.restartConfirmBody, [
+      { text: copy.settings.cancel, style: 'cancel' },
+      { text: copy.settings.restartConfirm, style: 'destructive', onPress: () => void restartPath() },
+    ]);
+  };
+
+  const confirmDeleteAll = () => {
+    Alert.alert(copy.settings.deleteConfirmTitle, copy.settings.deleteConfirmBody, [
+      { text: copy.settings.cancel, style: 'cancel' },
+      {
+        text: copy.settings.deleteConfirm,
+        style: 'destructive',
+        onPress: () => {
+          void (async () => {
+            await resetAll();
+            router.replace(Routes.onboarding);
+          })();
+        },
+      },
+    ]);
+  };
 
   return (
     <AppScreen scroll>
@@ -71,7 +99,7 @@ export function SettingsScreen() {
           <AppDivider inset />
           <ToggleRow
             label="Gentle reminders"
-            description="One gentle nudge each morning at 6 AM with today's focus"
+            description={copy.settings.remindersDescription}
             value={remindersEnabled}
             onValueChange={(next) => {
               if (next) {
@@ -83,11 +111,27 @@ export function SettingsScreen() {
           />
         </AppCard>
 
+        {/* Practice — the vow and the path itself */}
+        <AppText variant="caption" color="muted" uppercase>
+          {copy.settings.practiceLabel}
+        </AppText>
+        <AppButton
+          label={copy.settings.editVow}
+          variant="secondary"
+          fullWidth
+          onPress={() => setVowOpen(true)}
+        />
         <AppButton
           label="Guard the gates"
           variant="secondary"
           fullWidth
           onPress={() => router.push(Routes.boundaries)}
+        />
+        <AppButton
+          label={copy.settings.restartPath}
+          variant="ghost"
+          fullWidth
+          onPress={confirmRestart}
         />
 
         <AppButton
@@ -97,10 +141,28 @@ export function SettingsScreen() {
           onPress={() => router.push(Routes.safety)}
         />
 
+        {/* Your data — fully on-device, and erasable */}
+        <AppText variant="caption" color="muted" uppercase>
+          {copy.settings.dataLabel}
+        </AppText>
+        <AppButton
+          label={copy.settings.deleteAll}
+          variant="ghost"
+          fullWidth
+          onPress={confirmDeleteAll}
+        />
+
         <AppText variant="caption" color="muted" align="center">
           No account · No tracking · Fully offline · v1
         </AppText>
       </View>
+
+      <VowEditorModal
+        visible={vowOpen}
+        profile={profile}
+        onClose={() => setVowOpen(false)}
+        onSave={setVow}
+      />
     </AppScreen>
   );
 }

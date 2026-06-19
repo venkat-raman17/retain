@@ -135,7 +135,15 @@ export const copy = {
       begin: 'Begin the practice',
     },
     vowAttribution: 'Your vow',
-    stats: { day: 'Day', streak: 'Streak', urges: 'Urges', forge: 'Forge', embers: 'Embers' },
+    stats: {
+      day: 'Day',
+      streak: 'Streak',
+      urges: 'Urges met',
+      forge: 'Forge',
+      embers: 'Embers',
+      practiceDays: 'Practice days',
+      returns: 'Returns',
+    },
     crown: {
       label: 'The Crown is earned',
       body: 'Ninety days. You have been formed. Receive the Crown.',
@@ -191,6 +199,7 @@ export const copy = {
       night: 'Before you sleep',
     },
     teachingEyebrow: "Today's teaching",
+    longPathEyebrow: 'The Long Path',
   },
 
   chamber: {
@@ -259,6 +268,24 @@ export const copy = {
         'Nothing observed yet. Each urge you log, each act you forge, each return you record draws the pattern. Begin, and the mirror will show your face.',
     },
 
+    urgeTrend: {
+      label: 'The fire over time',
+      caption: 'Urges met each week',
+      easing: 'The fire is meeting you less often, and quieter when it does.',
+      steady: 'The fire holds steady. Keep meeting it as it comes.',
+      rising: 'The fire has risen lately. Meet it with the Pause — that is the rep.',
+      empty: 'Log a few urges and the shape of the fire over time will form here.',
+    },
+
+    moodTrend: {
+      label: 'How the days have felt',
+      caption: 'Average mood each week',
+      rising: 'The days have felt lighter lately.',
+      steady: 'Your days have felt steady.',
+      easing: 'Heavier days lately. Be gentle with yourself, and keep the practice.',
+      empty: 'Add a mood when you journal and the felt shape of your weeks will appear here.',
+    },
+
     pattern: {
       trigger: 'Most common trigger',
       hour: 'Strongest urge hour',
@@ -316,17 +343,56 @@ export const copy = {
       'Command is trained in the return.\nThe record shows where the fire asks for discipline.',
   },
 
+  honorsHall: {
+    label: 'The honors hall',
+    arcCleared: 'Arc cleared',
+    arcsCleared: 'Arcs cleared',
+    keys: 'Milestone keys',
+    keysHint: 'Keys are earned at days 7, 14, 21, 30, 45, 60, 75, and 90.',
+    earned: 'Honors earned',
+    none: 'No honors yet. Keep practicing — the first will come.',
+    ahead: 'Honors ahead',
+    all: 'All honors earned.',
+  },
+
   settings: {
     eyebrow: 'Settings',
     title: 'Your space',
     description: 'Adjust the practice to fit your life. Everything stays on this device.',
     points: ['Haptics and gentle reminders', 'Review the safety note', 'No account, ever'],
+    remindersDescription: 'Two gentle nudges a day — a morning intention and an evening account.',
+    practiceLabel: 'Your practice',
+    editVow: 'Edit your vow',
+    restartPath: 'Restart the path',
+    restartConfirmTitle: 'Restart the path?',
+    restartConfirmBody:
+      'This begins a new Day one, now. Your practice history — urges, forge acts, journals, returns — is kept.',
+    restartConfirm: 'Begin a new Day one',
+    dataLabel: 'Your data',
+    deleteAll: 'Delete all data',
+    deleteConfirmTitle: 'Delete everything?',
+    deleteConfirmBody:
+      'This erases all data on this device — vow, path, journal, and history — and returns to the start. It cannot be undone.',
+    deleteConfirm: 'Delete everything',
+    cancel: 'Cancel',
+    vowModal: {
+      title: 'Your vow',
+      customOption: 'Write my own',
+      save: 'Save vow',
+    },
   },
   safety: {
     eyebrow: 'Safety',
     title: 'Before you begin',
     description: 'A short, honest note about what this app is — and what it is not.',
+    /** Quiet link surfaced in hard moments (Pause, Lapse) to reach support. */
+    link: 'Need support right now?',
   },
+  errors: {
+    title: 'Something interrupted the path.',
+    body: 'Close and reopen the app — your practice is saved on this device.',
+  },
+  loading: 'Loading…',
 } as const;
 
 export type Copy = typeof copy;

@@ -14,6 +14,7 @@ import {
   SealArt,
   type SelectOption,
 } from '@/shared/components';
+import { copy } from '@/content';
 import { theme } from '@/shared/design';
 import { useSurfaceTone } from '@/shared/hooks';
 import { Routes } from '@/navigation';
@@ -112,6 +113,12 @@ export function LapseScreen() {
                 variant="ghost"
                 fullWidth
                 onPress={() => void goToReturn()}
+              />
+              <AppButton
+                label={copy.safety.link}
+                variant="ghost"
+                fullWidth
+                onPress={() => router.push(Routes.safety)}
               />
             </View>
           </>

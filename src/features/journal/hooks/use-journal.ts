@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
+import { useAsyncResource } from '@/shared/hooks';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
@@ -19,31 +20,11 @@ export function useJournal(): UseJournal {
   const { journal } = useRepositories();
   const service = useMemo(() => new JournalService(journal, systemClock), [journal]);
 
-  const [entries, setEntries] = useState<JournalEntry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const load = useCallback(() => service.listEntries(), [service]);
+  const { data, loading, refresh } = useAsyncResource(load, { scope: 'journal' });
+
+  // Validation error from addEntry — distinct from a load failure.
   const [error, setError] = useState<string | null>(null);
-  // Bumping this token re-runs the load effect — a clean, race-safe refresh that
-  // keeps state-setting inside the async effect rather than in the effect body.
-  const [reloadToken, setReloadToken] = useState(0);
-
-  const refresh = useCallback(() => setReloadToken((token) => token + 1), []);
-
-  useEffect(() => {
-    let active = true;
-    service
-      .listEntries()
-      .then((data) => {
-        if (!active) return;
-        setEntries(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [service, reloadToken]);
 
   const addEntry = useCallback(
     async (draft: JournalEntryDraft) => {
@@ -67,5 +48,5 @@ export function useJournal(): UseJournal {
     [service, refresh],
   );
 
-  return { entries, loading, addEntry, deleteEntry, refresh, error };
+  return { entries: data ?? [], loading, addEntry, deleteEntry, refresh, error };
 }

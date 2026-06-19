@@ -13,6 +13,16 @@ export const FORGE_CATEGORIES = [
 export const forgeCategorySchema = z.enum(FORGE_CATEGORIES);
 export type ForgeCategory = z.infer<typeof forgeCategorySchema>;
 
+/** Canonical display labels for the six forge directions. The single source of truth. */
+export const FORGE_CATEGORY_LABELS: Record<ForgeCategory, string> = {
+  body: 'Body',
+  mind: 'Mind',
+  spirit: 'Spirit',
+  order: 'Order',
+  creation: 'Creation',
+  brotherhood: 'Brotherhood',
+};
+
 export const forgeActSchema = z.object({
   id: z.string().min(1),
   occurredAt: z.string().datetime(),

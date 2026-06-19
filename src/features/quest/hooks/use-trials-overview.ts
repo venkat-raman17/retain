@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useAsyncResource } from '@/shared/hooks';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
@@ -33,27 +34,10 @@ export function useTrialsOverview(currentDay: number, count = 10): UseTrialsOver
     [repos],
   );
 
-  const [quests, setQuests] = useState<DayQuestResult[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [reloadToken, setReloadToken] = useState(0);
-  const refresh = useCallback(() => setReloadToken((t) => t + 1), []);
-
-  useEffect(() => {
-    let active = true;
-    service
-      .getRecentQuests(currentDay, count)
-      .then((result) => {
-        if (!active) return;
-        setQuests(result);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [service, currentDay, count, reloadToken]);
-
-  return { quests, loading, refresh };
+  const load = useCallback(
+    () => service.getRecentQuests(currentDay, count),
+    [service, currentDay, count],
+  );
+  const { data, loading, refresh } = useAsyncResource(load, { scope: 'quest' });
+  return { quests: data ?? [], loading, refresh };
 }

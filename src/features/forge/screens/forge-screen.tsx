@@ -19,6 +19,7 @@ import {
   EmberSigil,
   FadeInRise,
   FORGE_GLYPHS,
+  LoadingCard,
   NoForgeSymbol,
   SealArt,
   symbolStroke,
@@ -29,6 +30,7 @@ import { useTheme } from '@/shared/hooks/use-theme';
 
 import {
   FORGE_CATEGORIES,
+  FORGE_CATEGORY_LABELS,
   type ForgeActDraft,
   type ForgeCategory,
 } from '../domain/forge-act';
@@ -49,7 +51,7 @@ const CATEGORY_DESCRIPTIONS: Record<ForgeCategory, string> = {
 
 const CATEGORY_OPTIONS: SelectOption<ForgeCategory>[] = FORGE_CATEGORIES.map((c) => ({
   value: c,
-  label: c.charAt(0).toUpperCase() + c.slice(1),
+  label: FORGE_CATEGORY_LABELS[c],
   description: CATEGORY_DESCRIPTIONS[c],
 }));
 
@@ -322,11 +324,7 @@ export function ForgeScreen() {
         ) : null}
 
         {loading ? (
-          <AppCard>
-            <AppText variant="body" color="muted" align="center">
-              Loading...
-            </AppText>
-          </AppCard>
+          <LoadingCard />
         ) : acts.length === 0 ? (
           <View style={styles.emptyState}>
             <NoForgeSymbol size={64} color={colors.textMuted} />

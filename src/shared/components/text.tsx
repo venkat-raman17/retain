@@ -94,6 +94,10 @@ export function AppText({
 
   return (
     <Text
+      // Cap font scaling so the fixed per-variant line heights don't clip or
+      // overlap at extreme system text sizes; still generous for low vision.
+      // Overridable per-instance via `rest`.
+      maxFontSizeMultiplier={1.6}
       style={[
         styles[variant],
         { fontFamily, color: colorMap[color] },

@@ -1,4 +1,9 @@
-import { createForgeAct, type ForgeCategory } from '@/features/forge/domain/forge-act';
+import {
+  createForgeAct,
+  FORGE_CATEGORIES,
+  FORGE_CATEGORY_LABELS,
+  type ForgeCategory,
+} from '@/features/forge/domain/forge-act';
 import { createJournalEntry } from '@/features/journal/domain/journal-entry';
 import { createPathEvent } from '@/features/path/domain/path-event';
 import type { UserProfile } from '@/features/path/domain/user-profile';
@@ -39,17 +44,11 @@ function pattern(over: Partial<WeeklyPattern>): WeeklyPattern {
 }
 
 function forge(counts: Partial<Record<ForgeCategory, number>>): ForgeCategoryCount[] {
-  const labels: Record<ForgeCategory, string> = {
-    body: 'Body',
-    mind: 'Mind',
-    spirit: 'Spirit',
-    order: 'Order',
-    creation: 'Creation',
-    brotherhood: 'Brotherhood',
-  };
-  return (Object.keys(labels) as ForgeCategory[])
-    .map((category) => ({ category, label: labels[category], count: counts[category] ?? 0 }))
-    .sort((a, b) => b.count - a.count);
+  return FORGE_CATEGORIES.map((category) => ({
+    category,
+    label: FORGE_CATEGORY_LABELS[category],
+    count: counts[category] ?? 0,
+  })).sort((a, b) => b.count - a.count);
 }
 
 describe('buildReveal', () => {
@@ -173,6 +172,9 @@ describe('ProgressService.getRecord (end-to-end against fake repos)', () => {
     expect(record.triggerCounts).toHaveLength(9);
     expect(record.arc.started).toBe(false);
     expect(record.nextCommand.title).toBe('Build the record.');
+    expect(record.urgeTrend.buckets).toHaveLength(6);
+    expect(record.urgeTrend.hasEnoughData).toBe(false);
+    expect(record.moodTrend.hasEnoughData).toBe(false);
   });
 
   it('resolves with a populated record once data exists', async () => {
@@ -193,5 +195,9 @@ describe('ProgressService.getRecord (end-to-end against fake repos)', () => {
     expect(record.arc.currentDay).toBe(12);
     expect(record.triggerCounts.find((t) => t.triggerType === 'loneliness')?.count).toBe(1);
     expect(record.forgeBalance).toContain('body');
+    // The lone urge lands in the newest bucket; one urge is not yet a trend.
+    expect(record.urgeTrend.buckets).toHaveLength(6);
+    expect(record.urgeTrend.buckets[5]?.count).toBe(1);
+    expect(record.urgeTrend.hasEnoughData).toBe(false);
   });
 });

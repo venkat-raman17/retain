@@ -1,4 +1,4 @@
-import { type ReactNode, useCallback } from 'react';
+import { type FC, type ReactNode, useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 
@@ -11,12 +11,17 @@ import { usePath } from '@/features/path/hooks/use-path';
 import { useTrialsOverview } from '@/features/quest';
 import type { DayQuestResult } from '@/features/quest';
 import type {
+  ForgeCategoryCount,
   PathArc,
   PracticeRhythm,
   RecordData,
-  ReturnRecord,
+  TriggerCount,
+  WeeklyPattern,
 } from '@/features/progress/services/progress-service';
+import type { TrendSeries } from '@/features/progress/domain/trends';
 import {
+  AppBarSeries,
+  type BarDatum,
   AppCard,
   AppEmptyState,
   AppHero,
@@ -28,6 +33,7 @@ import {
   BentoItem,
   EmberSigil,
   FadeInRise,
+  FORGE_GLYPHS,
   GateSigil,
   PillarsSigil,
   PressableScale,
@@ -35,6 +41,7 @@ import {
   type SealArtSource,
   SectionBand,
   symbolStroke,
+  TRIGGER_GLYPHS,
   useCountUp,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
@@ -193,41 +200,204 @@ function RhythmCard({ practiceRhythm }: { practiceRhythm: PracticeRhythm }) {
   );
 }
 
-// ─── Return record ────────────────────────────────────────────────────────────
+// ─── Trends (the fire, and how the days feel, over time) ───────────────────────
 
-function ReturnCard({ returnRecord }: { returnRecord: ReturnRecord }) {
-  const noReturns = returnRecord.lapsesStudied === 0 && returnRecord.returnsRecorded === 0;
-  const postureColor: InsightColor =
-    returnRecord.currentPosture === copy.record.return.postureReturning ? 'accent' : 'calm';
+type TrendCopy = {
+  label: string;
+  caption: string;
+  easing: string;
+  steady: string;
+  rising: string;
+  empty: string;
+};
+
+/**
+ * A trend over recent weeks. `kind: 'count'` charts a frequency (urges met) and
+ * normalizes to the busiest week; `kind: 'average'` charts a 1–5 mean (mood) on a
+ * fixed 0–5 scale. Reads as felt experience, never a clinical claim, and a hard
+ * week is framed as a cue, never a failure.
+ */
+function TrendCard({
+  series,
+  text,
+  kind,
+  color,
+}: {
+  series: TrendSeries;
+  text: TrendCopy;
+  kind: 'count' | 'average';
+  color?: string;
+}) {
+  if (!series.hasEnoughData) {
+    return (
+      <AppCard tone="overlay">
+        <SectionLabel>{text.label}</SectionLabel>
+        <AppText variant="body" color="muted">
+          {text.empty}
+        </AppText>
+      </AppCard>
+    );
+  }
+
+  const max = kind === 'count' ? Math.max(1, ...series.buckets.map((b) => b.count)) : 5;
+  const data: BarDatum[] = series.buckets.map((b) => {
+    const hasData = kind === 'count' ? b.count > 0 : b.average !== null;
+    const raw = kind === 'count' ? b.count : (b.average ?? 0);
+    const value = kind === 'count' ? b.count : b.average;
+    return {
+      label: b.label,
+      fill: max > 0 ? raw / max : 0,
+      valueLabel: hasData && value !== null ? value.toString() : '',
+      hasData,
+    };
+  });
+  const headline = text[series.direction ?? 'steady'];
+
   return (
     <AppCard tone="overlay">
-      <SectionLabel>{copy.record.return.label}</SectionLabel>
-      {noReturns ? (
-        <AppText variant="body" color="muted" style={styles.framing}>
-          {copy.record.return.empty}
+      <SectionLabel>{text.label}</SectionLabel>
+      <AppText variant="body" color="secondary" style={styles.framing}>
+        {headline}
+      </AppText>
+      <AppBarSeries data={data} color={color} accessibilityLabel={`${text.label}. ${text.caption}.`} />
+      <AppText variant="caption" color="muted" style={styles.rhythmNote}>
+        {text.caption}
+      </AppText>
+    </AppCard>
+  );
+}
+
+// ─── The mirror: reveal, fire map, forge balance, weekly pattern ───────────────
+
+function RevealCard({ reveal }: { reveal: RecordData['reveal'] }) {
+  return (
+    <AppCard tone="overlay">
+      <SectionLabel>{copy.record.reveal.label}</SectionLabel>
+      {reveal ? (
+        <View style={styles.cardBody}>
+          <AppText variant="title" color="primary">
+            {reveal.title}
+          </AppText>
+          <AppText variant="body" color="secondary">
+            {reveal.body}
+          </AppText>
+        </View>
+      ) : (
+        <AppText variant="body" color="muted">
+          {copy.record.reveal.empty}
         </AppText>
-      ) : null}
+      )}
+    </AppCard>
+  );
+}
+
+/** Distribution tiles — reuses the Forge screen idiom (glyph + label + count). */
+function CountTiles({
+  items,
+  glyphs,
+}: {
+  items: { key: string; label: string; count: number }[];
+  glyphs: Record<string, FC<{ size?: number; color?: string; strokeWidth?: number }>>;
+}) {
+  const { colors } = useTheme();
+  return (
+    <Bento>
+      {items.map((item) => {
+        const Glyph = glyphs[item.key];
+        const active = item.count > 0;
+        return (
+          <BentoItem key={item.key}>
+            <AppCard tone={active ? 'raised' : 'overlay'} style={styles.countTile}>
+              {Glyph ? (
+                <Glyph
+                  size={24}
+                  color={active ? colors.primary : colors.textMuted}
+                  strokeWidth={symbolStroke(24)}
+                />
+              ) : null}
+              <AppText variant="label" color={active ? 'primary' : 'muted'} numberOfLines={1}>
+                {item.label}
+              </AppText>
+              <AppText variant="caption" color={active ? 'energy' : 'muted'}>
+                {item.count.toString()}
+              </AppText>
+            </AppCard>
+          </BentoItem>
+        );
+      })}
+    </Bento>
+  );
+}
+
+function FireMapCard({ triggerCounts }: { triggerCounts: TriggerCount[] }) {
+  const total = triggerCounts.reduce((sum, t) => sum + t.count, 0);
+  return (
+    <AppCard tone="overlay">
+      <SectionLabel>{copy.record.fireMap.label}</SectionLabel>
+      {total === 0 ? (
+        <AppText variant="body" color="muted">
+          {copy.record.fireMap.empty}
+        </AppText>
+      ) : (
+        <CountTiles
+          glyphs={TRIGGER_GLYPHS}
+          items={triggerCounts.map((t) => ({ key: t.triggerType, label: t.label, count: t.count }))}
+        />
+      )}
+    </AppCard>
+  );
+}
+
+function ForgeBalanceCard({
+  forgeCategoryCounts,
+  forgeBalance,
+}: {
+  forgeCategoryCounts: ForgeCategoryCount[];
+  forgeBalance: string | null;
+}) {
+  return (
+    <AppCard tone="overlay">
+      <SectionLabel>{copy.record.forge.label}</SectionLabel>
+      {forgeBalance ? (
+        <>
+          <AppText variant="body" color="secondary" style={styles.framing}>
+            {forgeBalance}
+          </AppText>
+          <CountTiles
+            glyphs={FORGE_GLYPHS}
+            items={forgeCategoryCounts.map((c) => ({ key: c.category, label: c.label, count: c.count }))}
+          />
+        </>
+      ) : (
+        <AppText variant="body" color="muted">
+          {copy.record.forge.empty}
+        </AppText>
+      )}
+    </AppCard>
+  );
+}
+
+/** This week's pattern — only the rows that have something to say. */
+function WeeklyPatternCard({ pattern }: { pattern: WeeklyPattern }) {
+  const rows: { label: string; value: string }[] = [];
+  if (pattern.mostCommonTriggerLabel)
+    rows.push({ label: copy.record.pattern.trigger, value: pattern.mostCommonTriggerLabel });
+  if (pattern.strongestUrgeHourLabel)
+    rows.push({ label: copy.record.pattern.hour, value: pattern.strongestUrgeHourLabel });
+  if (pattern.mostCommonResponse)
+    rows.push({ label: copy.record.pattern.response, value: pattern.mostCommonResponse });
+  if (pattern.strongestForgeCategoryLabel)
+    rows.push({ label: copy.record.pattern.forge, value: pattern.strongestForgeCategoryLabel });
+
+  if (rows.length === 0) return null;
+
+  return (
+    <AppCard tone="overlay">
+      <SectionLabel>{copy.record.rhythm.note}</SectionLabel>
       <View style={styles.cardBody}>
-        <InsightRow
-          label={copy.record.return.lapsesStudied}
-          value={returnRecord.lapsesStudied.toString()}
-          valueColor="secondary"
-        />
-        <InsightRow
-          label={copy.record.return.returnsRecorded}
-          value={returnRecord.returnsRecorded.toString()}
-          valueColor="calm"
-        />
-        <InsightRow
-          label={copy.record.return.averageReturn}
-          value={returnRecord.averageReturnTime}
-          valueColor="secondary"
-        />
-        <InsightRow
-          label={copy.record.return.posture}
-          value={returnRecord.currentPosture}
-          valueColor={postureColor}
-        />
+        {rows.map((row) => (
+          <InsightRow key={row.label} label={row.label} value={row.value} valueColor="accent" />
+        ))}
       </View>
     </AppCard>
   );
@@ -407,7 +577,71 @@ export function HallScreen() {
           }
         />
 
-        {/* Trials — today's quest + the days behind you, merged from the old tab */}
+        {/* ── Practice & recovery — what the record reveals comes first ────────── */}
+        {record ? (
+          <>
+            <ArcCard arc={record.arc} />
+            <RhythmCard practiceRhythm={record.practiceRhythm} />
+            <TrendCard series={record.urgeTrend} text={copy.record.urgeTrend} kind="count" />
+            <TrendCard
+              series={record.moodTrend}
+              text={copy.record.moodTrend}
+              kind="average"
+              color={colors.calm}
+            />
+            <RevealCard reveal={record.reveal} />
+            <FireMapCard triggerCounts={record.triggerCounts} />
+            <ForgeBalanceCard
+              forgeCategoryCounts={record.forgeCategoryCounts}
+              forgeBalance={record.forgeBalance}
+            />
+            <WeeklyPatternCard pattern={record.weeklyPattern} />
+            <NextCommandCard record={record} />
+          </>
+        ) : null}
+
+        {/* ── The honors hall — milestones, embers, trials (demoted below practice) ── */}
+        <SectionLabel>{copy.honorsHall.label}</SectionLabel>
+
+        {/* Embers + arcs */}
+        <SectionBand tone={tone}>
+          <View style={styles.statsRow}>
+            <View style={styles.stat}>
+              <AppText variant="title" color="primary" align="center">
+                {embersDisplay}
+              </AppText>
+              <AppText variant="caption" color="muted" align="center" uppercase>
+                {copy.path.stats.embers}
+              </AppText>
+            </View>
+            <View style={styles.statDivider} />
+            <View style={styles.stat}>
+              <AppText variant="title" color="primary" align="center">
+                {arcsCleared}
+              </AppText>
+              <AppText variant="caption" color="muted" align="center" uppercase>
+                {arcsCleared === 1 ? copy.honorsHall.arcCleared : copy.honorsHall.arcsCleared}
+              </AppText>
+            </View>
+          </View>
+        </SectionBand>
+
+        {/* Milestone keys */}
+        <AppCard tone="overlay">
+          <AppText variant="caption" color="energy" uppercase>
+            {copy.honorsHall.keys}
+          </AppText>
+          <KeyRow completedDays={completedDays} />
+          {completedDays.filter((d) =>
+            MILESTONE_DAYS.includes(d as (typeof MILESTONE_DAYS)[number]),
+          ).length === 0 ? (
+            <AppText variant="caption" color="muted">
+              {copy.honorsHall.keysHint}
+            </AppText>
+          ) : null}
+        </AppCard>
+
+        {/* Trials — today's quest + the days behind you */}
         {!isRunning ? (
           <AppEmptyState title={copy.trials.locked} message={copy.path.notStarted.body} />
         ) : null}
@@ -500,59 +734,11 @@ export function HallScreen() {
           </View>
         ) : null}
 
-        {/* Embers + arcs */}
-        <SectionBand tone={tone}>
-          <View style={styles.statsRow}>
-            <View style={styles.stat}>
-              <AppText variant="title" color="primary" align="center">
-                {embersDisplay}
-              </AppText>
-              <AppText variant="caption" color="muted" align="center" uppercase>
-                Embers
-              </AppText>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.stat}>
-              <AppText variant="title" color="primary" align="center">
-                {arcsCleared}
-              </AppText>
-              <AppText variant="caption" color="muted" align="center" uppercase>
-                {arcsCleared === 1 ? 'Arc cleared' : 'Arcs cleared'}
-              </AppText>
-            </View>
-          </View>
-        </SectionBand>
-
-        {/* Practice data */}
-        {record ? (
-          <>
-            <ArcCard arc={record.arc} />
-            <RhythmCard practiceRhythm={record.practiceRhythm} />
-            <ReturnCard returnRecord={record.returnRecord} />
-            <NextCommandCard record={record} />
-          </>
-        ) : null}
-
-        {/* Milestone keys */}
-        <AppCard tone="overlay">
-          <AppText variant="caption" color="energy" uppercase>
-            Milestone keys
-          </AppText>
-          <KeyRow completedDays={completedDays} />
-          {completedDays.filter((d) =>
-            MILESTONE_DAYS.includes(d as (typeof MILESTONE_DAYS)[number]),
-          ).length === 0 ? (
-            <AppText variant="caption" color="muted">
-              Keys are earned at days 7, 14, 21, 30, 45, 60, 75, and 90.
-            </AppText>
-          ) : null}
-        </AppCard>
-
         {/* Earned honors */}
         {earnedItems.length > 0 ? (
           <View style={styles.section}>
             <AppText variant="caption" color="energy" uppercase>
-              {`Honors earned · ${earnedItems.length}`}
+              {`${copy.honorsHall.earned} · ${earnedItems.length}`}
             </AppText>
             <Bento>
               {earnedItems.map((a) => (
@@ -565,7 +751,7 @@ export function HallScreen() {
         ) : (
           <AppCard tone="overlay">
             <AppText variant="caption" color="muted" align="center">
-              No honors yet. Keep practicing — the first will come.
+              {copy.honorsHall.none}
             </AppText>
           </AppCard>
         )}
@@ -574,7 +760,7 @@ export function HallScreen() {
         {lockedItems.length > 0 ? (
           <View style={styles.section}>
             <AppText variant="caption" color="muted" uppercase>
-              {`Honors ahead · ${lockedItems.length}`}
+              {copy.honorsHall.ahead}
             </AppText>
             <Bento>
               {lockedItems.map((a) => (
@@ -587,7 +773,7 @@ export function HallScreen() {
         ) : earnedItems.length === catalog.length ? (
           <AppCard tone="raised" border="gold">
             <AppText variant="body" color="energy" align="center">
-              All honors earned.
+              {copy.honorsHall.all}
             </AppText>
           </AppCard>
         ) : null}
@@ -616,6 +802,7 @@ const styles = StyleSheet.create({
   statDivider: { width: 1, height: 36, backgroundColor: 'rgba(255,255,255,0.1)' },
   // shared card internals
   sectionLabel: { marginBottom: theme.spacing.sm },
+  countTile: { gap: theme.spacing.xs, alignItems: 'flex-start' },
   cardBody: { gap: theme.spacing.sm },
   framing: { marginBottom: theme.spacing.md },
   insightRow: {

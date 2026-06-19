@@ -35,3 +35,9 @@ export function addDays(date: Date, days: number): Date {
 export function isSameUtcDay(a: Date, b: Date): boolean {
   return differenceInDays(a, b) === 0;
 }
+
+/** Start of the week (Sunday 00:00 UTC) containing `date`. */
+export function startOfWeek(date: Date): Date {
+  const day = startOfUtcDay(date);
+  return addDays(day, -day.getUTCDay());
+}

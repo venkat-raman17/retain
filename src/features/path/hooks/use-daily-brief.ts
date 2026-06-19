@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useAsyncResource } from '@/shared/hooks';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
@@ -19,28 +20,7 @@ export interface UseDailyBrief {
 export function useDailyBrief(): UseDailyBrief {
   const repos = useRepositories();
   const service = useMemo(() => new DailyBriefService(repos.profile, systemClock), [repos]);
-
-  const [brief, setBrief] = useState<DailyBrief | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [reloadToken, setReloadToken] = useState(0);
-  const refresh = useCallback(() => setReloadToken((token) => token + 1), []);
-
-  useEffect(() => {
-    let active = true;
-    service
-      .getDailyBrief()
-      .then((value) => {
-        if (!active) return;
-        setBrief(value);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [service, reloadToken]);
-
+  const load = useCallback(() => service.getDailyBrief(), [service]);
+  const { data: brief, loading, refresh } = useAsyncResource(load, { scope: 'path' });
   return { brief, loading, refresh };
 }

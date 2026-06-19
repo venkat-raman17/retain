@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useAsyncResource } from '@/shared/hooks';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
@@ -32,43 +33,26 @@ export function usePath(): UsePath {
     [profileRepo, pathRepo, lapseRepo],
   );
 
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [reloadToken, setReloadToken] = useState(0);
-  const refresh = useCallback(() => setReloadToken((token) => token + 1), []);
-
-  useEffect(() => {
-    let active = true;
-    pathService
-      .getProfile()
-      .then((value) => {
-        if (!active) return;
-        setProfile(value);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (active) setLoading(false);
-      });
-    return () => {
-      active = false;
-    };
-  }, [pathService, reloadToken]);
+  const load = useCallback(() => pathService.getProfile(), [pathService]);
+  const { data: profile, loading, refresh } = useAsyncResource(load, { scope: 'path' });
 
   const beginPath = useCallback(async () => {
-    setProfile(await pathService.startPath());
-  }, [pathService]);
+    await pathService.startPath();
+    refresh();
+  }, [pathService, refresh]);
 
   const recordLapse = useCallback(
     async (draft?: LapseRecordDraft) => {
       await recovery.recordLapse(draft ?? {});
-      setProfile(await pathService.getProfile());
+      refresh();
     },
-    [recovery, pathService],
+    [recovery, refresh],
   );
 
   const recordReturn = useCallback(async () => {
-    setProfile(await recovery.recordReturn());
-  }, [recovery]);
+    await recovery.recordReturn();
+    refresh();
+  }, [recovery, refresh]);
 
   const currentDay = profile ? currentPathDay(profile, systemClock) : 0;
   const isRunning = profile ? isPathRunning(profile) : false;

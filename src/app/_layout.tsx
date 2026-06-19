@@ -20,9 +20,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { theme } from '@/shared/design';
+import { ErrorBoundary } from '@/shared/components';
 import { HapticsHydrator } from '@/features/settings';
 import { AppDataProvider, ThemeProvider } from '@/shared/storage';
-import { RemindersHydrator } from '@/features/reminders/components/reminders-hydrator';
+import { RemindersHydrator } from '@/features/reminders';
 
 // Hold the native splash so the first frame the user sees is already in the
 // bundled Cinzel/Inter typefaces, with the database open — never a flash of
@@ -72,22 +73,24 @@ export default function RootLayout() {
           <HapticsHydrator />
           <RemindersHydrator />
           <StatusBar style="light" />
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: { backgroundColor: theme.colors.background },
-              animation: 'fade',
-            }}
-          >
-            <Stack.Screen name="pause" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="journal" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="lapse" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="boundaries" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="chamber" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="path-map" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="crown" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="safety" options={{ presentation: 'modal' }} />
-          </Stack>
+          <ErrorBoundary>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: theme.colors.background },
+                animation: 'fade',
+              }}
+            >
+              <Stack.Screen name="pause" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="journal" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="lapse" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="boundaries" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="chamber" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="path-map" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="crown" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="safety" options={{ presentation: 'modal' }} />
+            </Stack>
+          </ErrorBoundary>
           </ThemeProvider>
         </AppDataProvider>
       </SafeAreaProvider>

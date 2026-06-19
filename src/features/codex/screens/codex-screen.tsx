@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import {
   archetypeProfiles,
   arcs,
+  getAllRituals,
   getPrinciples,
   rites,
   studies,
@@ -32,11 +33,12 @@ import { useSurfaceTone, type SurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { Routes } from '@/navigation';
 
-type CodexTab = 'path' | 'principles' | 'archetypes' | 'studies' | 'rites';
+type CodexTab = 'path' | 'principles' | 'rituals' | 'archetypes' | 'studies' | 'rites';
 
 const TABS: { id: CodexTab; label: string }[] = [
   { id: 'path', label: 'Daily Path' },
   { id: 'principles', label: 'Principles' },
+  { id: 'rituals', label: 'Rituals' },
   { id: 'archetypes', label: 'Archetypes' },
   { id: 'studies', label: 'Studies' },
   { id: 'rites', label: 'Rites' },
@@ -155,6 +157,43 @@ function PrinciplesTab() {
           </AppCard>
         );
       })}
+    </View>
+  );
+}
+
+// ── Tab: Rituals ──────────────────────────────────────────────────────────────
+// The three rhythms (morning, evening, temptation-hour) — meant to be practiced.
+
+function RitualsTab() {
+  const rituals = getAllRituals();
+  return (
+    <View style={styles.list}>
+      <AppText variant="body" color="secondary">
+        Three rhythms to anchor the day — practiced, not just read.
+      </AppText>
+      {rituals.map((ritual) => (
+        <AppCard key={ritual.id} tone="overlay">
+          <View style={styles.riteHeader}>
+            <AppText variant="subheading" style={styles.archetypeName}>
+              {ritual.title}
+            </AppText>
+            <AppChip label={ritual.time} tone="accent" />
+          </View>
+          <AppText variant="body" color="accent" style={styles.body}>
+            {ritual.intention}
+          </AppText>
+          {ritual.steps.map((step, i) => (
+            <View key={i} style={styles.ritualStep}>
+              <AppText variant="caption" color="energy">
+                {`${i + 1}`}
+              </AppText>
+              <AppText variant="body" color="secondary" style={styles.ritualStepText}>
+                {step}
+              </AppText>
+            </View>
+          ))}
+        </AppCard>
+      ))}
     </View>
   );
 }
@@ -392,6 +431,7 @@ function RitesTab() {
 const SECTION_META: Record<CodexTab, { count: number; unit: string; eyebrow: string; title: string; subtitle: string }> = {
   path: { count: arcs.length, unit: 'arcs', eyebrow: 'Codex · Daily Path', title: 'Nine arcs, ninety chambers', subtitle: 'The shape of the rite.' },
   principles: { count: getPrinciples().length, unit: 'entries', eyebrow: 'Codex · Principles', title: 'The laws of the practice', subtitle: 'What holds when the fire rises.' },
+  rituals: { count: getAllRituals().length, unit: 'rituals', eyebrow: 'Codex · Rituals', title: 'The daily rhythms', subtitle: 'Anchor the morning, the night, and the hard hour.' },
   archetypes: { count: archetypeProfiles.length, unit: 'archetypes', eyebrow: 'Codex · Archetypes', title: 'The twelve modes', subtitle: 'Faces of the formed man.' },
   studies: { count: studies.length, unit: 'studies', eyebrow: 'Codex · Studies', title: 'Lineages of restraint', subtitle: 'Inspiration, not authority.' },
   rites: { count: rites.length, unit: 'rites', eyebrow: 'Codex · Rites', title: 'The milestone ceremonies', subtitle: 'Marks along the ninety days.' },
@@ -418,6 +458,7 @@ export function CodexScreen() {
   const toneByTab: Record<CodexTab, SurfaceTone> = {
     path: useSurfaceTone({ kind: 'arc', arcNumber: 1 }),
     principles: useSurfaceTone({ kind: 'semantic', name: 'primary' }),
+    rituals: useSurfaceTone({ kind: 'semantic', name: 'accent' }),
     archetypes: useSurfaceTone({ kind: 'archetype', id: 'sovereign' }),
     studies: useSurfaceTone({ kind: 'semantic', name: 'accent' }),
     rites: useSurfaceTone({ kind: 'semantic', name: 'gold' }),
@@ -453,6 +494,7 @@ export function CodexScreen() {
 
         {activeTab === 'path' && <DailyPathTab />}
         {activeTab === 'principles' && <PrinciplesTab />}
+        {activeTab === 'rituals' && <RitualsTab />}
         {activeTab === 'archetypes' && <ArchetypesTab />}
         {activeTab === 'studies' && <StudiesTab />}
         {activeTab === 'rites' && <RitesTab />}
@@ -475,4 +517,6 @@ const styles = StyleSheet.create({
   archetypeGlyph: { alignItems: 'center', paddingVertical: theme.spacing.sm },
   riteHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   riteDetailHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  ritualStep: { flexDirection: 'row', gap: theme.spacing.sm, marginTop: theme.spacing.sm },
+  ritualStepText: { flex: 1 },
 });

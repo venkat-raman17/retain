@@ -86,6 +86,7 @@ function CustomTabBar({ state, descriptors, navigation }: TabBarProps) {
             style={styles.tab}
             onPress={onPress}
             accessibilityRole="tab"
+            accessibilityLabel={label}
             accessibilityState={{ selected: focused }}
           >
             {IconComponent != null ? <IconComponent color={color} size={22} /> : null}

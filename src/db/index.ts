@@ -1,5 +1,6 @@
 export {
   initializeRetainDatabase,
+  resetAllLocalData,
   resetLocalDataForTestingOnly,
   clearDatabaseInstanceForTesting,
 } from './client';

@@ -13,6 +13,7 @@ import {
   AppSelectList,
   AppText,
   AppTextInput,
+  LoadingCard,
   SealArt,
   type SelectOption,
 } from '@/shared/components';
@@ -242,9 +243,7 @@ export function BoundariesScreen() {
         </View>
 
         {loading ? (
-          <AppCard>
-            <AppText variant="body" color="muted" align="center">Loading...</AppText>
-          </AppCard>
+          <LoadingCard />
         ) : boundaries.length === 0 ? (
           <AppEmptyState
             title="No boundaries set."

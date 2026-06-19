@@ -1,6 +1,7 @@
 import { lapseRecordSchema, type LapseRecord } from '@/features/path/domain/lapse-record';
 
 import type { AppDatabase } from '../database';
+import { parseRows } from './parse-rows';
 
 export interface LapseRepository {
   add(record: LapseRecord): Promise<void>;
@@ -59,7 +60,7 @@ export class SqliteLapseRepository implements LapseRepository {
       'SELECT * FROM lapse_records ORDER BY occurred_at DESC LIMIT ?;',
       [limit],
     );
-    return rows.map(toRecord);
+    return parseRows('lapse_records', rows, toRecord);
   }
 
   async count(): Promise<number> {
