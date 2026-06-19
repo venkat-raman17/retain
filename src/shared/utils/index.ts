@@ -5,4 +5,5 @@ export {
   differenceInDays,
   addDays,
   isSameUtcDay,
+  startOfWeek,
 } from './date';

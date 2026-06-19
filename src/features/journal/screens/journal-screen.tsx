@@ -14,6 +14,7 @@ import {
   AppText,
   AppTextInput,
   FadeInRise,
+  LoadingCard,
   NoJournalSymbol,
   TabletSigil,
   symbolStroke,
@@ -329,11 +330,7 @@ export function JournalScreen() {
         </View>
 
         {loading ? (
-          <AppCard>
-            <AppText variant="body" color="muted" align="center">
-              Loading...
-            </AppText>
-          </AppCard>
+          <LoadingCard />
         ) : filteredEntries.length === 0 ? (
           <View style={styles.emptyState}>
             <NoJournalSymbol size={56} color={colors.textMuted} />

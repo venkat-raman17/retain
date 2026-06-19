@@ -1,6 +1,7 @@
 import { getAllDailyPath } from '@/content';
 import {
   FORGE_CATEGORIES,
+  FORGE_CATEGORY_LABELS,
   type ForgeAct,
   type ForgeCategory,
 } from '@/features/forge/domain/forge-act';
@@ -16,7 +17,7 @@ import {
 } from '@/features/pause/domain/urge-log';
 import type { Repositories } from '@/db';
 import { createLogger, type Clock } from '@/shared/lib';
-import { addDays, differenceInDays, toIsoDateTime } from '@/shared/utils';
+import { addDays, differenceInDays, startOfWeek, toIsoDateTime } from '@/shared/utils';
 
 import { buildMoodTrend, buildUrgeTrend, type TrendSeries } from '../domain/trends';
 
@@ -126,15 +127,6 @@ export interface RecordData {
 }
 
 // ─── Pure helpers (no DB access) ─────────────────────────────────────────────
-
-const FORGE_CATEGORY_LABELS: Record<ForgeCategory, string> = {
-  body: 'Body',
-  mind: 'Mind',
-  spirit: 'Spirit',
-  order: 'Order',
-  creation: 'Creation',
-  brotherhood: 'Brotherhood',
-};
 
 function formatUrgeHour(hour: number): string {
   if (hour >= 22 || hour < 4) return 'After 10 PM';
@@ -463,11 +455,7 @@ export class ProgressService {
   }
 
   async getWeeklySummary(): Promise<WeeklySummary> {
-    const now = this.clock.now();
-    const weekStart = new Date(now);
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    weekStart.setHours(0, 0, 0, 0);
-    const iso = weekStart.toISOString();
+    const iso = startOfWeek(this.clock.now()).toISOString();
 
     const [forgeActsThisWeek, urgeLogs, journalEntries] = await Promise.all([
       this.repos.forge.countSince(iso),
@@ -485,9 +473,7 @@ export class ProgressService {
   /** Full record data powering the Record tab. Single DB fan-out, computed in memory. */
   async getRecord(): Promise<RecordData> {
     const now = this.clock.now();
-    const weekStart = new Date(now);
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    weekStart.setHours(0, 0, 0, 0);
+    const weekStart = startOfWeek(now);
     const weekISO = weekStart.toISOString();
 
     const [profile, urgeLogs, forgeActs, journalEntries, pathEvents] = await Promise.all([

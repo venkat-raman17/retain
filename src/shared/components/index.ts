@@ -18,6 +18,8 @@ export type { AppQuoteBlockProps } from './quote-block';
 export { AppEmptyState } from './empty-state';
 export type { AppEmptyStateProps } from './empty-state';
 export { ErrorBoundary } from './error-boundary';
+export { LoadingCard } from './loading-card';
+export type { LoadingCardProps } from './loading-card';
 export { AppContentCard } from './content-card';
 export type { AppContentCardProps } from './content-card';
 export { AppTextInput } from './text-input';

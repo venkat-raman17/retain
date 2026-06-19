@@ -87,7 +87,10 @@ src/
     types/        Cross-cutting types.
     utils/        Pure helpers (date math).
   features/<f>/   onboarding, path, pause, forge, journal, codex, progress, boundaries,
-                  settings, safety. Each: screens/ domain/ services/ hooks/ + index.ts barrel.
+                  settings, safety, honors, quest, reminders. Each: screens/ domain/
+                  services/ hooks/ + index.ts barrel. Some are intentionally partial:
+                  progress & quest are UI-less aggregators (no screens/); codex & safety
+                  are read-only (no services/); reminders is background-only (no screens/).
   content/
     schemas/      Zod schemas for bundled content.
     bundled/      The content itself (typed; validated by content/index.ts at load).

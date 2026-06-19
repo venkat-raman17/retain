@@ -392,6 +392,7 @@ export const copy = {
     title: 'Something interrupted the path.',
     body: 'Close and reopen the app — your practice is saved on this device.',
   },
+  loading: 'Loading…',
 } as const;
 
 export type Copy = typeof copy;

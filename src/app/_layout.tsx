@@ -23,7 +23,7 @@ import { theme } from '@/shared/design';
 import { ErrorBoundary } from '@/shared/components';
 import { HapticsHydrator } from '@/features/settings';
 import { AppDataProvider, ThemeProvider } from '@/shared/storage';
-import { RemindersHydrator } from '@/features/reminders/components/reminders-hydrator';
+import { RemindersHydrator } from '@/features/reminders';
 
 // Hold the native splash so the first frame the user sees is already in the
 // bundled Cinzel/Inter typefaces, with the database open — never a flash of

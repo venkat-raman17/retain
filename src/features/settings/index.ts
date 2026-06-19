@@ -1,4 +1,6 @@
 export { SettingsScreen } from './screens/settings-screen';
+export { ThemePickerModal } from './screens/theme-picker-modal';
+export { VowEditorModal } from './screens/vow-editor-modal';
 export { HapticsHydrator } from './components/haptics-hydrator';
 export { useSettings } from './hooks/use-settings';
 export type { UseSettings } from './hooks/use-settings';

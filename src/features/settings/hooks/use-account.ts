@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { resetAllLocalData } from '@/db';
 import { resolveVowText, type UserProfile } from '@/features/path/domain/user-profile';
 import { PathService } from '@/features/path/services/path-service';
-import { cancelAllNotifications } from '@/features/reminders/services/notification-scheduler';
+import { cancelAllNotifications } from '@/features/reminders';
 import { createLogger, systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 

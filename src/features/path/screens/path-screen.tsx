@@ -22,7 +22,7 @@ import { theme } from '@/shared/design';
 import { useSurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { Routes } from '@/navigation';
-import { ThemePickerModal } from '@/features/settings/screens/theme-picker-modal';
+import { ThemePickerModal } from '@/features/settings';
 
 import { usePath } from '../hooks/use-path';
 import { usePathProgress } from '../hooks/use-path-progress';
