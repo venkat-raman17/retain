@@ -18,6 +18,8 @@ import type { Repositories } from '@/db';
 import { createLogger, type Clock } from '@/shared/lib';
 import { addDays, differenceInDays, toIsoDateTime } from '@/shared/utils';
 
+import { buildMoodTrend, buildUrgeTrend, type TrendSeries } from '../domain/trends';
+
 const log = createLogger('progress');
 
 // ─── Public types ────────────────────────────────────────────────────────────
@@ -117,6 +119,10 @@ export interface RecordData {
   returnRecord: ReturnRecord;
   practiceRhythm: PracticeRhythm;
   nextCommand: NextCommand;
+  /** Urge frequency + intensity over recent weeks — is the fire easing? */
+  urgeTrend: TrendSeries;
+  /** Felt mood over recent weeks (from journal moods). */
+  moodTrend: TrendSeries;
 }
 
 // ─── Pure helpers (no DB access) ─────────────────────────────────────────────
@@ -521,6 +527,8 @@ export class ProgressService {
     const reveal = buildReveal(weeklyPattern, returnRecord);
     const forgeBalance = buildForgeBalanceInsight(forgeCategoryCounts);
     const nextCommand = buildNextCommand(hasEnoughData, weeklyPattern, forgeCategoryCounts);
+    const urgeTrend = buildUrgeTrend(urgeLogs, this.clock);
+    const moodTrend = buildMoodTrend(journalEntries, this.clock);
 
     return {
       hasEnoughData,
@@ -533,6 +541,8 @@ export class ProgressService {
       returnRecord,
       practiceRhythm,
       nextCommand,
+      urgeTrend,
+      moodTrend,
     };
   }
 }

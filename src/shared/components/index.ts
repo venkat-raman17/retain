@@ -47,4 +47,6 @@ export { HeroStat } from './stat/hero-stat';
 export type { HeroStatProps } from './stat/hero-stat';
 export { PathPulse } from './progress/path-pulse';
 export type { PathPulseProps } from './progress/path-pulse';
+export { AppBarSeries } from './progress/bar-series';
+export type { AppBarSeriesProps, BarDatum } from './progress/bar-series';
 export * from './symbols';

@@ -173,6 +173,9 @@ describe('ProgressService.getRecord (end-to-end against fake repos)', () => {
     expect(record.triggerCounts).toHaveLength(9);
     expect(record.arc.started).toBe(false);
     expect(record.nextCommand.title).toBe('Build the record.');
+    expect(record.urgeTrend.buckets).toHaveLength(6);
+    expect(record.urgeTrend.hasEnoughData).toBe(false);
+    expect(record.moodTrend.hasEnoughData).toBe(false);
   });
 
   it('resolves with a populated record once data exists', async () => {
@@ -193,5 +196,9 @@ describe('ProgressService.getRecord (end-to-end against fake repos)', () => {
     expect(record.arc.currentDay).toBe(12);
     expect(record.triggerCounts.find((t) => t.triggerType === 'loneliness')?.count).toBe(1);
     expect(record.forgeBalance).toContain('body');
+    // The lone urge lands in the newest bucket; one urge is not yet a trend.
+    expect(record.urgeTrend.buckets).toHaveLength(6);
+    expect(record.urgeTrend.buckets[5]?.count).toBe(1);
+    expect(record.urgeTrend.hasEnoughData).toBe(false);
   });
 });

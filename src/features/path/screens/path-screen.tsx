@@ -17,7 +17,6 @@ import {
   SealArt,
   SectionBand,
   SplitRow,
-  useCountUp,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
 import { useSurfaceTone } from '@/shared/hooks';
@@ -44,7 +43,6 @@ export function PathScreen() {
   const day = currentDay > 0 ? currentDay : 1;
   const { quest, refresh: refreshQuest } = useDayQuest(day);
   const { summary: honorsSummary, refresh: refreshHonors } = useHonors();
-  const embersDisplay = useCountUp(honorsSummary?.totalEmbers ?? 0, 1200);
 
   const stationSeal =
     honorsSummary?.station?.sealSource === 'arc'
@@ -216,11 +214,13 @@ export function PathScreen() {
               </>
             ) : null}
 
-            {/* Compact stat band — Day now lives in the pulse, so show the rest. */}
+            {/* Compact stat band — Day lives in the pulse; lead with practice and
+                return (a lapse never reads as zero), not the streak. Embers (the
+                game currency) lives in the Hall. */}
             {summary ? (
               <View style={styles.statsGrid}>
-                <AppStatCard label={copy.path.stats.embers} value={embersDisplay.toString()} style={styles.stat} />
-                <AppStatCard label={copy.path.stats.streak} value={summary.longestPathDays.toString()} style={styles.stat} />
+                <AppStatCard label={copy.path.stats.practiceDays} value={summary.totalPracticeDays.toString()} style={styles.stat} />
+                <AppStatCard label={copy.path.stats.returns} value={summary.returnsRecorded.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.urges} value={summary.urgesObserved.toString()} style={styles.stat} />
                 <AppStatCard label={copy.path.stats.forge} value={summary.forgeActs.toString()} style={styles.stat} />
               </View>
