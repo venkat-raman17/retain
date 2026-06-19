@@ -14,6 +14,7 @@ import {
   FlameCircleGlyph,
   symbolStroke,
 } from '@/shared/components';
+import { copy } from '@/content';
 import { theme } from '@/shared/design';
 import { useReducedMotion } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
@@ -180,7 +181,11 @@ export function PauseScreen() {
         showsVerticalScrollIndicator={false}
       >
         {step === 'entry' && (
-          <StepEntry onContinue={() => setStep('trigger')} onDismiss={() => router.back()} />
+          <StepEntry
+            onContinue={() => setStep('trigger')}
+            onDismiss={() => router.back()}
+            onSupport={() => router.push(Routes.safety)}
+          />
         )}
 
         {step === 'trigger' && (
@@ -268,7 +273,15 @@ export function PauseScreen() {
 
 // ── Sub-steps ────────────────────────────────────────────────────────────────
 
-function StepEntry({ onContinue, onDismiss }: { onContinue: () => void; onDismiss: () => void }) {
+function StepEntry({
+  onContinue,
+  onDismiss,
+  onSupport,
+}: {
+  onContinue: () => void;
+  onDismiss: () => void;
+  onSupport: () => void;
+}) {
   const { colors } = useTheme();
   return (
     <View style={styles.step}>
@@ -292,6 +305,7 @@ function StepEntry({ onContinue, onDismiss }: { onContinue: () => void; onDismis
       <View style={styles.nav}>
         <AppButton label="Enter the pause" fullWidth onPress={onContinue} />
         <AppButton label="I rode it out" variant="ghost" fullWidth onPress={onDismiss} />
+        <AppButton label={copy.safety.link} variant="ghost" fullWidth onPress={onSupport} />
       </View>
     </View>
   );

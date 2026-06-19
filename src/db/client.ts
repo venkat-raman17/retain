@@ -102,17 +102,32 @@ export function initializeRetainDatabase(): Promise<InitializedDatabase> {
   return globalRef[INIT_KEY];
 }
 
-/**
- * DEVELOPMENT/TEST ONLY. Clears every user-data table (schema is preserved).
- * Never wire this to a production button without an explicit, guarded flow.
- */
-export async function resetLocalDataForTestingOnly(): Promise<void> {
+/** Clears every user-data table (schema is preserved). */
+async function clearAllTables(): Promise<void> {
   const { db } = await initializeRetainDatabase();
   await db.transaction(async () => {
     for (const table of ALL_TABLES) {
       await db.run(`DELETE FROM ${table};`);
     }
   });
+}
+
+/**
+ * Wipe all on-device user data. The schema is preserved; the next profile read
+ * re-seeds a fresh, onboarding-incomplete profile, so the app returns to its
+ * first-run state. Wire only to an explicit, confirmed user action.
+ */
+export async function resetAllLocalData(): Promise<void> {
+  await clearAllTables();
+  log.warn('all local data reset by user');
+}
+
+/**
+ * DEVELOPMENT/TEST ONLY. Clears every user-data table (schema is preserved).
+ * Never wire this to a production button without an explicit, guarded flow.
+ */
+export async function resetLocalDataForTestingOnly(): Promise<void> {
+  await clearAllTables();
   log.warn('local data reset (testing only)');
 }
 

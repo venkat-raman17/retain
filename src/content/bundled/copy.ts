@@ -199,6 +199,7 @@ export const copy = {
       night: 'Before you sleep',
     },
     teachingEyebrow: "Today's teaching",
+    longPathEyebrow: 'The Long Path',
   },
 
   chamber: {
@@ -359,11 +360,33 @@ export const copy = {
     title: 'Your space',
     description: 'Adjust the practice to fit your life. Everything stays on this device.',
     points: ['Haptics and gentle reminders', 'Review the safety note', 'No account, ever'],
+    remindersDescription: 'Two gentle nudges a day — a morning intention and an evening account.',
+    practiceLabel: 'Your practice',
+    editVow: 'Edit your vow',
+    restartPath: 'Restart the path',
+    restartConfirmTitle: 'Restart the path?',
+    restartConfirmBody:
+      'This begins a new Day one, now. Your practice history — urges, forge acts, journals, returns — is kept.',
+    restartConfirm: 'Begin a new Day one',
+    dataLabel: 'Your data',
+    deleteAll: 'Delete all data',
+    deleteConfirmTitle: 'Delete everything?',
+    deleteConfirmBody:
+      'This erases all data on this device — vow, path, journal, and history — and returns to the start. It cannot be undone.',
+    deleteConfirm: 'Delete everything',
+    cancel: 'Cancel',
+    vowModal: {
+      title: 'Your vow',
+      customOption: 'Write my own',
+      save: 'Save vow',
+    },
   },
   safety: {
     eyebrow: 'Safety',
     title: 'Before you begin',
     description: 'A short, honest note about what this app is — and what it is not.',
+    /** Quiet link surfaced in hard moments (Pause, Lapse) to reach support. */
+    link: 'Need support right now?',
   },
   errors: {
     title: 'Something interrupted the path.',

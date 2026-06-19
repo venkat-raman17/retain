@@ -168,6 +168,13 @@ export function getCrownCodexById(id: string): CrownCodexItem | undefined {
   return crownCodex.find((item) => item.id === id);
 }
 
+/** Rotate the crown-codex by index (e.g. long-path day), wrapping around. */
+export function getCrownCodexByIndex(index: number): CrownCodexItem | undefined {
+  if (crownCodex.length === 0) return undefined;
+  const i = ((Math.trunc(index) % crownCodex.length) + crownCodex.length) % crownCodex.length;
+  return crownCodex[i];
+}
+
 // --- Trials / quest loaders ---
 
 export function getAllTrials(): readonly Trial[] {

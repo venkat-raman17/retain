@@ -2,6 +2,7 @@ import {
   copy,
   getArcByNumber,
   getCodexDayByIndex,
+  getCrownCodexByIndex,
   getDailyPathContent,
   type DailyPathContent,
   type PathSeason,
@@ -69,14 +70,19 @@ export class DailyBriefService {
     const isLongPath = profile.currentPathPhase === 'crowned_long_path';
     const longPathDay = isLongPath ? daysSince(profile.longPathStartedAt, this.clock) + 1 : 0;
 
-    // Codex rotation: long path rotates by long-path day, initiation by path day,
-    // idle by calendar day — so the teaching is never static.
-    const codexIndex = isLongPath ? longPathDay : running ? day : dayOfYearIndex(this.clock);
+    // The Long Path has its own evergreen wisdom stream (the Crown Codex), rotated
+    // by long-path day, so post-Crown days carry dedicated guidance rather than
+    // recycling the initiation codex. Initiation rotates the 7-day codex by path
+    // day; idle by calendar day — so the teaching is never static.
+    const crownItem = isLongPath ? getCrownCodexByIndex(longPathDay - 1) : undefined;
+    const codexIndex = running ? day : dayOfYearIndex(this.clock);
     const codexDay = getCodexDayByIndex(codexIndex);
 
     // Daily chambers only exist for days 1–90; skip on the long path.
     const content = running && !isLongPath ? getDailyPathContent(day) : undefined;
     const arc = content ? getArcByNumber(content.arcNumber) : undefined;
+
+    const longPathFocusLabel = dailyCopy.focus[this.focusKey(tod)];
 
     return {
       running,
@@ -88,13 +94,21 @@ export class DailyBriefService {
       greeting: isLongPath ? `Long Path · Day ${longPathDay}` : dailyCopy.greeting[tod],
       isLongPath,
       longPathDay,
-      focus: isLongPath && codexDay
-        ? { label: dailyCopy.focus[this.focusKey(tod)], body: codexDay.theme }
-        : content ? this.focusFor(tod, content) : null,
-      teaching: codexDay
-        ? { eyebrow: dailyCopy.teachingEyebrow, title: codexDay.title, body: codexDay.teaching }
-        : null,
-      seal: content?.seal ?? null,
+      focus: isLongPath
+        ? crownItem
+          ? { label: longPathFocusLabel, body: crownItem.practice }
+          : null
+        : content
+          ? this.focusFor(tod, content)
+          : null,
+      teaching: isLongPath
+        ? crownItem
+          ? { eyebrow: dailyCopy.longPathEyebrow, title: crownItem.title, body: crownItem.body }
+          : null
+        : codexDay
+          ? { eyebrow: dailyCopy.teachingEyebrow, title: codexDay.title, body: codexDay.teaching }
+          : null,
+      seal: isLongPath ? (crownItem?.seal ?? null) : (content?.seal ?? null),
       milestoneRiteId: content?.milestoneRiteId ?? null,
     };
   }
