@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { systemClock } from '@/shared/lib';
+import { createLogger, systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
 import { DailyBriefService, type DailyBrief } from '../services/daily-brief-service';
+
+const log = createLogger('path');
 
 /**
  * Hook boundary over {@link DailyBriefService}. The Path screen consumes the
@@ -34,7 +36,8 @@ export function useDailyBrief(): UseDailyBrief {
         setBrief(value);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        log.error('Failed to load the daily brief', error);
         if (active) setLoading(false);
       });
     return () => {

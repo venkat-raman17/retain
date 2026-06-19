@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { systemClock } from '@/shared/lib';
+import { createLogger, systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
 import type { LapseRecordDraft } from '../domain/lapse-record';
@@ -8,6 +8,8 @@ import { currentPathDay, isPathRunning } from '../domain/practice';
 import { resolveVowText, type UserProfile } from '../domain/user-profile';
 import { LapseRecoveryService } from '../services/lapse-recovery-service';
 import { PathService } from '../services/path-service';
+
+const log = createLogger('path');
 
 export interface UsePath {
   profile: UserProfile | null;
@@ -46,7 +48,8 @@ export function usePath(): UsePath {
         setProfile(value);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        log.error('Failed to load the profile', error);
         if (active) setLoading(false);
       });
     return () => {

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { systemClock } from '@/shared/lib';
+import { createLogger, systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
 import type { ProgressSummary } from '../../progress/services/progress-service';
 import { ProgressService } from '../../progress/services/progress-service';
+
+const log = createLogger('progress');
 
 export interface UsePathProgress {
   summary: ProgressSummary | null;
@@ -31,7 +33,8 @@ export function usePathProgress(): UsePathProgress {
           setLoading(false);
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        log.error('Failed to load the progress summary', error);
         if (active) setLoading(false);
       });
     return () => {

@@ -7,6 +7,7 @@ import {
 import { createId } from '@/shared/lib';
 
 import type { AppDatabase } from '../database';
+import { parseRows } from './parse-rows';
 
 export interface ContentProgressRepository {
   get(contentType: ContentType, contentId: string): Promise<ContentProgress | null>;
@@ -84,7 +85,7 @@ export class SqliteContentProgressRepository implements ContentProgressRepositor
 
   async list(): Promise<ContentProgress[]> {
     const rows = await this.db.getAll<ProgressRow>('SELECT * FROM content_progress;');
-    return rows.map(toProgress);
+    return parseRows('content_progress', rows, toProgress);
   }
 
   async countCompleted(): Promise<number> {

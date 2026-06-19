@@ -365,6 +365,10 @@ export const copy = {
     title: 'Before you begin',
     description: 'A short, honest note about what this app is — and what it is not.',
   },
+  errors: {
+    title: 'Something interrupted the path.',
+    body: 'Close and reopen the app — your practice is saved on this device.',
+  },
 } as const;
 
 export type Copy = typeof copy;
