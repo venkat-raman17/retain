@@ -17,8 +17,8 @@ import {
   SealArt,
   SectionBand,
 } from '@/shared/components';
-import { theme } from '@/shared/design';
-import { useSurfaceTone } from '@/shared/hooks';
+import { theme, type ArchetypeTone } from '@/shared/design';
+import { useDayTheme, useSurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { Routes } from '@/navigation';
 import { ThemePickerModal } from '@/features/settings';
@@ -60,9 +60,14 @@ export function PathScreen() {
 
   const isCrownUnlocked = profile ? checkCrownUnlocked(profile, currentDay) : false;
 
-  // The screen's identity color follows today's arc; the Gate (arc 1) before start.
+  // While the path runs, the home takes TODAY'S archetype as its identity — its
+  // per-day color, mark, and invocation — so the opening page leads with "who you
+  // are today." Before start / on the Long Path it falls back to the arc tone.
   const arcNumber = isRunning && brief ? brief.arcNumber : 1;
-  const tone = useSurfaceTone({ kind: 'arc', arcNumber });
+  const archetypeLed = Boolean(isRunning && brief && !brief.isLongPath && brief.archetype);
+  const arcSurfaceTone = useSurfaceTone({ kind: 'arc', arcNumber });
+  const dayTone = useDayTheme({ day, archetype: (brief?.archetype ?? 'monk') as ArchetypeTone, arcNumber });
+  const tone = archetypeLed ? dayTone : arcSurfaceTone;
 
   const hasMilestone = Boolean(brief?.milestoneRiteId);
 
@@ -117,21 +122,52 @@ export function PathScreen() {
           </>
         ) : (
           <>
-            {/* Living hero — the 9-arc pulse is the focal art, in today's arc tone. */}
+            {/* Living hero — leads with today's archetype (per-day mark + invocation)
+                during initiation; the 9-arc pulse sits below. On the Long Path the
+                crown seal marks the rite as complete. */}
             <AppHero
               tone={tone}
               align="center"
-              eyebrow={brief?.greeting ?? `Day ${currentDay}`}
+              eyebrow={
+                archetypeLed && brief?.archetypeName
+                  ? `Day ${currentDay} · ${brief.archetypeName}`
+                  : (brief?.greeting ?? `Day ${currentDay}`)
+              }
               title={brief?.arcTitle || `Day ${currentDay}`}
-              halo={false}
+              subtitle={archetypeLed ? (brief?.invocation ?? undefined) : undefined}
+              halo={brief?.isLongPath ?? false}
+              art={
+                brief?.isLongPath ? (
+                  <SealArt source={{ kind: 'crown' }} size={132} color={colors.gold} />
+                ) : archetypeLed && brief?.archetype ? (
+                  <SealArt
+                    source={{
+                      kind: 'day',
+                      day: currentDay,
+                      archetype: brief.archetype,
+                      arcNumber,
+                      accentColor: tone.base,
+                    }}
+                    size={120}
+                    color={tone.text}
+                  />
+                ) : undefined
+              }
             >
-              <PathPulse
-                currentDay={brief?.isLongPath ? Math.min(currentDay, 90) : currentDay}
-                arcTitle={brief?.arcTitle}
-                litColor={tone.base}
-                size={208}
-              />
+              {!brief?.isLongPath ? (
+                <PathPulse currentDay={currentDay} arcTitle={brief?.arcTitle} litColor={tone.base} size={208} />
+              ) : null}
             </AppHero>
+
+            {/* Long Path touchpoint — the day's single beat for a crowned man. */}
+            {brief?.isLongPath && brief.longPathTouchpoint ? (
+              <SectionBand tone={tone}>
+                <AppText variant="caption" uppercase style={{ color: tone.text }}>
+                  {copy.daily.longPathTouchpoint}
+                </AppText>
+                <AppText variant="subheading">{brief.longPathTouchpoint}</AppText>
+              </SectionBand>
+            ) : null}
 
             {/* Quest dock — today's trial name + objective progress */}
             {quest ? (

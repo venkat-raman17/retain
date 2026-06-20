@@ -50,7 +50,7 @@ export function CrownCelebrationScreen() {
           eyebrow="Day 90"
           title="The Crown of Command"
           subtitle="Ninety days does not make a man finished. It proves he can be formed."
-          art={<SealArt source={{ kind: 'arc', arcNumber: 9 }} size={124} color={goldTone.text} />}
+          art={<SealArt source={{ kind: 'crown' }} size={124} color={goldTone.text} />}
         />
 
         <AppCard tone="raised" border="gold">

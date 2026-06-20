@@ -1,5 +1,5 @@
 /**
- * Onboarding domain: step types, intention options, boundary presets.
+ * Onboarding domain: step types and intention options.
  * No imports from other features — this module is self-contained.
  */
 
@@ -10,7 +10,6 @@ export const ONBOARDING_STEPS = [
   'intention',
   'vow',
   'forge',
-  'boundary',
   'disclaimer',
   'path_start',
   'begin',
@@ -72,18 +71,6 @@ export const FORGE_CATEGORY_DISPLAY = [
   { id: 'brotherhood', label: 'Brotherhood', description: 'Serve, connect, speak honestly.' },
 ] as const;
 
-export const BOUNDARY_PRESETS = [
-  'No phone in bed.',
-  'No explicit content.',
-  'No scrolling alone at night.',
-  'Train when the urge rises.',
-  'Sleep before the temptation hour.',
-  'Remove triggers from my environment.',
-] as const;
-
-export const BOUNDARY_SKIP = '__skip__';
-export const BOUNDARY_CUSTOM = '__custom__';
-
 export interface OnboardingDraft {
   /** Preset vow ID from VOW_PRESETS, or 'custom'. */
   vowPresetId: string | null;
@@ -93,12 +80,6 @@ export interface OnboardingDraft {
   intention: IntentionId;
   /** One of FORGE_CATEGORY_DISPLAY[].id */
   forgeCategory: string;
-  /**
-   * A preset boundary title, '__custom__' (use customBoundaryTitle),
-   * or '__skip__' / null (no boundary created).
-   */
-  boundaryChoice: string | null;
-  customBoundaryTitle: string | null;
   /** Days already completed before install (0 = starting fresh today). */
   offsetDays: number;
 }

@@ -16,7 +16,8 @@ export const copy = {
     path: 'Path',
     forge: 'Forge',
     codex: 'Codex',
-    progress: 'Hall',
+    progress: 'Record',
+    hall: 'Hall',
   },
   actions: {
     begin: 'Begin',
@@ -86,12 +87,6 @@ export const copy = {
       title: 'Where will you forge first?',
       subtitle: 'Choose where your energy will be turned into action.',
     },
-    boundary: {
-      title: 'Guard the gates.',
-      subtitle: 'A boundary is a small rule that wins before the battle begins.',
-      customLabel: 'Your boundary',
-      customPlaceholder: 'Name one rule you will keep...',
-    },
     pathStart: {
       title: 'Where are you?',
       subtitle: 'Honor the work you have already done.',
@@ -120,7 +115,6 @@ export const copy = {
         vow: 'Vow',
         intention: 'Intention',
         forge: 'First forge',
-        boundary: 'First boundary',
       },
     },
   },
@@ -198,6 +192,7 @@ export const copy = {
     },
     teachingEyebrow: "Today's teaching",
     longPathEyebrow: 'The Long Path',
+    longPathTouchpoint: 'Today on the Long Path',
   },
 
   chamber: {

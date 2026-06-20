@@ -1,12 +1,11 @@
 import { getTrialForDay } from '@/content';
 import type {
-  BoundaryRepository,
   ContentProgressRepository,
   ForgeRepository,
   UrgeRepository,
 } from '@/db';
 import type { Clock } from '@/shared/lib';
-import { startOfUtcDay, toIsoDateTime } from '@/shared/utils';
+import { startOfLocalDay, toIsoDateTime } from '@/shared/utils';
 
 import {
   evaluateDayQuest,
@@ -23,7 +22,6 @@ export class QuestService {
   constructor(
     private readonly forge: ForgeRepository,
     private readonly urge: UrgeRepository,
-    private readonly boundary: BoundaryRepository,
     private readonly contentProgress: ContentProgressRepository,
     private readonly clock: Clock,
   ) {}
@@ -32,23 +30,20 @@ export class QuestService {
     const trial = getTrialForDay(dayNumber);
     if (!trial) return null;
 
-    const todayStart = toIsoDateTime(startOfUtcDay(this.clock.now()));
+    const todayStart = toIsoDateTime(startOfLocalDay(this.clock.now()));
 
-    const [forgeActsToday, allUrges, boundaryCheckinsToday, progress] =
-      await Promise.all([
-        this.forge.countSince(todayStart),
-        this.urge.list(200),
-        this.boundary.countCheckinsSince(todayStart),
-        this.contentProgress.get('daily_path', `day-${dayNumber}`),
-      ]);
+    const [forgeActsToday, allUrges, progress] = await Promise.all([
+      this.forge.countSince(todayStart),
+      this.urge.list(200),
+      this.contentProgress.get('daily_path', `day-${dayNumber}`),
+    ]);
 
     const pausesToday = allUrges.filter((u) => u.occurredAt >= todayStart).length;
 
     const signals: DayQuestSignals = {
-      secretRevealed: progress?.status === 'completed',
+      secretRevealed: progress?.status === 'revealed' || progress?.status === 'completed',
       forgeActsToday,
       pausesToday,
-      boundaryCheckinsToday,
     };
 
     return evaluateDayQuest(trial, signals, this.clock);

@@ -8,7 +8,6 @@ export const ACHIEVEMENT_CRITERIA_KINDS = [
   'forge_act_logged',
   'forge_all_categories',
   'return_recorded',
-  'boundary_kept',
   'crown_received',
   'embers_earned',
 ] as const;

@@ -23,13 +23,7 @@ export function useTrialsOverview(currentDay: number, count = 10): UseTrialsOver
   const repos = useRepositories();
   const service = useMemo(
     () =>
-      new QuestService(
-        repos.forge,
-        repos.urge,
-        repos.boundary,
-        repos.contentProgress,
-        systemClock,
-      ),
+      new QuestService(repos.forge, repos.urge, repos.contentProgress, systemClock),
     [repos],
   );
 

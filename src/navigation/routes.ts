@@ -10,12 +10,12 @@ export const Routes = {
   forge: '/forge',
   codex: '/codex',
   progress: '/progress',
+  hall: '/hall',
   pause: '/pause',
   lapse: '/lapse',
   chamber: '/chamber',
   pathMap: '/path-map',
   crown: '/crown',
-  boundaries: '/boundaries',
   settings: '/settings',
   safety: '/safety',
 } as const;

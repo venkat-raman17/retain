@@ -7,6 +7,7 @@ import { TAB_ORDER } from '@/navigation';
 import {
   EmberSigil,
   GateSigil,
+  HallSigil,
   MirrorSigil,
   PillarsSigil,
 } from '@/shared/components/symbols';
@@ -16,9 +17,9 @@ import { useTheme } from '@/shared/hooks/use-theme';
 
 // ─── Per-tab sigils ─────────────────────────────────────────────────────────
 // SVG sigils in the app's symbolic language: monoline, iron + ember, carved.
-// Path = gate to cross each day. Forge = ember diamond.
-// Codex = archive pillars. Hall (progress) = hand mirror; the day's trials and
-// honors live together here.
+// Path = gate to cross each day. Forge = ember diamond. Codex = archive pillars.
+// Record (progress) = hand mirror, revealing the pattern. Hall = a columned hall
+// where rank, keys, trials, and honors are kept.
 
 const ICON_SIZE = 22;
 
@@ -29,6 +30,7 @@ const TAB_ICON_MAP: Record<string, (props: IconProps) => ReactElement> = {
   forge: ({ color }) => <EmberSigil size={ICON_SIZE} color={color} />,
   codex: ({ color }) => <PillarsSigil size={ICON_SIZE} color={color} />,
   progress: ({ color }) => <MirrorSigil size={ICON_SIZE} color={color} />,
+  hall: ({ color }) => <HallSigil size={ICON_SIZE} color={color} />,
 };
 
 // ─── Custom tab bar ─────────────────────────────────────────────────────────

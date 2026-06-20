@@ -32,6 +32,14 @@ describe('DailyBriefService', () => {
     expect(brief.focus?.body).toBe(getDailyPathContent(1)?.command);
   });
 
+  it('carries the day archetype + invocation so the home can lead with it', async () => {
+    const service = await startedService(fixedClock(new Date('2024-01-15T09:00:00')));
+    const brief = await service.getDailyBrief();
+    expect(brief.archetype).toBe(getDailyPathContent(1)?.archetype);
+    expect(brief.archetypeName).toBeTruthy();
+    expect(brief.invocation).toBe(getDailyPathContent(1)?.invocation);
+  });
+
   it('surfaces the evening account in the evening', async () => {
     const service = await startedService(fixedClock(new Date('2024-01-15T19:00:00')));
     const brief = await service.getDailyBrief();
@@ -44,5 +52,19 @@ describe('DailyBriefService', () => {
     const morning = await (await startedService(fixedClock(new Date('2024-01-15T09:00:00')))).getDailyBrief();
     const evening = await (await startedService(fixedClock(new Date('2024-01-15T19:00:00')))).getDailyBrief();
     expect(morning.focus?.body).not.toBe(evening.focus?.body);
+  });
+
+  it('surfaces a Long Path touchpoint once the Crown is received', async () => {
+    const repos = createFakeRepositories();
+    const clock = fixedClock(new Date('2024-04-15T09:00:00'));
+    await new PathService(repos.profile, repos.path, clock).startPath();
+    await repos.profile.update({
+      currentPathPhase: 'crowned_long_path',
+      longPathStartedAt: new Date('2024-04-10T09:00:00').toISOString(),
+    });
+    const brief = await new DailyBriefService(repos.profile, clock).getDailyBrief();
+    expect(brief.isLongPath).toBe(true);
+    expect(brief.longPathTouchpoint).toBeTruthy();
+    expect(brief.arcTitle).toBe('Long Path');
   });
 });

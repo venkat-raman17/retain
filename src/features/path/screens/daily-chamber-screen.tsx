@@ -19,7 +19,6 @@ import {
   AppText,
   FadeInRise,
   Halo,
-  PressableScale,
   SealArt,
   type SealArtSource,
   SectionBand,
@@ -43,7 +42,7 @@ export function DailyChamberScreen() {
   const params = useLocalSearchParams<{ day?: string }>();
   const dayNumber = params.day ? parseInt(params.day, 10) : 1;
 
-  const { markDayOpened, markDayCompleted } = useDailyPath();
+  const { markDayOpened, markDaySecretRevealed, getDayProgressStatus, markDayCompleted } = useDailyPath();
   const { quest, refresh: refreshQuest } = useDayQuest(dayNumber);
   const { summary: honorsSummary, checkAndAward, refresh: refreshHonors } = useHonors();
 
@@ -53,7 +52,18 @@ export function DailyChamberScreen() {
 
   useEffect(() => {
     void markDayOpened(dayNumber);
-  }, [markDayOpened, dayNumber]);
+    // Restore reveal/complete from persisted progress so leaving and returning
+    // doesn't re-hide the instruction or re-ask for completion.
+    void getDayProgressStatus(dayNumber).then((status) => {
+      if (status === 'revealed' || status === 'completed') setSecretRevealed(true);
+      if (status === 'completed') setCompleted(true);
+    });
+  }, [markDayOpened, getDayProgressStatus, dayNumber]);
+
+  const revealSecret = useCallback(() => {
+    setSecretRevealed(true);
+    void markDaySecretRevealed(dayNumber);
+  }, [markDaySecretRevealed, dayNumber]);
 
   const content = getDailyPathContent(dayNumber);
   const archetype = content?.archetype ? getArchetypeProfile(content.archetype) : null;
@@ -188,7 +198,7 @@ export function DailyChamberScreen() {
         <AppCard
           tone="overlay"
           border={secretRevealed ? 'gold' : 'subtle'}
-          onPress={() => !secretRevealed && setSecretRevealed(true)}
+          onPress={() => !secretRevealed && revealSecret()}
         >
           <AppText variant="caption" color="energy" uppercase>
             {secretRevealed
@@ -252,32 +262,20 @@ export function DailyChamberScreen() {
             <AppText variant="caption" uppercase style={{ color: tone.text }}>
               {quest.cleared ? 'Trial complete' : 'Trial objectives'}
             </AppText>
-            {quest.objectives.filter((o) => !o.optional).map((obj) => {
-              const actionable = obj.kind === 'boundary_checkin' && !obj.complete;
-              return (
-                <PressableScale
-                  key={obj.id}
-                  disabled={!actionable}
-                  onPress={actionable ? () => router.push(Routes.boundaries as never) : undefined}
+            {quest.objectives.filter((o) => !o.optional).map((obj) => (
+              <View key={obj.id} style={styles.objective}>
+                <AppText variant="caption" color={obj.complete ? 'energy' : 'muted'}>
+                  {obj.complete ? '✓' : '·'}
+                </AppText>
+                <AppText
+                  variant="caption"
+                  color={obj.complete ? 'primary' : 'muted'}
+                  style={styles.objectiveLabel}
                 >
-                  <View style={styles.objective}>
-                    <AppText variant="caption" color={obj.complete ? 'energy' : 'muted'}>
-                      {obj.complete ? '✓' : '·'}
-                    </AppText>
-                    <AppText
-                      variant="caption"
-                      color={obj.complete ? 'primary' : 'muted'}
-                      style={styles.objectiveLabel}
-                    >
-                      {obj.label}
-                    </AppText>
-                    {actionable ? (
-                      <AppText variant="caption" color="accent">→</AppText>
-                    ) : null}
-                  </View>
-                </PressableScale>
-              );
-            })}
+                  {obj.label}
+                </AppText>
+              </View>
+            ))}
           </SectionBand>
         ) : null}
 

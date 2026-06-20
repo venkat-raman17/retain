@@ -1,5 +1,5 @@
-import { HallScreen } from '@/features/honors';
+import { RecordScreen } from '@/features/progress';
 
 export default function ProgressRoute() {
-  return <HallScreen />;
+  return <RecordScreen />;
 }

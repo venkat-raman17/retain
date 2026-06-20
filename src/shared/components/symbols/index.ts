@@ -1,5 +1,5 @@
 export type { SymbolProps } from './nav-icons';
-export { GateSigil, EmberSigil, TabletSigil, PillarsSigil, MirrorSigil } from './nav-icons';
+export { GateSigil, EmberSigil, TabletSigil, PillarsSigil, MirrorSigil, HallSigil } from './nav-icons';
 
 export {
   SpineGlyph,

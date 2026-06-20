@@ -17,13 +17,7 @@ export function useDayQuest(dayNumber: number): UseDayQuest {
   const repos = useRepositories();
   const service = useMemo(
     () =>
-      new QuestService(
-        repos.forge,
-        repos.urge,
-        repos.boundary,
-        repos.contentProgress,
-        systemClock,
-      ),
+      new QuestService(repos.forge, repos.urge, repos.contentProgress, systemClock),
     [repos],
   );
 

@@ -1,6 +1,7 @@
 import {
   copy,
   getArcByNumber,
+  getArchetypeProfile,
   getCodexDayByIndex,
   getCrownCodexByIndex,
   getDailyPathContent,
@@ -36,6 +37,11 @@ export interface DailyBrief {
   arcNumber: number;
   arcTitle: string;
   season: PathSeason | null;
+  /** Today's archetype id + display name, so the home leads with it. Null on the Long Path. */
+  archetype: string | null;
+  archetypeName: string | null;
+  /** The day's second-person investiture line. Null on the Long Path. */
+  invocation: string | null;
   timeOfDay: TimeOfDay;
   greeting: string;
   /** True once the Crown is received and the man walks the Long Path. */
@@ -46,6 +52,8 @@ export interface DailyBrief {
   teaching: DailyTeaching | null;
   seal: string | null;
   milestoneRiteId: string | null;
+  /** A one-line daily prompt for the Long Path home; null during initiation. */
+  longPathTouchpoint: string | null;
 }
 
 /**
@@ -90,6 +98,9 @@ export class DailyBriefService {
       arcNumber: content?.arcNumber ?? arc?.arcNumber ?? 1,
       arcTitle: isLongPath ? 'Long Path' : (content?.arcTitle || arc?.title || ''),
       season: content?.season ?? null,
+      archetype: content?.archetype ?? null,
+      archetypeName: content ? (getArchetypeProfile(content.archetype)?.name ?? null) : null,
+      invocation: content?.invocation ?? null,
       timeOfDay: tod,
       greeting: isLongPath ? `Long Path · Day ${longPathDay}` : dailyCopy.greeting[tod],
       isLongPath,
@@ -110,6 +121,9 @@ export class DailyBriefService {
           : null,
       seal: isLongPath ? (crownItem?.seal ?? null) : (content?.seal ?? null),
       milestoneRiteId: content?.milestoneRiteId ?? null,
+      longPathTouchpoint: isLongPath
+        ? (crownItem?.longPathTouchpoint || crownItem?.practice || null)
+        : null,
     };
   }
 

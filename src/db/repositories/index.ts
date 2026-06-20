@@ -3,7 +3,6 @@ import {
   SqliteAchievementsRepository,
   type AchievementsRepository,
 } from './achievements-repository';
-import { SqliteBoundaryRepository, type BoundaryRepository } from './boundary-repository';
 import {
   SqliteContentProgressRepository,
   type ContentProgressRepository,
@@ -25,7 +24,6 @@ export interface Repositories {
   urge: UrgeRepository;
   forge: ForgeRepository;
   lapse: LapseRepository;
-  boundary: BoundaryRepository;
   contentProgress: ContentProgressRepository;
   settings: SettingsRepository;
   achievements: AchievementsRepository;
@@ -38,7 +36,6 @@ export function createRepositories(db: AppDatabase): Repositories {
     urge: new SqliteUrgeRepository(db),
     forge: new SqliteForgeRepository(db),
     lapse: new SqliteLapseRepository(db),
-    boundary: new SqliteBoundaryRepository(db),
     contentProgress: new SqliteContentProgressRepository(db),
     settings: new SqliteSettingsRepository(db),
     achievements: new SqliteAchievementsRepository(db),
@@ -51,7 +48,6 @@ export type {
   UrgeRepository,
   ForgeRepository,
   LapseRepository,
-  BoundaryRepository,
   ContentProgressRepository,
   SettingsRepository,
   AchievementsRepository,

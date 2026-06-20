@@ -122,12 +122,6 @@ export function SettingsScreen() {
           onPress={() => setVowOpen(true)}
         />
         <AppButton
-          label="Guard the gates"
-          variant="secondary"
-          fullWidth
-          onPress={() => router.push(Routes.boundaries)}
-        />
-        <AppButton
           label={copy.settings.restartPath}
           variant="ghost"
           fullWidth

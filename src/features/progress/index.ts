@@ -1,3 +1,4 @@
+export { RecordScreen } from './screens/record-screen';
 export { useProgressSummary } from './hooks/use-progress-summary';
 export type { UseProgressSummary } from './hooks/use-progress-summary';
 export { ProgressService } from './services/progress-service';

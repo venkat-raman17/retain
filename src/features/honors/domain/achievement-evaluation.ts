@@ -7,7 +7,6 @@ export interface AchievementSignals {
   forgeActCount: number;
   forgeCategoriesUsed: Set<string>;
   returnCount: number;
-  boundaryKeptCount: number;
   crownReceived: boolean;
   totalEmbers: number;
 }
@@ -50,8 +49,6 @@ function isCriteriaMet(
       return signals.forgeCategoriesUsed.size >= 6;
     case 'return_recorded':
       return signals.returnCount >= (params['count'] ?? 1);
-    case 'boundary_kept':
-      return signals.boundaryKeptCount >= (params['count'] ?? 1);
     case 'crown_received':
       return signals.crownReceived;
     case 'embers_earned':

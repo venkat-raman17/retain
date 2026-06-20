@@ -7,13 +7,7 @@ const CLOCK = fixedClock(new Date('2026-01-01T08:00:00Z'));
 
 function makeService() {
   const repos = createFakeRepositories();
-  const service = new QuestService(
-    repos.forge,
-    repos.urge,
-    repos.boundary,
-    repos.contentProgress,
-    CLOCK,
-  );
+  const service = new QuestService(repos.forge, repos.urge, repos.contentProgress, CLOCK);
   return { repos, service };
 }
 

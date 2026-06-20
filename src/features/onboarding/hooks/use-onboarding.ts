@@ -18,13 +18,7 @@ export function useOnboarding(): UseOnboarding {
   const repos = useRepositories();
   const service = useMemo(
     () =>
-      new OnboardingService(
-        repos.profile,
-        repos.path,
-        repos.boundary,
-        repos.settings,
-        systemClock,
-      ),
+      new OnboardingService(repos.profile, repos.path, repos.settings, systemClock),
     [repos],
   );
 

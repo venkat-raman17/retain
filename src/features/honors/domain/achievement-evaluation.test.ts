@@ -11,7 +11,6 @@ const emptySignals: AchievementSignals = {
   forgeActCount: 0,
   forgeCategoriesUsed: new Set(),
   returnCount: 0,
-  boundaryKeptCount: 0,
   crownReceived: false,
   totalEmbers: 0,
 };
@@ -22,7 +21,6 @@ const allSignals: AchievementSignals = {
   forgeActCount: 20,
   forgeCategoriesUsed: new Set(['body', 'mind', 'spirit', 'order', 'creation', 'brotherhood']),
   returnCount: 2,
-  boundaryKeptCount: 10,
   crownReceived: true,
   totalEmbers: 2500,
 };

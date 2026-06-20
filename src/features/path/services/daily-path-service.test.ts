@@ -76,6 +76,26 @@ describe('DailyPathService — progress tracking', () => {
     expect(fragments.length).toBeGreaterThanOrEqual(1);
     expect(typeof fragments[0]).toBe('string');
   });
+
+  it('persists a revealed secret and does not downgrade it on re-open', async () => {
+    const { service } = makeService();
+    await service.markDayOpened(5);
+    await service.markDaySecretRevealed(5);
+    expect(await service.getDayProgressStatus(5)).toBe('revealed');
+    // Re-opening writes 'opened' but must not undo the reveal.
+    await service.markDayOpened(5);
+    expect(await service.getDayProgressStatus(5)).toBe('revealed');
+  });
+
+  it('keeps a completed day completed when revisited (no re-asking)', async () => {
+    const { service } = makeService();
+    await service.markDayCompleted(7);
+    // Revisiting a finished day must not silently un-complete it.
+    await service.markDayOpened(7);
+    await service.markDaySecretRevealed(7);
+    expect(await service.getDayProgressStatus(7)).toBe('completed');
+    expect(await service.getCompletedDays()).toContain(7);
+  });
 });
 
 describe('DailyPathService — Crown', () => {

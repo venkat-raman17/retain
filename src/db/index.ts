@@ -14,7 +14,6 @@ export type {
   UrgeRepository,
   ForgeRepository,
   LapseRepository,
-  BoundaryRepository,
   ContentProgressRepository,
   SettingsRepository,
   AchievementsRepository,

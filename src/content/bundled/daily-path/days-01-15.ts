@@ -98,7 +98,8 @@ export const days01to15: readonly DailyPathContentInput[] = [
     contentStatus: 'final',
     relatedStudyIds: ['guarding-the-gates-sense-restraint'],
     relatedPrincipleIds: ['guard-the-gates'],
-    milestoneRiteId: null, safetyGuardrail: null,
+    milestoneRiteId: null,
+    safetyGuardrail: 'If the night gate opens before you do, this is practice, not failure — look away, and begin again tomorrow.',
   },
   {
     id: 'day-05', dayNumber: 5, arcNumber: 1, arcTitle: 'The Vow',
@@ -273,7 +274,8 @@ export const days01to15: readonly DailyPathContentInput[] = [
     contentStatus: 'final',
     relatedStudyIds: ['brahmacharya-vow-and-attention'],
     relatedPrincipleIds: ['energy-is-ally', 'refine-the-fire'],
-    milestoneRiteId: null, safetyGuardrail: null,
+    milestoneRiteId: null,
+    safetyGuardrail: 'If the fire won today, you are not the enemy — name the real need, learn, and return.',
   },
   {
     id: 'day-12', dayNumber: 12, arcNumber: 2, arcTitle: 'Guard the Gates',

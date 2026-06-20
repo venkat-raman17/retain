@@ -24,7 +24,6 @@ const emptySignals: DayQuestSignals = {
   secretRevealed: false,
   forgeActsToday: 0,
   pausesToday: 0,
-  boundaryCheckinsToday: 0,
 };
 
 describe('evaluateDayQuest', () => {
@@ -76,17 +75,15 @@ describe('evaluateDayQuest', () => {
         { id: 'o1', kind: 'reveal_secret', label: 'Secret', optional: false },
         { id: 'o2', kind: 'forge_act', label: 'Forge', optional: false },
         { id: 'o3', kind: 'log_pause', label: 'Pause', optional: false },
-        { id: 'o4', kind: 'boundary_checkin', label: 'Boundary', optional: false },
       ],
     };
     const signals: DayQuestSignals = {
       secretRevealed: true,
       forgeActsToday: 1,
       pausesToday: 1,
-      boundaryCheckinsToday: 1,
     };
     const result = evaluateDayQuest(allKindsTrial, signals, CLOCK);
     expect(result.cleared).toBe(true);
-    expect(result.objectives.map((o) => o.complete)).toEqual([true, true, true, true]);
+    expect(result.objectives.map((o) => o.complete)).toEqual([true, true, true]);
   });
 });

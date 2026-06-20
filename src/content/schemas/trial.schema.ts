@@ -1,11 +1,6 @@
 import { z } from 'zod';
 
-export const OBJECTIVE_KINDS = [
-  'reveal_secret',
-  'forge_act',
-  'log_pause',
-  'boundary_checkin',
-] as const;
+export const OBJECTIVE_KINDS = ['reveal_secret', 'forge_act', 'log_pause'] as const;
 export type ObjectiveKind = (typeof OBJECTIVE_KINDS)[number];
 
 export const TRIAL_TIERS = ['foundation', 'discipline', 'mastery', 'sovereign'] as const;

@@ -268,8 +268,7 @@ describe('bundled content — achievements', () => {
   it('every achievement has a valid criteria kind', () => {
     const VALID_KINDS = [
       'days_completed', 'arc_cleared', 'arcs_cleared', 'pause_logged', 'forge_act_logged',
-      'forge_all_categories', 'return_recorded', 'boundary_kept', 'crown_received',
-      'embers_earned',
+      'forge_all_categories', 'return_recorded', 'crown_received', 'embers_earned',
     ];
     for (const a of achievements) {
       expect(VALID_KINDS).toContain(a.criteria.kind);
@@ -382,6 +381,14 @@ describe('bundled content — lineage passages', () => {
         expect(p.sourceUrl).toBeNull();
         expect(p.attribution.length).toBeGreaterThan(0);
       }
+    }
+  });
+});
+
+describe('bundled content — crown codex', () => {
+  it('every crown codex item has a Long Path touchpoint', () => {
+    for (const item of crownCodex) {
+      expect(item.longPathTouchpoint.trim().length).toBeGreaterThan(0);
     }
   });
 });

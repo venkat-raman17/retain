@@ -155,15 +155,6 @@ export const achievements: readonly Achievement[] = [
     criteria: { kind: 'days_completed', params: { count: 30 } },
   },
   {
-    id: 'gates-kept',
-    title: 'Gates Kept',
-    description:
-      'Earned after seven boundary check-ins held — seven quiet victories won before the test ever arrived.',
-    sealSource: 'arc',
-    sealId: '2',
-    criteria: { kind: 'boundary_kept', params: { count: 7 } },
-  },
-  {
     id: 'the-crown',
     title: 'The Crown',
     description:

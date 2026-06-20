@@ -1,20 +1,14 @@
 import { createFakeRepositories } from '@/testing/fakes';
 import { fixedClock } from '@/shared/lib';
 
-import { BOUNDARY_CUSTOM, BOUNDARY_SKIP, type OnboardingDraft } from '../domain/onboarding';
+import { type OnboardingDraft } from '../domain/onboarding';
 import { OnboardingService } from './onboarding-service';
 
 const CLOCK = fixedClock(new Date('2024-01-15T09:00:00Z'));
 
 function makeService() {
   const repos = createFakeRepositories();
-  const service = new OnboardingService(
-    repos.profile,
-    repos.path,
-    repos.boundary,
-    repos.settings,
-    CLOCK,
-  );
+  const service = new OnboardingService(repos.profile, repos.path, repos.settings, CLOCK);
   return { repos, service };
 }
 
@@ -23,8 +17,6 @@ const BASE_DRAFT: OnboardingDraft = {
   customVow: null,
   intention: 'discipline',
   forgeCategory: 'mind',
-  boundaryChoice: 'No phone in bed.',
-  customBoundaryTitle: null,
   offsetDays: 0,
 };
 
@@ -69,40 +61,6 @@ describe('OnboardingService', () => {
     await service.complete(BASE_DRAFT);
     const prefs = await repos.settings.getPreferences();
     expect(prefs.safetyAcknowledged).toBe(true);
-  });
-
-  it('creates a boundary from a preset choice', async () => {
-    const { repos, service } = makeService();
-    await service.complete({ ...BASE_DRAFT, boundaryChoice: 'No phone in bed.' });
-    const boundaries = await repos.boundary.list();
-    expect(boundaries).toHaveLength(1);
-    expect(boundaries[0]?.title).toBe('No phone in bed.');
-  });
-
-  it('creates a custom boundary', async () => {
-    const { repos, service } = makeService();
-    await service.complete({
-      ...BASE_DRAFT,
-      boundaryChoice: BOUNDARY_CUSTOM,
-      customBoundaryTitle: 'No screens after 21:00.',
-    });
-    const boundaries = await repos.boundary.list();
-    expect(boundaries).toHaveLength(1);
-    expect(boundaries[0]?.title).toBe('No screens after 21:00.');
-  });
-
-  it('skips boundary creation when SKIP is chosen', async () => {
-    const { repos, service } = makeService();
-    await service.complete({ ...BASE_DRAFT, boundaryChoice: BOUNDARY_SKIP });
-    const boundaries = await repos.boundary.list();
-    expect(boundaries).toHaveLength(0);
-  });
-
-  it('skips boundary creation when boundaryChoice is null', async () => {
-    const { repos, service } = makeService();
-    await service.complete({ ...BASE_DRAFT, boundaryChoice: null });
-    const boundaries = await repos.boundary.list();
-    expect(boundaries).toHaveLength(0);
   });
 
   it('starts the path', async () => {

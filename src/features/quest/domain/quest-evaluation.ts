@@ -2,11 +2,10 @@ import type { Trial, TrialObjective } from '@/content/schemas';
 import type { Clock } from '@/shared/lib/clock';
 
 export interface DayQuestSignals {
-  /** True when content_progress for this day has status 'completed' (secret revealed + day done). */
+  /** True when this day's hidden instruction has been revealed (or the day completed). */
   secretRevealed: boolean;
   forgeActsToday: number;
   pausesToday: number;
-  boundaryCheckinsToday: number;
 }
 
 export interface ObjectiveResult {
@@ -34,8 +33,6 @@ function isObjectiveMet(kind: TrialObjective['kind'], signals: DayQuestSignals):
       return signals.forgeActsToday > 0;
     case 'log_pause':
       return signals.pausesToday > 0;
-    case 'boundary_checkin':
-      return signals.boundaryCheckinsToday > 0;
   }
 }
 

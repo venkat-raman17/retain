@@ -147,7 +147,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-11-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-11-2', kind: 'boundary_checkin', label: 'Check in on one environment boundary' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -175,7 +174,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-13-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-13-2', kind: 'boundary_checkin', label: 'Affirm one boundary you kept today' },
       { id: 'obj-13-3', kind: 'log_pause', label: 'Log one pull resisted', optional: true },
     ],
     rewardEmbers: 25,
@@ -204,7 +202,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-15-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-15-2', kind: 'boundary_checkin', label: 'Audit one digital habit or scroll pattern' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -232,7 +229,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-17-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-17-2', kind: 'boundary_checkin', label: 'Check in on your evening environment' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -260,7 +256,6 @@ export const trials = [
     tier: 'foundation',
     objectives: [
       { id: 'obj-19-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-19-2', kind: 'boundary_checkin', label: 'Confirm your most important boundary held' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -681,7 +676,6 @@ export const trials = [
     tier: 'discipline',
     objectives: [
       { id: 'obj-49-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-49-2', kind: 'boundary_checkin', label: 'Review and affirm the boundaries that protect the kingdom' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -866,7 +860,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-62-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-62-2', kind: 'boundary_checkin', label: 'Hold a boundary that protects your service capacity' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -880,7 +873,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-63-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-63-3', kind: 'boundary_checkin', label: 'Review one boundary around your time and energy', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -907,7 +899,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-65-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-65-2', kind: 'boundary_checkin', label: 'Check: are your boundaries serving others or just yourself?' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -921,7 +912,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-66-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-66-3', kind: 'boundary_checkin', label: 'Check one external boundary', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -935,7 +925,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-67-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-67-2', kind: 'boundary_checkin', label: 'Affirm one boundary that makes you a better presence for others' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1156,7 +1145,6 @@ export const trials = [
     objectives: [
       { id: 'obj-83-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
       { id: 'obj-83-2', kind: 'log_pause', label: 'Return to the Pause with the gravity of eighty-three days behind you' },
-      { id: 'obj-83-3', kind: 'boundary_checkin', label: 'Review the boundary you hold most sacred', optional: true },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,
@@ -1224,7 +1212,6 @@ export const trials = [
     tier: 'mastery',
     objectives: [
       { id: 'obj-88-1', kind: 'reveal_secret', label: 'Reveal the day\'s teaching' },
-      { id: 'obj-88-2', kind: 'boundary_checkin', label: 'Stand at the boundary you have built and affirm it' },
     ],
     rewardEmbers: 25,
     rewardKeyId: null,

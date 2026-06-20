@@ -19,9 +19,6 @@ import { Routes } from '@/navigation';
 import { VOW_PRESETS } from '@/features/path/domain/user-profile';
 
 import {
-  BOUNDARY_CUSTOM,
-  BOUNDARY_PRESETS,
-  BOUNDARY_SKIP,
   FORGE_CATEGORY_DISPLAY,
   INTENTIONS,
   ONBOARDING_STEPS,
@@ -35,7 +32,6 @@ const CUSTOM_VOW_ID = 'custom';
 
 /** Recommended starting selections (the cleanest, most universal options). */
 const DEFAULT_VOW_ID = 'pause-before-obey';
-const DEFAULT_BOUNDARY = 'No phone in bed.';
 
 const VOW_OPTIONS: SelectOption<string>[] = [
   ...VOW_PRESETS.map((vow) => ({ value: vow.id, label: vow.text })),
@@ -53,12 +49,6 @@ const FORGE_OPTIONS: SelectOption<string>[] = FORGE_CATEGORY_DISPLAY.map((c) => 
   label: c.label,
   description: c.description,
 }));
-
-const BOUNDARY_OPTIONS: SelectOption<string>[] = [
-  ...BOUNDARY_PRESETS.map((b) => ({ value: b, label: b })),
-  { value: BOUNDARY_CUSTOM, label: 'Write my own boundary.' },
-  { value: BOUNDARY_SKIP, label: 'Skip for now.' },
-];
 
 const PATH_START_OPTIONS: SelectOption<string>[] = [
   {
@@ -78,10 +68,9 @@ const STEP_EYEBROW: Record<OnboardingStep, string> = {
   welcome: copy.onboarding.eyebrow.intro,
   philosophy: copy.onboarding.eyebrow.intro,
   privacy: copy.onboarding.eyebrow.intro,
-  intention: 'Step 1 of 4',
-  vow: 'Step 2 of 4',
-  forge: 'Step 3 of 4',
-  boundary: 'Step 4 of 4',
+  intention: 'Step 1 of 3',
+  vow: 'Step 2 of 3',
+  forge: 'Step 3 of 3',
   disclaimer: copy.onboarding.eyebrow.disclaimer,
   path_start: copy.onboarding.eyebrow.pathStart,
   begin: copy.onboarding.eyebrow.threshold,
@@ -94,13 +83,11 @@ export function OnboardingScreen() {
   const [stepIndex, setStepIndex] = useState(0);
   const [finishing, setFinishing] = useState(false);
 
-  // Selection state — vow and boundary start on the recommended option.
+  // Selection state — vow starts on the recommended option.
   const [intention, setIntention] = useState<string | null>(null);
   const [vowPresetId, setVowPresetId] = useState<string | null>(DEFAULT_VOW_ID);
   const [customVow, setCustomVow] = useState('');
   const [forgeCategory, setForgeCategory] = useState<string | null>(null);
-  const [boundaryChoice, setBoundaryChoice] = useState<string | null>(DEFAULT_BOUNDARY);
-  const [customBoundary, setCustomBoundary] = useState('');
   const [pathStartMode, setPathStartMode] = useState<string | null>('today');
   const [existingDaysText, setExistingDaysText] = useState('');
 
@@ -116,9 +103,6 @@ export function OnboardingScreen() {
         return true;
       case 'forge':
         return forgeCategory !== null;
-      case 'boundary':
-        if (boundaryChoice === BOUNDARY_CUSTOM) return customBoundary.trim().length > 0;
-        return true;
       case 'path_start': {
         if (pathStartMode === 'existing') {
           const n = parseInt(existingDaysText, 10);
@@ -157,8 +141,6 @@ export function OnboardingScreen() {
         customVow: vowPresetId === CUSTOM_VOW_ID ? customVow.trim() : null,
         intention: intention as IntentionId,
         forgeCategory,
-        boundaryChoice,
-        customBoundaryTitle: customBoundary.trim() || null,
         offsetDays,
       };
       await completeOnboarding(draft);
@@ -172,13 +154,6 @@ export function OnboardingScreen() {
     vowPresetId && vowPresetId !== CUSTOM_VOW_ID
       ? VOW_PRESETS.find((v) => v.id === vowPresetId)?.text ?? null
       : customVow.trim() || null;
-
-  const resolvedBoundary =
-    boundaryChoice === BOUNDARY_CUSTOM
-      ? customBoundary.trim() || null
-      : boundaryChoice === BOUNDARY_SKIP || boundaryChoice === null
-        ? null
-        : boundaryChoice;
 
   const intentionLabel = INTENTIONS.find((i) => i.id === intention)?.label ?? null;
   const forgeCategoryLabel = FORGE_CATEGORY_DISPLAY.find((c) => c.id === forgeCategory)?.label ?? null;
@@ -258,26 +233,6 @@ export function OnboardingScreen() {
           </>
         )}
 
-        {currentStep === 'boundary' && (
-          <>
-            <AppHeader
-              title={copy.onboarding.boundary.title}
-              subtitle={copy.onboarding.boundary.subtitle}
-            />
-            <AppSelectList options={BOUNDARY_OPTIONS} value={boundaryChoice} onChange={setBoundaryChoice} />
-            {boundaryChoice === BOUNDARY_CUSTOM && (
-              <AppTextInput
-                label={copy.onboarding.boundary.customLabel}
-                placeholder={copy.onboarding.boundary.customPlaceholder}
-                value={customBoundary}
-                onChangeText={setCustomBoundary}
-                maxLength={160}
-                autoFocus
-              />
-            )}
-          </>
-        )}
-
         {currentStep === 'disclaimer' && <StepDisclaimer />}
 
         {currentStep === 'path_start' && (
@@ -310,7 +265,6 @@ export function OnboardingScreen() {
             vow={resolvedVow}
             intention={intentionLabel}
             forgeCategory={forgeCategoryLabel}
-            boundary={resolvedBoundary}
           />
         )}
       </View>
@@ -420,10 +374,9 @@ interface StepBeginProps {
   vow: string | null;
   intention: string | null;
   forgeCategory: string | null;
-  boundary: string | null;
 }
 
-function StepBegin({ vow, intention, forgeCategory, boundary }: StepBeginProps) {
+function StepBegin({ vow, intention, forgeCategory }: StepBeginProps) {
   return (
     <>
       <AppHeader
@@ -438,9 +391,6 @@ function StepBegin({ vow, intention, forgeCategory, boundary }: StepBeginProps) 
         ) : null}
         {forgeCategory ? (
           <SummaryRow label={copy.onboarding.begin.summaryLabels.forge} value={forgeCategory} />
-        ) : null}
-        {boundary ? (
-          <SummaryRow label={copy.onboarding.begin.summaryLabels.boundary} value={boundary} />
         ) : null}
       </View>
       <AppQuoteBlock

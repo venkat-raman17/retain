@@ -3,6 +3,8 @@ import { useMemo } from 'react';
 import { systemClock } from '@/shared/lib';
 import { useRepositories } from '@/shared/storage';
 
+import type { ContentStatus } from '@/features/codex/domain/content-progress';
+
 import type { UserProfile } from '../domain/user-profile';
 import { DailyPathService, type DayStatus } from '../services/daily-path-service';
 
@@ -14,6 +16,8 @@ import { DailyPathService, type DayStatus } from '../services/daily-path-service
 export interface UseDailyPath {
   isCrownUnlocked: (profile: UserProfile, currentDay: number) => boolean;
   markDayOpened: (day: number) => Promise<void>;
+  markDaySecretRevealed: (day: number) => Promise<void>;
+  getDayProgressStatus: (day: number) => Promise<ContentStatus>;
   markDayCompleted: (day: number) => Promise<void>;
   getDayStatusList: () => Promise<DayStatus[]>;
   getCollectedCrownFragments: () => Promise<string[]>;
@@ -32,6 +36,8 @@ export function useDailyPath(): UseDailyPath {
       isCrownUnlocked: (profile: UserProfile, currentDay: number) =>
         service.isCrownUnlocked(profile, currentDay),
       markDayOpened: (day: number) => service.markDayOpened(day),
+      markDaySecretRevealed: (day: number) => service.markDaySecretRevealed(day),
+      getDayProgressStatus: (day: number) => service.getDayProgressStatus(day),
       markDayCompleted: (day: number) => service.markDayCompleted(day),
       getDayStatusList: () => service.getDayStatusList(),
       getCollectedCrownFragments: () => service.getCollectedCrownFragments(),

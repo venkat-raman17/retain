@@ -1,5 +1,6 @@
 import {
   contentProgressSchema,
+  CONTENT_STATUS_RANK,
   type ContentProgress,
   type ContentStatus,
   type ContentType,
@@ -59,15 +60,21 @@ export class SqliteContentProgressRepository implements ContentProgressRepositor
     at: string,
   ): Promise<ContentProgress> {
     const existing = await this.get(contentType, contentId);
-    const firstOpenedAt = existing?.firstOpenedAt ?? (status === 'unread' ? null : at);
+    // Progress only moves forward — never downgrade (e.g. re-opening a finished
+    // day writes 'opened' but must not undo 'completed'). Timestamps still settle.
+    const effectiveStatus: ContentStatus =
+      existing && CONTENT_STATUS_RANK[existing.status] >= CONTENT_STATUS_RANK[status]
+        ? existing.status
+        : status;
+    const firstOpenedAt = existing?.firstOpenedAt ?? (effectiveStatus === 'unread' ? null : at);
     const completedAt =
-      status === 'completed' ? (existing?.completedAt ?? at) : (existing?.completedAt ?? null);
+      effectiveStatus === 'completed' ? (existing?.completedAt ?? at) : (existing?.completedAt ?? null);
 
     const next = contentProgressSchema.parse({
       id: existing?.id ?? createId(),
       contentId,
       contentType,
-      status,
+      status: effectiveStatus,
       firstOpenedAt,
       completedAt,
     });

@@ -1,5 +1,6 @@
 import { getDailyPathContent } from '@/content';
 import type { ContentProgressRepository, PathRepository, UserProfileRepository } from '@/db';
+import type { ContentStatus } from '@/features/codex/domain/content-progress';
 import type { Clock } from '@/shared/lib';
 
 import { currentPathDay } from '../domain/practice';
@@ -71,6 +72,18 @@ export class DailyPathService {
   async markDayOpened(dayNumber: number): Promise<void> {
     const now = this.clock.now().toISOString();
     await this.contentProgress.markStatus('daily_path', `day-${dayNumber}`, 'opened', now);
+  }
+
+  /** Persist that the day's hidden instruction was revealed, so it survives navigation. */
+  async markDaySecretRevealed(dayNumber: number): Promise<void> {
+    const now = this.clock.now().toISOString();
+    await this.contentProgress.markStatus('daily_path', `day-${dayNumber}`, 'revealed', now);
+  }
+
+  /** The persisted progress status for a day ('unread' when never touched). */
+  async getDayProgressStatus(dayNumber: number): Promise<ContentStatus> {
+    const progress = await this.contentProgress.get('daily_path', `day-${dayNumber}`);
+    return progress?.status ?? 'unread';
   }
 
   async markDayCompleted(dayNumber: number): Promise<void> {

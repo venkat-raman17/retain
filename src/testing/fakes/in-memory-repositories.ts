@@ -1,6 +1,5 @@
 import type {
   AchievementsRepository,
-  BoundaryRepository,
   ContentProgressRepository,
   EarnedAchievement,
   ForgeCategoryCount,
@@ -12,10 +11,9 @@ import type {
   UrgeRepository,
   UserProfileRepository,
 } from '@/db';
-import type { Boundary } from '@/features/boundaries/domain/boundary';
-import type { BoundaryCheckin } from '@/features/boundaries/domain/boundary-checkin';
 import {
   contentProgressSchema,
+  CONTENT_STATUS_RANK,
   type ContentProgress,
   type ContentStatus,
   type ContentType,
@@ -152,44 +150,6 @@ class InMemoryLapseRepository implements LapseRepository {
   }
 }
 
-class InMemoryBoundaryRepository implements BoundaryRepository {
-  private readonly boundaries = new Map<string, Boundary>();
-  private checkins: BoundaryCheckin[] = [];
-
-  async list(activeOnly = false): Promise<Boundary[]> {
-    const all = [...this.boundaries.values()].sort((a, b) =>
-      a.createdAt.localeCompare(b.createdAt),
-    );
-    return activeOnly ? all.filter((boundary) => boundary.isActive) : all;
-  }
-  async getById(id: string): Promise<Boundary | null> {
-    return this.boundaries.get(id) ?? null;
-  }
-  async save(boundary: Boundary): Promise<void> {
-    this.boundaries.set(boundary.id, boundary);
-  }
-  async setActive(id: string, isActive: boolean, updatedAt: string): Promise<void> {
-    const existing = this.boundaries.get(id);
-    if (existing) this.boundaries.set(id, { ...existing, isActive, updatedAt });
-  }
-  async remove(id: string): Promise<void> {
-    this.boundaries.delete(id);
-    this.checkins = this.checkins.filter((checkin) => checkin.boundaryId !== id);
-  }
-  async addCheckin(checkin: BoundaryCheckin): Promise<void> {
-    this.checkins.unshift(checkin);
-  }
-  async listCheckins(boundaryId: string, limit = 100): Promise<BoundaryCheckin[]> {
-    return this.checkins.filter((checkin) => checkin.boundaryId === boundaryId).slice(0, limit);
-  }
-  async countCheckinsSince(iso: string): Promise<number> {
-    return this.checkins.filter((checkin) => checkin.checkedAt >= iso).length;
-  }
-  async countKeptCheckinsSince(iso: string): Promise<number> {
-    return this.checkins.filter((c) => c.checkedAt >= iso && c.status === 'kept').length;
-  }
-}
-
 class InMemoryContentProgressRepository implements ContentProgressRepository {
   private readonly items = new Map<string, ContentProgress>();
   private key(type: ContentType, id: string): string {
@@ -206,13 +166,19 @@ class InMemoryContentProgressRepository implements ContentProgressRepository {
     at: string,
   ): Promise<ContentProgress> {
     const existing = await this.get(contentType, contentId);
+    // Monotonic — mirrors the SQLite repo so re-opening never undoes progress.
+    const effectiveStatus: ContentStatus =
+      existing && CONTENT_STATUS_RANK[existing.status] >= CONTENT_STATUS_RANK[status]
+        ? existing.status
+        : status;
     const next = contentProgressSchema.parse({
       id: existing?.id ?? createId(),
       contentId,
       contentType,
-      status,
-      firstOpenedAt: existing?.firstOpenedAt ?? (status === 'unread' ? null : at),
-      completedAt: status === 'completed' ? (existing?.completedAt ?? at) : (existing?.completedAt ?? null),
+      status: effectiveStatus,
+      firstOpenedAt: existing?.firstOpenedAt ?? (effectiveStatus === 'unread' ? null : at),
+      completedAt:
+        effectiveStatus === 'completed' ? (existing?.completedAt ?? at) : (existing?.completedAt ?? null),
     });
     this.items.set(this.key(contentType, contentId), next);
     return next;
@@ -300,7 +266,6 @@ export function createFakeRepositories(): Repositories {
     urge: new InMemoryUrgeRepository(),
     forge: new InMemoryForgeRepository(),
     lapse: new InMemoryLapseRepository(),
-    boundary: new InMemoryBoundaryRepository(),
     contentProgress: new InMemoryContentProgressRepository(),
     settings: new InMemorySettingsRepository(),
     achievements: new InMemoryAchievementsRepository(),

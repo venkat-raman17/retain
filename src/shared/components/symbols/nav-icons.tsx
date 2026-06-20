@@ -60,6 +60,19 @@ export const PillarsSigil: FC<SymbolProps> = ({ size = 24, color = '#888', strok
   </Svg>
 );
 
+/** Hall tab — a columned hall with pediment and steps. Where the honors are kept. */
+export const HallSigil: FC<SymbolProps> = ({ size = 24, color = '#888', strokeWidth = 1.5 }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <Path
+      d="M 3 8 L 12 3 L 21 8 M 5 8 L 5 17 M 12 8 L 12 17 M 19 8 L 19 17 M 4 17 L 20 17 M 3 20 L 21 20"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+
 /** Progress/Record tab — hand mirror. Revealing the pattern. */
 export const MirrorSigil: FC<SymbolProps> = ({ size = 24, color = '#888', strokeWidth = 1.5 }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">

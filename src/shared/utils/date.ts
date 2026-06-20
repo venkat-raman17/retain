@@ -28,6 +28,21 @@ export function differenceInDays(a: Date, b: Date): number {
   return Math.round((startOfUtcDay(a).getTime() - startOfUtcDay(b).getTime()) / MS_PER_DAY);
 }
 
+/**
+ * Midnight of the device-LOCAL calendar day containing `date`. Used for the
+ * "what day of the practice is it for the user" math (path day, the daily quest
+ * window), so the count flips at the user's local midnight — not UTC midnight.
+ * Streak/trend math stays on `startOfUtcDay` for timezone-stable history.
+ */
+export function startOfLocalDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+/** Whole local-calendar-day difference (a − b), positive when `a` is later. */
+export function differenceInCalendarDaysLocal(a: Date, b: Date): number {
+  return Math.round((startOfLocalDay(a).getTime() - startOfLocalDay(b).getTime()) / MS_PER_DAY);
+}
+
 export function addDays(date: Date, days: number): Date {
   return new Date(date.getTime() + days * MS_PER_DAY);
 }
