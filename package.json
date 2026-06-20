@@ -21,7 +21,8 @@
     "build:preview:ios": "eas build --platform ios --profile preview",
     "build:preview": "eas build --platform all --profile preview",
     "build:dev:android": "eas build --platform android --profile dev --local",
-    "build:dev:ios": "eas build --platform ios --profile dev --local"
+    "build:dev:ios": "eas build --platform ios --profile dev --local",
+    "submit:preview:ios": "eas submit --platform ios --latest"
   },
   "dependencies": {
     "@expo-google-fonts/cinzel": "^0.4.2",
