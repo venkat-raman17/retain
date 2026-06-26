@@ -32,7 +32,9 @@ export class LapseRecoveryService {
 
   async recordReturn(): Promise<UserProfile> {
     const now = this.clock.now().toISOString();
-    const profile = await this.profiles.update({ currentPathStartedAt: now });
+    // A return restarts the run at day 1, so the start-day offset resets — every
+    // arc is walkable again and no honors should stay hidden.
+    const profile = await this.profiles.update({ currentPathStartedAt: now, startDayOffset: 0 });
     await this.path.addEvent(createPathEvent('return_recorded', this.clock));
     return profile;
   }

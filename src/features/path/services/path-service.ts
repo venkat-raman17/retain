@@ -35,6 +35,7 @@ export class PathService {
     const next = await this.profiles.update({
       currentPathStartedAt: isoStart,
       pathStartedAt: profile.pathStartedAt ?? isoStart,
+      startDayOffset: offsetDays,
     });
     await this.path.addEvent(createPathEvent('path_started', this.clock));
     return next;

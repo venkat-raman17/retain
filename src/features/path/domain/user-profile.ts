@@ -25,6 +25,12 @@ export const userProfileSchema = z.object({
   pathStartedAt: z.string().datetime().nullable(),
   /** Start of the current run; reset to now on a return after a lapse. */
   currentPathStartedAt: z.string().datetime().nullable(),
+  /**
+   * Days skipped before the user's first in-app day (onboarding "I've already
+   * done N days"). 0 = started at day 1. Used to hide honors for arcs/days the
+   * user never walked. Reset to 0 on a full restart / return (a new run from day 1).
+   */
+  startDayOffset: z.number().int().min(0).default(0),
   appContentVersion: z.number().int().min(0),
   preferredTeachingTone: teachingToneSchema,
   notificationStyle: notificationStyleSchema,
@@ -48,6 +54,7 @@ export const DEFAULT_PROFILE: Omit<UserProfile, 'createdAt' | 'updatedAt'> = {
   customVow: null,
   pathStartedAt: null,
   currentPathStartedAt: null,
+  startDayOffset: 0,
   appContentVersion: 1,
   preferredTeachingTone: 'gentle',
   notificationStyle: 'off',

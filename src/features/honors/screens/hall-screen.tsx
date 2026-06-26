@@ -119,14 +119,16 @@ function HonorTile({
 
 // ─── Milestone keys ───────────────────────────────────────────────────────────
 
-function KeyRow({ completedDays }: { completedDays: number[] }) {
+function KeyRow({ completedDays, startDayOffset }: { completedDays: number[]; startDayOffset: number }) {
   const { colors } = useTheme();
   const completedSet = new Set(completedDays);
-  const anyKey = MILESTONE_DAYS.some((d) => completedSet.has(d));
+  // Hide milestone keys for days the man skipped at the start — he can never earn them.
+  const keyDays = MILESTONE_DAYS.filter((d) => d > startDayOffset);
+  const anyKey = keyDays.some((d) => completedSet.has(d));
   if (!anyKey) return null;
   return (
     <View style={styles.keyRow}>
-      {MILESTONE_DAYS.map((day) => {
+      {keyDays.map((day) => {
         const earned = completedSet.has(day);
         return (
           <View key={day} style={styles.keyItem}>
@@ -153,7 +155,12 @@ export function HallScreen() {
   const { summary, refresh: refreshHonors } = useHonors();
   const { currentDay, isRunning } = usePath();
   const day = currentDay > 0 ? currentDay : 1;
-  const { quests, refresh: refreshQuests } = useTrialsOverview(day, 12);
+  const startDayOffset = summary?.startDayOffset ?? 0;
+  // Don't surface days the man skipped at the start (onboarding offset) in the gallery.
+  const { quests, refresh: refreshQuests } = useTrialsOverview(
+    day,
+    Math.min(12, Math.max(1, day - startDayOffset)),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -221,7 +228,7 @@ export function HallScreen() {
                 {embersDisplay}
               </AppText>
               <AppText variant="caption" color="muted" align="center" uppercase>
-                {copy.path.stats.embers}
+                {copy.honorsHall.embers}
               </AppText>
             </View>
             <View style={styles.statDivider} />
@@ -241,7 +248,7 @@ export function HallScreen() {
           <AppText variant="caption" color="energy" uppercase>
             {copy.honorsHall.keys}
           </AppText>
-          <KeyRow completedDays={completedDays} />
+          <KeyRow completedDays={completedDays} startDayOffset={startDayOffset} />
           {completedDays.filter((d) =>
             MILESTONE_DAYS.includes(d as (typeof MILESTONE_DAYS)[number]),
           ).length === 0 ? (
@@ -280,7 +287,7 @@ export function HallScreen() {
                     {todayTrial.trial.name}
                   </AppText>
                   <AppText variant="caption" color="muted">
-                    {`Day ${todayTrial.trial.dayNumber} · +${todayTrial.trial.rewardEmbers} ${copy.path.stats.embers}`}
+                    {`Day ${todayTrial.trial.dayNumber} · +${todayTrial.trial.rewardEmbers} ${copy.honorsHall.embers}`}
                   </AppText>
                 </View>
               </View>

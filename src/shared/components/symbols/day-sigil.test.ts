@@ -1,15 +1,9 @@
-import { theme, type ArchetypeTone } from '@/shared/design';
+import { theme } from '@/shared/design';
 import { resolveDayTone } from '@/shared/hooks/use-day-theme';
 
 import { daySigilParams } from './day-sigil';
 
-const ARCHETYPES: ArchetypeTone[] = [
-  'monk', 'warrior', 'craftsman', 'king', 'lover', 'pilgrim',
-  'sage', 'brother', 'guardian', 'builder', 'healer', 'sovereign',
-];
-
 const arcForDay = (day: number) => Math.min(9, Math.max(1, Math.ceil(day / 10)));
-const archForDay = (day: number) => ARCHETYPES[day % ARCHETYPES.length]!;
 
 describe('daySigilParams', () => {
   it('is deterministic — same inputs yield identical params', () => {
@@ -45,8 +39,8 @@ describe('daySigilParams', () => {
 
 describe('resolveDayTone', () => {
   it('is deterministic and theme-safe', () => {
-    const a = resolveDayTone({ day: 12, archetype: 'warrior', arcNumber: 2 }, theme);
-    const b = resolveDayTone({ day: 12, archetype: 'warrior', arcNumber: 2 }, theme);
+    const a = resolveDayTone({ day: 12, arcNumber: 2 }, theme);
+    const b = resolveDayTone({ day: 12, arcNumber: 2 }, theme);
     expect(a).toEqual(b);
     expect(a.base).toMatch(/^#[0-9a-fA-F]{6}$/);
   });
@@ -58,9 +52,8 @@ describe('per-day distinctness across the full path', () => {
     for (let day = 1; day <= 91; day += 1) {
       const crown = day === 91;
       const arc = arcForDay(day);
-      const arch = crown ? 'sovereign' : archForDay(day);
       const p = daySigilParams(day, arc, crown);
-      const tone = resolveDayTone({ day, archetype: arch, arcNumber: arc }, theme);
+      const tone = resolveDayTone({ day, arcNumber: arc }, theme);
       signatures.add(`${p.rings}-${p.accentCount}-${p.accentRotation}-${p.markStyle}-${tone.base}`);
     }
     expect(signatures.size).toBe(91);

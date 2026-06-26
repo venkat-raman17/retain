@@ -1,16 +1,13 @@
-import { type FC, useCallback } from 'react';
+import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 
 import { copy } from '@/content';
 import { useProgressSummary } from '@/features/progress/hooks/use-progress-summary';
 import type {
-  ForgeCategoryCount,
   PathArc,
   PracticeRhythm,
   RecordData,
-  TriggerCount,
-  WeeklyPattern,
 } from '@/features/progress/services/progress-service';
 import type { TrendSeries } from '@/features/progress/domain/trends';
 import {
@@ -20,12 +17,8 @@ import {
   AppHero,
   AppScreen,
   AppText,
-  Bento,
-  BentoItem,
-  FORGE_GLYPHS,
   MirrorSigil,
   symbolStroke,
-  TRIGGER_GLYPHS,
   useCountUp,
 } from '@/shared/components';
 import { theme } from '@/shared/design';
@@ -43,17 +36,6 @@ function SectionLabel({ children }: { children: string }) {
     <AppText variant="caption" color="muted" uppercase style={styles.sectionLabel}>
       {children}
     </AppText>
-  );
-}
-
-type InsightColor = 'accent' | 'energy' | 'calm' | 'secondary';
-
-function InsightRow({ label, value, valueColor = 'accent' }: { label: string; value: string; valueColor?: InsightColor }) {
-  return (
-    <View style={styles.insightRow}>
-      <AppText variant="body" color="secondary">{label}</AppText>
-      <AppText variant="body" color={valueColor}>{value}</AppText>
-    </View>
   );
 }
 
@@ -174,102 +156,6 @@ function TrendCard({ series, text, kind, color }: { series: TrendSeries; text: T
   );
 }
 
-// ─── The mirror: reveal, fire map, forge balance, weekly pattern ───────────────
-
-function RevealCard({ reveal }: { reveal: RecordData['reveal'] }) {
-  return (
-    <AppCard tone="overlay">
-      <SectionLabel>{copy.record.reveal.label}</SectionLabel>
-      {reveal ? (
-        <View style={styles.cardBody}>
-          <AppText variant="title" color="primary">{reveal.title}</AppText>
-          <AppText variant="body" color="secondary">{reveal.body}</AppText>
-        </View>
-      ) : (
-        <AppText variant="body" color="muted">{copy.record.reveal.empty}</AppText>
-      )}
-    </AppCard>
-  );
-}
-
-/** Distribution tiles — reuses the Forge screen idiom (glyph + label + count). */
-function CountTiles({
-  items,
-  glyphs,
-}: {
-  items: { key: string; label: string; count: number }[];
-  glyphs: Record<string, FC<{ size?: number; color?: string; strokeWidth?: number }>>;
-}) {
-  const { colors } = useTheme();
-  return (
-    <Bento>
-      {items.map((item) => {
-        const Glyph = glyphs[item.key];
-        const active = item.count > 0;
-        return (
-          <BentoItem key={item.key}>
-            <AppCard tone={active ? 'raised' : 'overlay'} style={styles.countTile}>
-              {Glyph ? <Glyph size={24} color={active ? colors.primary : colors.textMuted} strokeWidth={symbolStroke(24)} /> : null}
-              <AppText variant="label" color={active ? 'primary' : 'muted'} numberOfLines={1}>{item.label}</AppText>
-              <AppText variant="caption" color={active ? 'energy' : 'muted'}>{item.count.toString()}</AppText>
-            </AppCard>
-          </BentoItem>
-        );
-      })}
-    </Bento>
-  );
-}
-
-function FireMapCard({ triggerCounts }: { triggerCounts: TriggerCount[] }) {
-  const total = triggerCounts.reduce((sum, t) => sum + t.count, 0);
-  return (
-    <AppCard tone="overlay">
-      <SectionLabel>{copy.record.fireMap.label}</SectionLabel>
-      {total === 0 ? (
-        <AppText variant="body" color="muted">{copy.record.fireMap.empty}</AppText>
-      ) : (
-        <CountTiles glyphs={TRIGGER_GLYPHS} items={triggerCounts.map((t) => ({ key: t.triggerType, label: t.label, count: t.count }))} />
-      )}
-    </AppCard>
-  );
-}
-
-function ForgeBalanceCard({ forgeCategoryCounts, forgeBalance }: { forgeCategoryCounts: ForgeCategoryCount[]; forgeBalance: string | null }) {
-  return (
-    <AppCard tone="overlay">
-      <SectionLabel>{copy.record.forge.label}</SectionLabel>
-      {forgeBalance ? (
-        <>
-          <AppText variant="body" color="secondary" style={styles.framing}>{forgeBalance}</AppText>
-          <CountTiles glyphs={FORGE_GLYPHS} items={forgeCategoryCounts.map((c) => ({ key: c.category, label: c.label, count: c.count }))} />
-        </>
-      ) : (
-        <AppText variant="body" color="muted">{copy.record.forge.empty}</AppText>
-      )}
-    </AppCard>
-  );
-}
-
-/** This week's pattern — only the rows that have something to say. */
-function WeeklyPatternCard({ pattern }: { pattern: WeeklyPattern }) {
-  const rows: { label: string; value: string }[] = [];
-  if (pattern.mostCommonTriggerLabel) rows.push({ label: copy.record.pattern.trigger, value: pattern.mostCommonTriggerLabel });
-  if (pattern.strongestUrgeHourLabel) rows.push({ label: copy.record.pattern.hour, value: pattern.strongestUrgeHourLabel });
-  if (pattern.mostCommonResponse) rows.push({ label: copy.record.pattern.response, value: pattern.mostCommonResponse });
-  if (pattern.strongestForgeCategoryLabel) rows.push({ label: copy.record.pattern.forge, value: pattern.strongestForgeCategoryLabel });
-  if (rows.length === 0) return null;
-  return (
-    <AppCard tone="overlay">
-      <SectionLabel>{copy.record.rhythm.note}</SectionLabel>
-      <View style={styles.cardBody}>
-        {rows.map((row) => (
-          <InsightRow key={row.label} label={row.label} value={row.value} valueColor="accent" />
-        ))}
-      </View>
-    </AppCard>
-  );
-}
-
 // ─── Next command ─────────────────────────────────────────────────────────────
 
 function NextCommandCard({ record }: { record: RecordData }) {
@@ -309,19 +195,11 @@ export function RecordScreen() {
           art={<MirrorSigil size={88} color={tone.text} strokeWidth={symbolStroke(88)} />}
         />
 
-        <AppCard tone="overlay">
-          <AppText variant="body" color="secondary">{copy.record.intention}</AppText>
-        </AppCard>
-
         {record ? (
           <>
             <ArcCard arc={record.arc} />
             <RhythmCard practiceRhythm={record.practiceRhythm} />
             <TrendCard series={record.urgeTrend} text={copy.record.urgeTrend} kind="count" />
-            <RevealCard reveal={record.reveal} />
-            <FireMapCard triggerCounts={record.triggerCounts} />
-            <ForgeBalanceCard forgeCategoryCounts={record.forgeCategoryCounts} forgeBalance={record.forgeBalance} />
-            <WeeklyPatternCard pattern={record.weeklyPattern} />
             <NextCommandCard record={record} />
           </>
         ) : null}
@@ -333,10 +211,8 @@ export function RecordScreen() {
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
   sectionLabel: { marginBottom: theme.spacing.sm },
-  countTile: { gap: theme.spacing.xs, alignItems: 'flex-start' },
   cardBody: { gap: theme.spacing.sm },
   framing: { marginBottom: theme.spacing.md },
-  insightRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: theme.spacing.md },
   arcTimeline: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm, marginVertical: theme.spacing.xs },
   arcDot: { width: 9, height: 9, borderRadius: 5 },
   arcTrack: { flex: 1, height: 6, flexDirection: 'row', borderRadius: 3, overflow: 'hidden' },

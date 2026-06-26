@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import { getDailyPathContent } from '@/content';
-import type { ArchetypeTone } from '@/shared/design';
 
 import { usePath } from '@/features/path/hooks/use-path';
 import { useDayQuest } from '@/features/quest/hooks/use-day-quest';
@@ -12,7 +11,8 @@ export interface TodaysObjective {
   forgeChallenge: string;
   arcNumber: number;
   arcTitle: string;
-  archetype: ArchetypeTone | null;
+  /** The day's archetype slug, used as the focal-sigil seed on the objective card. */
+  archetype: string | null;
   /** True once a forge act has been logged today (the day's forge objective met). */
   alreadyDoneToday: boolean;
 }
@@ -42,7 +42,7 @@ export function useTodaysObjective(): UseTodaysObjective {
         forgeChallenge: content.forgeChallenge,
         arcNumber: content.arcNumber,
         arcTitle: content.arcTitle,
-        archetype: (content.archetype as ArchetypeTone | undefined) ?? null,
+        archetype: content.archetype ?? null,
         alreadyDoneToday:
           quest?.objectives.some((o) => o.kind === 'forge_act' && o.complete) ?? false,
       }

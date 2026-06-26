@@ -5,10 +5,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-61', dayNumber: 61, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Do Not Disappear', theme: 'isolation is the enemy, reaching out',
-    season: 'brotherhood_and_service', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man who reaches out before isolation rots the room.',
+    season: 'brotherhood_and_service', archetype: 'arch-61',
+    invocation: 'Today you walk as the Brother-Keeper: a man who refuses to let another disappear, and refuses to disappear himself.',
     archetypeExpression:
-      "The Brother governs today because the danger is the slow withdrawal, and the Brother is the part of the man that refuses to disappear. He does not suffer silently to protect an image of self-sufficiency; he sends the message before pride makes the cost too high. That is why today's command is not introspection but contact — reach one brother, because a hand offered in time is the difference between a lapse and a return.",
+      'The Brother-Keeper governs today because the danger is the slow withdrawal, and he is the part of the man that will not let anyone vanish unseen — least of all himself. He does not suffer silently to protect an image of self-sufficiency; he sends the message before pride makes the cost too high. That bends today\'s command away from introspection and toward contact: reach one brother, because a hand offered in time is the difference between a lapse and a return.',
     lineagePassageId: 'synthesis-another-self',
     openingLine: 'The man who disappears from his brothers has already lost one gate.',
     teachingBody:
@@ -19,7 +19,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, reach one brother before any part of you considers disappearing.',
     practice: 'Send one honest message today to someone who matters. No performance, no apology — simply presence.',
     forgeChallenge: 'If you have been withdrawing from anyone who matters, end the withdrawal today with one concrete act of return.',
-    journalPrompt: 'Who have I been quietly withdrawing from? Why? What does the withdrawal cost me?',
     eveningAccount: 'Did I remain present to my relationships today, or did I begin to fade?',
     seal: 'The man who stays in contact has half-won the night.',
     contentStatus: 'final',
@@ -30,10 +29,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-62', dayNumber: 62, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: "The Brother's Hand", theme: 'brotherhood, honest presence',
-    season: 'brotherhood_and_service', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man who offers a hand that does not require the receiver to perform strength.',
+    season: 'brotherhood_and_service', archetype: 'arch-62',
+    invocation: 'Today you walk as the Hand-Giver: a man who offers a hand that does not require the receiver to perform strength.',
     archetypeExpression:
-      "The Brother rules today because real loyalty is honesty, not mutual performance — two men presenting curated weeks return nothing to each other. He contacts one person with truth rather than polish, refusing to suffer silently behind an image of self-sufficiency. That bends today's practice toward a single true sentence given to a single real person, the muscle of honest presence rebuilt by use.",
+      'The Hand-Giver rules today because real loyalty is honesty, not mutual performance — two men presenting curated weeks return nothing to each other. He gives one person the truth rather than the polish, refusing to hide behind an image of self-sufficiency. That bends today\'s practice toward a single true sentence given to a single real person, the muscle of honest presence rebuilt by use.',
     lineagePassageId: 'synthesis-another-self',
     openingLine: 'A brother does not need you to be strong. He needs you to be honest.',
     teachingBody:
@@ -44,7 +43,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Tell one brother one true thing today.',
     practice: 'Practice the discipline of honest presence: one real sentence, given to one real person.',
     forgeChallenge: 'Offer the kind of hand to someone today that you wish someone had offered you when you needed it.',
-    journalPrompt: 'Who in my life have I been performing for instead of being honest with?',
     eveningAccount: 'Was anything I said today actually true to what I was feeling?',
     seal: 'A brother\'s hand is a hand that does not require performance.',
     contentStatus: 'final',
@@ -55,10 +53,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-63', dayNumber: 63, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Speak Before the Fall', theme: 'accountability, honesty before crisis',
-    season: 'brotherhood_and_service', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man who speaks before the hour of weakness, not only after the loss.',
+    season: 'brotherhood_and_service', archetype: 'arch-63',
+    invocation: 'Today you walk as the Forewarner: a man who speaks before the hour of weakness, not only after the loss.',
     archetypeExpression:
-      "The Brother governs today because his discipline is to reach out before isolation rots — to send the message before pride makes the cost too high. Pre-crisis honesty has no narrative of contrition; it simply admits, while still standing, that the standing is not guaranteed. So today's command recruits a brother in advance: name the hardest hour now and ask him to check in before the test arrives.",
+      'The Forewarner governs today because his discipline is to name the danger while it is still abstract — to recruit help before the crisis instead of confessing after it. Pre-crisis honesty has no narrative of contrition; it simply admits, while still standing, that the standing is not guaranteed. So today\'s command enlists a brother in advance: name the hardest hour now and ask him to check in before the test arrives.',
     lineagePassageId: 'synthesis-another-self',
     openingLine: 'The time to speak is before the hour of weakness, not after.',
     teachingBody:
@@ -69,7 +67,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, speak to one brother about the practice before any crisis.',
     practice: 'Identify the hardest hour or day of your week. Name it in advance to someone who matters.',
     forgeChallenge: 'Set up one accountability check-in this week, before you need it.',
-    journalPrompt: 'What stops me from speaking about the practice when I am still standing? What does pride cost?',
     eveningAccount: 'Was I honest in advance, or am I still saving honesty for after the loss?',
     seal: 'Speak before the fall. The man who does this falls less.',
     contentStatus: 'final',
@@ -80,10 +77,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-64', dayNumber: 64, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Pride Locks the Door', theme: 'pride vs humility, asking for help',
-    season: 'brotherhood_and_service', archetype: 'pilgrim',
-    invocation: 'Today you walk as the Pilgrim: a man humble enough to ask for company on a road no one walks perfectly alone.',
+    season: 'brotherhood_and_service', archetype: 'arch-64',
+    invocation: 'Today you walk as the Companioned: a man humble enough to let others walk a road no one walks perfectly alone.',
     archetypeExpression:
-      "The Pilgrim governs today because his humility is plain — the road is hard, and asking for company is not a failure of the road but part of how it is walked. He does not dramatize the difficulty or restart in private; he keeps walking and lets others walk with him. That bends today's command toward an honest ask: find the door pride has locked from the inside and open it.",
+      'The Companioned governs today because his humility is plain — the road is hard, and asking for company is not a failure of the road but part of how it is walked. He does not wear strength as a costume over a weakness; he names the help he needs and lets a brother answer. That bends today\'s command toward an honest ask: find the door pride has locked from the inside and open it.',
     lineagePassageId: 'tao-64-single-step',
     openingLine: "Pride says: I don't need anyone. Humility says: I'll call before it costs me.",
     teachingBody:
@@ -94,7 +91,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, notice where pride is locking a door. Open it.',
     practice: 'Identify one ask you have been refusing to make out of pride. Make it today.',
     forgeChallenge: 'Call or message someone who could help with something you have been carrying alone. Ask honestly.',
-    journalPrompt: 'What pride do I wear that costs me more than it returns?',
     eveningAccount: 'Did I keep any doors locked today out of pride?',
     seal: "Humility is what unlocks the door pride has been guarding.",
     contentStatus: 'final',
@@ -106,10 +102,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-65', dayNumber: 65, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'A Man Needs Witness', theme: 'being seen, the regulated nervous system',
-    season: 'brotherhood_and_service', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man who arranges to be seen, because no one governs himself well unseen.',
+    season: 'brotherhood_and_service', archetype: 'arch-65',
+    invocation: 'Today you walk as the Witnessed: a man who arranges to be seen, because no one governs himself well unseen.',
     archetypeExpression:
-      "The Brother governs today because his strength is partly relational — he does not suffer in silence to protect an image of self-sufficiency, and he does not disappear. He reaches for reliable, honest witness the way the lodges and the bands of brothers always did, not as decoration but as the structure that makes inner work survivable. So today's command is structural: arrange one piece of real witness and strengthen the weakest part of the web that sees you.",
+      'The Witnessed governs today because his strength is partly relational — a man steadies through honest contact with steady people, and the man who needs no witness has only not yet noticed it. He reaches for reliable, honest witness the way the lodges and the bands of brothers always did, not as decoration but as the structure that makes inner work survivable. So today\'s command is structural: arrange one piece of real witness and strengthen the weakest part of the web that sees you.',
     lineagePassageId: 'synthesis-another-self',
     openingLine: 'No man governs himself well in permanent isolation.',
     teachingBody:
@@ -120,7 +116,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, arrange one piece of real witness. A call, a meeting, an honest conversation.',
     practice: 'Audit your witness structure: who sees you regularly? Honestly? Strengthen the weakest part this week.',
     forgeChallenge: 'Establish one new piece of recurring witness — a weekly call, a regular meeting, a check-in pattern.',
-    journalPrompt: 'Who actually sees me? When was the last time I was actually seen?',
     eveningAccount: 'Was I witnessed today, even briefly?',
     seal: 'Witness is structure, not luxury.',
     contentStatus: 'final',
@@ -131,10 +126,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-66', dayNumber: 66, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Serve Someone', theme: 'service as Forge, outward attention',
-    season: 'brotherhood_and_service', archetype: 'brother',
-    invocation: "Today you walk as the Brother: a man who turns his attention outward toward another's real need.",
+    season: 'brotherhood_and_service', archetype: 'arch-66',
+    invocation: 'Today you walk as the Servant: a man who turns his attention outward toward another\'s real need.',
     archetypeExpression:
-      "The Brother governs today because service is how he refuses to disappear into himself. The compulsion is self-referential, looping attention back to appetite and discomfort; genuine presence to someone else's reality occupies that channel and leaves the urge no strong signal. So today's command is practical, not moral — serve someone, anonymously if you can, and watch the compulsion's terrain grow smaller.",
+      'The Servant governs today because real service is how he refuses to collapse inward into his own appetite. The compulsion is self-referential, looping attention back to craving and discomfort; genuine presence to someone else\'s reality occupies that channel and leaves the urge no strong signal. So today\'s command is practical, not moral — serve someone, anonymously if you can, and watch the compulsion\'s terrain grow smaller.',
     lineagePassageId: 'analects-15-23-reciprocity',
     openingLine: "The man absorbed in another's need has less room for the compulsion.",
     teachingBody:
@@ -145,7 +140,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, serve someone. Anonymously if possible. Realistically if not.',
     practice: 'Identify one person whose need you can address today. Address it without making it about you.',
     forgeChallenge: 'Build one act of service into your weekly rhythm this week. Repeat next week.',
-    journalPrompt: 'Whose need have I been ignoring because I have been absorbed in my own appetite?',
     eveningAccount: 'Did I serve anyone today, or did the whole day go to my own concerns?',
     seal: 'Attention given outward returns the man to himself larger.',
     contentStatus: 'final',
@@ -157,10 +151,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-67', dayNumber: 67, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Repair One Bond', theme: 'repair, honesty, relationship',
-    season: 'brotherhood_and_service', archetype: 'healer',
-    invocation: 'Today you walk as the Healer: a man who repairs one bond instead of carrying fifty avoided conversations.',
+    season: 'brotherhood_and_service', archetype: 'arch-67',
+    invocation: 'Today you walk as the Mender: a man who repairs one bond instead of carrying fifty avoided conversations.',
     archetypeExpression:
-      "The Healer governs today because his discipline is to repair what he can and then move, never making the wound an identity. He looks at the long list of small relational debts draining the interior and picks one — not a sweeping apology tour, one honest sentence to one real person. That is why today's command is bounded and concrete: identify the next repair and make it, trusting that small honest movement returns more than any heroic gesture.",
+      'The Mender governs today because his discipline is to repair what he can and then move, never making a wound an identity. He looks at the long list of small relational debts draining the interior and picks one — not a sweeping apology tour, one honest sentence to one real person. That is why today\'s command is bounded and concrete: identify the next repair and make it, trusting that small honest movement returns more than any heroic gesture.',
     lineagePassageId: 'analects-15-23-reciprocity',
     openingLine: 'One honest repair is worth more than fifty avoided conversations.',
     teachingBody:
@@ -171,7 +165,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, identify the next repair. Make it.',
     practice: 'List three relational debts. Pick the one most likely to repay attention. Address it today.',
     forgeChallenge: 'Send the message you have been postponing for too long. Send it now, before the day ends.',
-    journalPrompt: 'What repair have I been carrying that costs me daily energy to keep avoiding?',
     eveningAccount: 'Did I repair anything today? Even one sentence?',
     seal: 'Small honest repair returns more than any heroic apology tour.',
     contentStatus: 'final',
@@ -182,10 +175,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-68', dayNumber: 68, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Leave Isolation', theme: 'structural companionship, not solitary',
-    season: 'brotherhood_and_service', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man who tells real solitude apart from the cell of hiding.',
+    season: 'brotherhood_and_service', archetype: 'arch-68',
+    invocation: 'Today you walk as the Lodge-Builder: a man who pairs his solitude with community and tells the sanctuary apart from the cell.',
     archetypeExpression:
-      "The Brother governs today because he knows the solitary romance can become a costume for isolation — disappearing dressed up as discipline. He examines his aloneness honestly: does it return him stronger to his life, or quietly remove him from it? That bends today's command toward one concrete act of contact, leaving the cell while still honoring the restorative solitude every tradition paired with community.",
+      'The Lodge-Builder governs today because he knows the solitary romance can become a costume for isolation — disappearing dressed up as discipline. Every tradition that took formation seriously bound solitude to community, the hermit to his elder, the monk to his house; he rebuilds that pairing instead of romanticizing the lone road. That bends today\'s command toward one concrete act of contact, leaving the cell while still honoring the restorative solitude the work also requires.',
     lineagePassageId: 'synthesis-stillness',
     openingLine: 'The cell is not the sanctuary. The cell is sometimes the problem.',
     teachingBody:
@@ -196,7 +189,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, leave isolation by one concrete act of contact.',
     practice: 'Examine your current ratio of solitude to community. Adjust this week if the balance has tipped.',
     forgeChallenge: 'Plan one act of genuine in-person contact this week. Then plan one act of restorative solitude. Honor both.',
-    journalPrompt: 'Is my current solitude the tool, or the cell? How would I know?',
     eveningAccount: 'Was today restorative solitude or quiet isolation?',
     seal: 'Solitude returns the man strong. Isolation removes him.',
     contentStatus: 'final',
@@ -207,10 +199,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-69', dayNumber: 69, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Brotherhood Without Grievance', theme: 'non-grievance brotherhood, building up',
-    season: 'brotherhood_and_service', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man whose company is the shared project of becoming stronger, not the shared complaint.',
+    season: 'brotherhood_and_service', archetype: 'arch-69',
+    invocation: 'Today you walk as the Whetstone: a man whose company sharpens, the shared project of becoming stronger rather than the shared complaint.',
     archetypeExpression:
-      "The Brother governs today because his shadow is exactly the grievance circle that replaces honest friendship — camaraderie that feels like loyalty but builds nothing. He chooses his company by the year test: does this man, over time, make me stronger or weaker? So today's command steers every conversation toward what is being built, refusing to erode himself or anyone else in the slow motion of complaint.",
+      'The Whetstone governs today because his shadow is exactly the grievance circle that replaces honest friendship — camaraderie that feels like loyalty but builds nothing. He chooses his company by the year test: does this man, over time, make me stronger or weaker? So today\'s command steers every conversation toward what is being built, refusing to erode himself or anyone else in the slow motion of complaint.',
     lineagePassageId: 'synthesis-another-self',
     openingLine: 'Brotherhood is not complaint. It is the shared project of becoming stronger.',
     teachingBody:
@@ -221,7 +213,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, refuse to be part of any grievance circle. Steer conversation toward what is being built.',
     practice: 'In your conversations today, ask one forward question for every backward complaint.',
     forgeChallenge: 'If you are part of a grievance circle that has been quietly draining you, leave it. Or change its center.',
-    journalPrompt: 'Which of my brotherhoods produce growth? Which produce grievance?',
     eveningAccount: 'Did my conversations today build anyone, including me?',
     seal: 'Brotherhood worth keeping is brotherhood that builds.',
     contentStatus: 'final',
@@ -232,10 +223,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-70', dayNumber: 70, arcNumber: 7, arcTitle: 'Brotherhood and Service',
     title: 'Strength Shared Is Strengthened', theme: 'arc 7 milestone, strength multiplied by sharing',
-    season: 'brotherhood_and_service', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: a man whose strength has begun to reach beyond himself.',
+    season: 'brotherhood_and_service', archetype: 'arch-70',
+    invocation: 'Today you walk as the Embedded: a man whose strength is no longer held alone but woven into the brothers around him.',
     archetypeExpression:
-      "The Sovereign governs this milestone because his integration is not held alone — strength hoarded fractures, while strength shared is held by more than one man. He accounts honestly for what the brotherhood arc has extended into his service, his presence, his witness. So today's command is to stand at seventy days, name what has reached beyond the self, and renew the vow with the arc's truth fixed: undivided strength multiplies when it is given form in others.",
+      'The Embedded governs this milestone because strength hoarded fractures, while strength shared is held by more than one man — the brotherhood arc has rooted the practice in others, not just in the self. He accounts honestly for what these ten days have extended into his service, his presence, his witness. So today\'s command is to stand at seventy days, name what has reached beyond the self, and renew the vow with the arc\'s truth fixed: undivided strength multiplies when it is given form in others.',
     lineagePassageId: 'aurelius-8-59-one-another',
     openingLine: 'Seventy days. The practice has begun to reach beyond the self.',
     teachingBody:
@@ -246,7 +237,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Stand at seventy days and account for what the practice has extended beyond you.',
     practice: 'Read the milestone rite. Name what brotherhood and service have built in the last ten days. Renew the vow with twenty days remaining.',
     forgeChallenge: 'Complete one act today that combines inner discipline with genuine service to another person.',
-    journalPrompt: 'How has the practice begun to reach beyond me? Who has felt it?',
     eveningAccount: 'Was the practice shared today, or kept private?',
     seal: 'Strength shared is strengthened. Strength hoarded is lost.',
     contentStatus: 'final',
@@ -259,10 +249,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-71', dayNumber: 71, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'The Shadow Speaks', theme: 'shadow, Jungian recognition, naming darkness',
-    season: 'brotherhood_and_service', archetype: 'sage',
-    invocation: 'Today you walk as the Sage: a man who names what he has been managing not to see in himself.',
+    season: 'brotherhood_and_service', archetype: 'arch-71',
+    invocation: 'Today you walk as the Shadow-Namer: a man who names what he has been managing not to see in himself.',
     archetypeExpression:
-      "The Sage governs today because the work is recognition, and he can see the shape of his own compulsion without drama. He does not wallow in the shadow or make a religion of it; he studies it the way a physician studies a symptom, with curiosity rather than contempt. That bends today's command toward intelligence, not confession: name one disowned thing honestly, and watch the unnamed material lose some of its grip the moment it is seen.",
+      'The Shadow-Namer governs today because the work is recognition, and what is named loses some of its grip the moment it is seen. He does not wallow in the disowned material or make a religion of it; he looks at it the way a physician studies a symptom, with curiosity rather than contempt. That bends today\'s command toward intelligence, not confession: name one disowned thing honestly and take back some of the power the unnamed thing held over you.',
     lineagePassageId: 'analects-2-17-knowledge',
     openingLine: 'The shadow does not destroy the man who names it. It destroys the man who never does.',
     teachingBody:
@@ -273,7 +263,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, name one shadow material honestly. To yourself first. Possibly to one other.',
     practice: 'Sit ten minutes with a difficult inward truth without rushing to resolve it.',
     forgeChallenge: 'Speak one shadow honestly to one trusted person today. Not the worst. The one you are ready to begin with.',
-    journalPrompt: 'What in me have I been managing not to look at? Why?',
     eveningAccount: 'Did I see anything in myself today that I usually do not let myself see?',
     seal: 'The shadow named is the shadow workable.',
     contentStatus: 'final',
@@ -285,10 +274,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-72', dayNumber: 72, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'Shame Is Not Command', theme: 'shame vs guilt, healing vs punishment',
-    season: 'brotherhood_and_service', archetype: 'healer',
-    invocation: 'Today you walk as the Healer: a man who separates the guilt that repairs from the shame that hides.',
+    season: 'brotherhood_and_service', archetype: 'arch-72',
+    invocation: 'Today you walk as the Absolver: a man who separates the guilt that repairs from the shame that hides.',
     archetypeExpression:
-      "The Healer governs today because his whole craft is mercy without excusing — repairing what he can without making a wound an identity. He lets specific guilt do its useful work and motivate repair, then sets down the diffuse shame that says the man himself is wrong, because that voice is the compulsion's most loyal employee. So today's command is a translation: when shame says \"I am the problem,\" convert it to \"this act was wrong; what is the repair?\"",
+      'The Absolver governs today because his whole craft is mercy without excusing — keeping the useful guilt and setting down the corrosive shame. He lets specific guilt do its work and motivate repair, then refuses the diffuse shame that says the man himself is wrong, because that voice is the compulsion\'s most loyal employee. So today\'s command is a translation: when shame says \'I am the problem,\' convert it to \'this act was wrong; what is the repair?\'',
     lineagePassageId: 'synthesis-shame-vs-guilt',
     openingLine: 'Shame says you are the problem. Guilt says you did a wrong thing. Only one is useful.',
     teachingBody:
@@ -299,7 +288,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, distinguish guilt from shame. Use the first. Refuse the second.',
     practice: 'When you notice shame talking — \"I am the problem\" — translate to specific guilt: \"This act was wrong; what is the repair?\"',
     forgeChallenge: 'Do one clean act of repair today motivated by useful guilt, not by shame.',
-    journalPrompt: 'When does shame speak in me? What does it sound like? Has it ever helped me?',
     eveningAccount: 'Did shame run me anywhere today? Did I notice it for what it was?',
     seal: 'Guilt repairs. Shame hides. Choose the workable one.',
     contentStatus: 'final',
@@ -311,10 +299,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-73', dayNumber: 73, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'The Pattern Beneath the Pattern', theme: 'root patterns, second-layer work',
-    season: 'brotherhood_and_service', archetype: 'sage',
-    invocation: 'Today you walk as the Sage: a man who asks not only what happened, but what kept happening.',
+    season: 'brotherhood_and_service', archetype: 'arch-73',
+    invocation: 'Today you walk as the Root-Reader: a man who asks not only what happened, but what the urge was quietly trying to solve.',
     archetypeExpression:
-      "The Sage governs today because the urge is a surface symptom, and his gift is seeing the pattern beneath the pattern without drama. He resists the temptation to make the inquiry an endless intellectual delay; one insight earns one action. So today's command is a single asked question — what state is this urge trying to solve? — followed by addressing that state directly: eat if hungry, call if lonely, train if angry.",
+      'The Root-Reader governs today because the urge is a surface symptom, and his gift is seeing the pattern beneath the pattern without drama. He resists the temptation to turn the inquiry into endless intellectual delay; one insight earns one action. So today\'s command is a single asked question — what state is this urge trying to solve? — followed by addressing that state directly: eat if hungry, call if lonely, train if angry.',
     lineagePassageId: 'analects-2-17-knowledge',
     openingLine: 'Behind the habit of the urge is usually a pattern that the urge is solving.',
     teachingBody:
@@ -325,7 +313,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, when the urge arrives, ask once: what state is this trying to solve?',
     practice: 'Track for three days: what feeling precedes the urge most often? Loneliness? Anger? Boredom? Anxiety? Note it.',
     forgeChallenge: 'Address the underlying state directly today instead of through the urge. Eat if hungry, call if lonely, train if angry.',
-    journalPrompt: 'What state does the compulsion most reliably medicate for me? What would address that state directly?',
     eveningAccount: 'Did I see beneath the urge today, or only fight its surface?',
     seal: 'The urge is the symptom. The root is the work.',
     contentStatus: 'final',
@@ -337,10 +324,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-74', dayNumber: 74, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'Anger Guards Grief', theme: 'anger as protector, grief work',
-    season: 'brotherhood_and_service', archetype: 'warrior',
-    invocation: 'Today you walk as the Warrior: a man with courage enough to let the feeling beneath the anger exist.',
+    season: 'brotherhood_and_service', archetype: 'arch-74',
+    invocation: 'Today you walk as the Grief-Bearer: a man with courage enough to let the feeling beneath the anger exist.',
     archetypeExpression:
-      "The Warrior governs today precisely because his shadow is unresolved pain channeled into aggression — anger that is really grief, irritability that is really loneliness. His true courage is containment under pressure: to sit with a strong feeling for one full minute without discharging it through the only channel he was permitted. So today's command turns endurance inward — feel the thing until it softens into its truer shape, then meet that shape honestly.",
+      'The Grief-Bearer governs today because the hardest courage is not the contest but the containment — letting grief, fear, and longing exist when only anger was ever permitted. He sits with a strong feeling for one full minute without discharging it through the one channel he was trained to use. So today\'s command turns endurance inward: feel the thing until it softens into its truer shape, then meet that shape honestly.',
     lineagePassageId: 'dhammapada-223-anger-by-love',
     openingLine: 'Beneath the anger is often a grief the man has not been permitted to feel.',
     teachingBody:
@@ -351,7 +338,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, when a strong feeling arrives, sit with it for one minute before doing anything with it.',
     practice: 'Practice the one-minute sit. Let the feeling become whatever it actually is underneath.',
     forgeChallenge: 'If a real grief or loss has been waiting to be felt, let it have ten minutes today. With dignity. Without theater.',
-    journalPrompt: 'What feeling have I been routing through anger that might be something else underneath?',
     eveningAccount: 'Did I feel anything truly today, or did I keep converting it into something more permitted?',
     seal: 'A feeling truly felt completes faster than a feeling endlessly avoided.',
     contentStatus: 'final',
@@ -363,10 +349,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-75', dayNumber: 75, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'The Wound Is Not the Throne', theme: 'milestone, wound healed not worshiped',
-    season: 'brotherhood_and_service', archetype: 'healer',
-    invocation: 'Today you walk as the Healer: a man who treats the wound he has named instead of crowning it.',
+    season: 'brotherhood_and_service', archetype: 'arch-75',
+    invocation: 'Today you walk as the Throne-Keeper: a man who treats the wound he has named instead of seating it on the throne.',
     archetypeExpression:
-      "The Healer governs this milestone because his discipline is to repair what he can and then move, never letting the wound become an identity. He honors the shadow work already done — the naming was real — but refuses to seat the wound on the throne and organize a life around it. So today's command accounts for the work without enshrining it: treat the wound honestly, then return the throne to the man it belongs to.",
+      'The Throne-Keeper governs this milestone because the throne belongs to the man, not to his wound — and the subtle trap is letting the struggle become the story he tells about himself. He honors the shadow work already done — the naming was real — but refuses to organize a life around the wound. So today\'s command accounts for the work without enshrining it: treat the wound honestly, then return the throne to the man it belongs to.',
     lineagePassageId: 'synthesis-shame-vs-guilt',
     openingLine: "Seventy-five days. You have looked at the shadow. It is not the throne.",
     teachingBody:
@@ -377,7 +363,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Stand at day seventy-five and account for the shadow work without crowning it.',
     practice: 'Read the milestone rite. Name what you have looked at honestly. Renew the vow with the wound in its place.',
     forgeChallenge: 'Do one act today that the man-beyond-the-wound would do. Not the wounded man. The man.',
-    journalPrompt: 'Where in my life am I treating the wound as the throne? What would it look like to demote it?',
     eveningAccount: 'Who sat on the throne today — me, or the wound?',
     seal: 'The wound is part of the kingdom. It is not the kingdom.',
     contentStatus: 'final',
@@ -388,10 +373,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-76', dayNumber: 76, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'Return Without Theater', theme: 'clean return, no drama, lapse medicine',
-    season: 'the_integrated_man', archetype: 'pilgrim',
-    invocation: 'Today you walk as the Pilgrim: a man who returns without theater, one clean action after every stumble.',
+    season: 'the_integrated_man', archetype: 'arch-76',
+    invocation: 'Today you walk as the Returner: a man who comes back without theater, one clean action after every stumble.',
     archetypeExpression:
-      "The Pilgrim governs today because his discipline is the clean return and his temptation is dramatizing the fall to avoid it. He stands up, names what happened briefly, takes the lesson, and moves — refusing the grand vow and the long penance that only feel like seriousness. So today's command is plain: if you have fallen recently, return cleanly, because the drama is wasted fire the next lapse is waiting to use.",
+      'The Returner governs today because his discipline is the clean return and his temptation is dramatizing the fall to avoid it. He stands up, names what happened briefly, takes the lesson, and moves — refusing the grand vow and the long penance that only feel like seriousness. So today\'s command is plain: if you have fallen recently, return cleanly, because the drama is wasted fire the next lapse is waiting to use.',
     lineagePassageId: 'aurelius-6-11-return',
     openingLine: 'The drama of the fall is not the fall. It is the next lapse in preparation.',
     teachingBody:
@@ -402,7 +387,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'If you have fallen recently, return cleanly today. No theater. Just the return.',
     practice: 'Practice the clean return protocol on any setback: acknowledge briefly, learn briefly, repair briefly, continue.',
     forgeChallenge: 'Take any current setback and apply the clean return today. Refuse to make a religion of it.',
-    journalPrompt: 'When have I substituted drama for actual repair? What did it cost the next round?',
     eveningAccount: 'Did any return today happen cleanly, or did I dramatize it?',
     seal: 'Clean return is the discipline. Drama is the substitute.',
     contentStatus: 'final',
@@ -414,10 +398,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-77', dayNumber: 77, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'Clean the Wound', theme: 'repair vs worshiping the wound',
-    season: 'the_integrated_man', archetype: 'healer',
-    invocation: 'Today you walk as the Healer: a man who cleans the wound rather than worshiping it.',
+    season: 'the_integrated_man', archetype: 'arch-77',
+    invocation: 'Today you walk as the Wound-Cleaner: a man who cleans the wound rather than worshiping it.',
     archetypeExpression:
-      "The Healer governs today because the line between repair and enshrinement is his whole art — he does not erase the wound, he stops worshiping it. Naming was the first work; now the shadow must be treated rather than re-told, through one concrete change in behavior, environment, or relational structure. So today's command moves from the door to the room: pick a pattern named long enough and begin the next available treatment, trusting movement over perfect understanding.",
+      'The Wound-Cleaner governs today because the line between repair and enshrinement is his whole art — he does not erase the wound, he stops returning to pick at it. Naming was the first work; now the shadow must be treated rather than re-told, through one concrete change in behavior, environment, or relational structure. So today\'s command moves from the door to the room: pick a pattern named long enough and begin the next available treatment, trusting movement over perfect understanding.',
     lineagePassageId: 'analects-1-8-faults',
     openingLine: 'Clean it. Do not live in it.',
     teachingBody:
@@ -428,7 +412,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, move from naming the wound to treating it. One concrete change.',
     practice: 'Identify one shadow pattern that has been named long enough. Choose one treatment today.',
     forgeChallenge: 'Make one structural change in your life today that the wound has been asking for.',
-    journalPrompt: 'What part of the wound have I been naming for too long without treating?',
     eveningAccount: 'Did I treat any wound today, or just visit it?',
     seal: 'Naming is the door. Treatment is the room.',
     contentStatus: 'final',
@@ -440,10 +423,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-78', dayNumber: 78, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'Study the Lapse', theme: 'post-lapse analysis, intelligence gathering',
-    season: 'the_integrated_man', archetype: 'sage',
-    invocation: 'Today you walk as the Sage: a man who studies the lapse the way a physician studies a symptom.',
+    season: 'the_integrated_man', archetype: 'arch-78',
+    invocation: 'Today you walk as the Investigator: a man who studies the lapse the way a detective studies a case, not a criminal.',
     archetypeExpression:
-      "The Sage governs today because every lapse contains an intelligence file, and he reads it with curiosity instead of contempt. He is the investigator, not the criminal: detached enough to map what state preceded the fall, what voice spoke, what gate stood open. So today's command turns the last setback into research, charting the chain so the pattern can be interrupted earlier — and refusing to drown the information in shame.",
+      'The Investigator governs today because every lapse contains an intelligence file, and he reads it with curiosity instead of contempt. The investigator is not the criminal: he is detached enough to map what state preceded the fall, what voice spoke, what gate stood open. So today\'s command turns the last setback into research, charting the chain so the pattern can be interrupted earlier — and refusing to drown the information in shame.',
     lineagePassageId: 'synthesis-study-the-lapse',
     openingLine: 'A lapse studied is information. A lapse repeated is a pattern waiting for attention.',
     teachingBody:
@@ -454,7 +437,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, study the last lapse or near-lapse as intelligence. No shame, no drowning.',
     practice: 'Write the lapse report. Twelve hours back, six hours, one hour. Map the chain.',
     forgeChallenge: 'Use the intelligence to set one structural change for the coming week. Specific.',
-    journalPrompt: 'What does the chain of the last lapse show me about where to intervene earlier?',
     eveningAccount: 'Did I gather intelligence from anything today, or only feel about it?',
     seal: 'The investigator is not the criminal. The investigator solves the case.',
     contentStatus: 'final',
@@ -465,10 +447,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-79', dayNumber: 79, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'Build the Boundary', theme: 'structural response to shadow learning',
-    season: 'the_integrated_man', archetype: 'guardian',
-    invocation: 'Today you walk as the Guardian: a man who builds the gate before the fire rises.',
+    season: 'the_integrated_man', archetype: 'arch-79',
+    invocation: 'Today you walk as the Gate-Builder: a man who builds the gate in calm daylight so it holds at the hour of fire.',
     archetypeExpression:
-      "The Guardian governs today because his work is structure over willpower — removing the fuel, not just resisting the spark. He refuses to blame the temptation and instead translates the shadow's hard-won data into a specific, targeted boundary: a time rule, an environmental change, a relational protocol. So today's command builds one new boundary from the intelligence, written down in calm daylight so it holds at the hour the spark arrives.",
+      'The Gate-Builder governs today because his work is structure over willpower — building the architecture that makes the unwanted act measurably harder, not just resolving to resist the spark. He refuses to blame the temptation and instead forges the shadow\'s hard-won data into a specific, targeted boundary: a time rule, an environmental change, a relational protocol. So today\'s command builds one new boundary from the intelligence, written down in calm daylight so it holds at the hour the spark arrives.',
     lineagePassageId: 'synthesis-guard-the-doors',
     openingLine: 'The boundary built after the lapse is stronger than the one built before it.',
     teachingBody:
@@ -479,7 +461,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, build one new boundary informed by what the shadow work has revealed.',
     practice: 'Translate the lapse intelligence into one specific, structural commitment. Write it down.',
     forgeChallenge: 'Implement the new boundary tonight. Make it real before the temptation hour arrives.',
-    journalPrompt: 'What boundary is the data of the past month asking for?',
     eveningAccount: 'Did I build any boundary today that will hold tomorrow night?',
     seal: 'A boundary is law passed when calm and obeyed when tested.',
     contentStatus: 'final',
@@ -491,10 +472,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-80', dayNumber: 80, arcNumber: 8, arcTitle: 'The Shadow and the Return',
     title: 'The Pilgrim Continues', theme: 'arc 8 milestone, eighty days',
-    season: 'the_integrated_man', archetype: 'pilgrim',
-    invocation: 'Today you walk as the Pilgrim: a man who is not the one who never falls, but the one who keeps the road.',
+    season: 'the_integrated_man', archetype: 'arch-80',
+    invocation: 'Today you walk as the Road-Keeper: a man who is not the one who never falls, but the one who keeps the road.',
     archetypeExpression:
-      "The Pilgrim governs this milestone because the shadow arc closes on his central truth — the path is not for the man without struggles but for the man with practiced returns. He does not need the road to have been smooth; he kept walking through it, which is the whole instruction. So today's command honors the road kept over eighty days and renews the vow with ten remaining, the crown now in sight for a man being formed, not made perfect.",
+      'The Road-Keeper governs this milestone because the shadow arc closes on his central truth — the path is not for the man without struggles but for the man with practiced returns. He does not need the road to have been smooth; he kept walking through it, which is the whole instruction. So today\'s command honors the road kept over eighty days and renews the vow with ten remaining, the crown now in sight for a man being formed, not made perfect.',
     lineagePassageId: 'aurelius-6-11-return',
     openingLine: 'Eighty days. The shadow has been looked at. The path continues.',
     teachingBody:
@@ -505,7 +486,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Stand at eighty days and honor the road kept.',
     practice: 'Read the milestone rite. Acknowledge the shadow work honestly. Renew the vow with ten days remaining.',
     forgeChallenge: 'Complete one act today that the man who began this rite eighty days ago could not have completed.',
-    journalPrompt: 'What has changed in me that the shadow work made possible?',
     eveningAccount: 'Was the road kept today?',
     seal: 'Keep the road. That is the whole instruction.',
     contentStatus: 'final',
@@ -518,10 +498,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-81', dayNumber: 81, arcNumber: 9, arcTitle: 'The Crown',
     title: 'The Integrated Man', theme: 'integration, all parts in order',
-    season: 'the_integrated_man', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: a man who holds the whole without fracture, every part ordered around a center.',
+    season: 'the_integrated_man', archetype: 'arch-81',
+    invocation: 'Today you walk as the Integrated: a man who holds the whole without fracture, every part ordered around a center.',
     archetypeExpression:
-      "The Sovereign governs today because integration is exactly his nature — not the disappearance of appetite, spirit, or shadow, but their ordered coexistence in service of one center. He is undivided, not desireless; the part that feels anger channels it toward worthy targets rather than suppressing it. So today's command is to govern the parts, allowing each its presence while directing each toward its proper end, making one decision that uses all three in alignment.",
+      'The Integrated governs today because integration is exactly his nature — not the disappearance of appetite, spirit, or shadow, but their ordered coexistence in service of one center. He is undivided, not desireless; the part that feels anger channels it toward worthy targets rather than suppressing it. So today\'s command is to govern the parts, allowing each its presence while directing each toward its proper end, making one decision that uses all three in alignment.',
     lineagePassageId: 'synthesis-reason-rules',
     openingLine: 'The integrated man does not suppress appetite. He governs it.',
     teachingBody:
@@ -532,7 +512,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, govern the parts. Allow each its presence. Direct each toward its proper end.',
     practice: 'Notice once per part — appetite, spirit, reason — and where each is pointed today.',
     forgeChallenge: 'Make one decision today that uses all three parts in alignment. Hard work, courageous spirit, clear reason.',
-    journalPrompt: 'Where in me are the parts now ordered? Where are they still arguing?',
     eveningAccount: 'Were all the parts present today, working together?',
     seal: 'Integration is parts present and ordered, not parts erased.',
     contentStatus: 'final',
@@ -543,10 +522,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-82', dayNumber: 82, arcNumber: 9, arcTitle: 'The Crown',
     title: 'Power Without Ego', theme: 'mature power, quiet authority',
-    season: 'the_integrated_man', archetype: 'king',
-    invocation: 'Today you walk as the King: a man whose first kingdom is his own attention, governed without display.',
+    season: 'the_integrated_man', archetype: 'arch-82',
+    invocation: 'Today you walk as the Quiet King: a man whose strength is owned, not announced, available without display.',
     archetypeExpression:
-      "The King governs today because mature authority does not perform itself — his shadow is control and entitlement, and the cure is quiet ownership. Having ruled the small kingdom of room, schedule, body, and speech, he no longer needs to show his strength to himself or to an audience that was never coming. So today's command drops the announcement: use strength in service of something real, and do one strong act no one will ever know you did.",
+      'The Quiet King governs today because mature authority does not perform itself — young strength postures, while strength that is owned can simply be used. Having ruled the small kingdom of room, schedule, body, and speech, he no longer needs to show his strength to himself or to an audience that was never coming. So today\'s command drops the announcement: use strength in service of something real, and do one strong act no one will ever know you did.',
     lineagePassageId: 'tao-24-tiptoe',
     openingLine: 'The man who has to announce his strength does not yet own it.',
     teachingBody:
@@ -557,7 +536,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, use strength without announcing it. Quietly, in service of something real.',
     practice: 'Notice every impulse to perform your discipline today. Refuse it. Just live the discipline.',
     forgeChallenge: 'Do one strong act today that no one will know you did. Let it stand without record.',
-    journalPrompt: 'Where am I still performing strength I have already built? What would dropping the performance look like?',
     eveningAccount: 'Was today\'s strength quiet, or did I need to display it?',
     seal: 'Power that needs an audience is borrowed. Power that does not is yours.',
     contentStatus: 'final',
@@ -568,10 +546,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-83', dayNumber: 83, arcNumber: 9, arcTitle: 'The Crown',
     title: 'Desire With Direction', theme: 'directed desire, permanent practice model',
-    season: 'the_integrated_man', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: a man who is not desireless but undivided, his desire pointed at worthy things.',
+    season: 'the_integrated_man', archetype: 'arch-83',
+    invocation: 'Today you walk as the Undivided: a man who is not desireless but whose desire is pointed at worthy things.',
     archetypeExpression:
-      "The Sovereign governs today because his freedom was never the absence of desire — the body stays the body — but its stable direction. The energy is the ally; he refuses to wait for appetite to vanish before considering himself free, and instead lets it point toward work, training, real relationships, service. So today's command is not to negotiate desire away but to aim it: each time it rises, ask where the trained man would let it point, and channel it into the most ambitious worthy form available.",
+      'The Undivided governs today because his freedom was never the absence of desire — the body stays the body — but its stable direction. The energy is the ally; he refuses to wait for appetite to vanish before considering himself free, and instead lets it point toward work, training, real relationships, service. So today\'s command is not to negotiate desire away but to aim it: each time it rises, ask where the trained man would let it point, and channel it into the most ambitious worthy form available.',
     lineagePassageId: 'synthesis-forge-the-fire',
     openingLine: 'The desire does not leave. The direction becomes stable.',
     teachingBody:
@@ -582,7 +560,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, let desire have direction. Do not negotiate it away. Point it.',
     practice: 'Each time desire arises today, ask: where would the trained man let this point?',
     forgeChallenge: 'Channel one strong desire today into the most ambitious worthy form available.',
-    journalPrompt: 'What does desire look like now compared to day one? Where does it tend to point?',
     eveningAccount: 'Was desire directed today, or did it scatter?',
     seal: 'Desire with direction is not a problem. It is a life.',
     contentStatus: 'final',
@@ -593,10 +570,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-84', dayNumber: 84, arcNumber: 9, arcTitle: 'The Crown',
     title: 'The Crown Is Responsibility', theme: 'leadership, the crown as burden and honor',
-    season: 'the_integrated_man', archetype: 'king',
-    invocation: 'Today you walk as the King: a man who receives the crown as a commission, never as a trophy.',
+    season: 'the_integrated_man', archetype: 'arch-84',
+    invocation: 'Today you walk as the Commissioned: a man who receives the crown as a charge to keep, never as a trophy to display.',
     archetypeExpression:
-      "The King governs today because the crown is order and responsibility, not entitlement — and his temptation is to want authority without earning continued self-rule. He understands the crown carries weight: responsibility for his own ongoing formation, for the brothers earlier on the walk, for the things larger than himself the practice prepared him to serve. So today's command sketches the architecture of the Long Path now, beginning one durable commitment before the crown arrives.",
+      'The Commissioned governs today because the crown is a commission for maturity, not a prize for the man who has finally won — and the temptation is to want authority without earning continued self-rule. He understands the crown carries weight: responsibility for his own ongoing formation, for the brothers earlier on the walk, for the things larger than himself the practice prepared him to serve. So today\'s command sketches the architecture of the Long Path now, beginning one durable commitment before the crown arrives.',
     lineagePassageId: 'synthesis-crown-is-responsibility',
     openingLine: 'The crown is not a reward for perfection. It is a commission for maturity.',
     teachingBody:
@@ -607,7 +584,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, treat the approaching crown as commission, not reward.',
     practice: 'Sketch the Long Path: what daily, weekly, monthly practices will carry the formation forward after day ninety?',
     forgeChallenge: 'Begin one Long Path commitment today, before the crown arrives. Live it now.',
-    journalPrompt: 'What is the crown actually going to ask of me? Am I ready to accept the ask?',
     eveningAccount: 'Did I act today like a man preparing for responsibility, or like a man chasing a reward?',
     seal: 'The crown is a commission. The man wears it as service.',
     contentStatus: 'final',
@@ -618,10 +594,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-85', dayNumber: 85, arcNumber: 9, arcTitle: 'The Crown',
     title: 'The Long Path', theme: 'preparing for post-90, what comes after',
-    season: 'the_integrated_man', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: a man preparing to carry the fire into a life with no milestones to mark it.',
+    season: 'the_integrated_man', archetype: 'arch-85',
+    invocation: 'Today you walk as the Long-Walker: a man preparing to carry the fire into a life with no milestones to mark it.',
     archetypeExpression:
-      "The Sovereign governs today because his maturity is reliability, not inspiration — the daily account continues long after the early triumph fades. His shadow is believing one victory means completion; the Long Path answers it by becoming a way of life rather than a season, held more by habit and less by attention. So today's command is to sketch that life concretely: the daily practices, weekly witness, and monthly review that carry the formation through the unmarked stretch.",
+      'The Long-Walker governs today because his maturity is reliability, not inspiration — the daily account continues long after the early triumph fades. The main test ahead is the unmarked stretch, where no arc ends soon and only the practice remains; he answers it by making the practice a way of life rather than a season, held more by habit and less by attention. So today\'s command is to sketch that life concretely: the daily practices, weekly witness, and monthly review that carry the formation through the long quiet.',
     lineagePassageId: 'aurelius-7-29-present',
     openingLine: 'Ninety days prepares the man. The Long Path is where he lives.',
     teachingBody:
@@ -632,7 +608,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, see what the Long Path looks like for you. Sketch it concretely.',
     practice: 'Write the structure of week one of the Long Path: daily practices, weekly check-ins, monthly review.',
     forgeChallenge: 'Build the Long Path schedule into your calendar today. Recurring, durable, real.',
-    journalPrompt: 'What does the practice look like as a way of life, not a season?',
     eveningAccount: 'Did I prepare for the Long Path today, or only for the milestone?',
     seal: 'The Long Path is where the formation actually lives.',
     contentStatus: 'final',
@@ -643,10 +618,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-86', dayNumber: 86, arcNumber: 9, arcTitle: 'The Crown',
     title: 'Rule the Ordinary Day', theme: 'ordinary life, daily sovereignty, no audience',
-    season: 'the_integrated_man', archetype: 'king',
-    invocation: 'Today you walk as the King: a man who rules the ordinary day, not only the special one.',
+    season: 'the_integrated_man', archetype: 'arch-86',
+    invocation: 'Today you walk as the Day-Ruler: a man who governs the ordinary day, not only the special one.',
     archetypeExpression:
-      "The King governs today because his kingdom is held in the small things — room, schedule, speech, body — long after any audience has gone home. He does not save his sovereignty for milestones; he brings it to the Tuesday afternoon that has nothing to recommend it, which is the unit the Long Path is built from. So today's command treats the ordinary as the substance, governing the unremarkable hours with the same care a milestone day would receive.",
+      'The Day-Ruler governs today because his kingdom is held in the small things — room, schedule, speech, body — long after any audience has gone home. He does not save his sovereignty for milestones; he brings it to the Tuesday afternoon that has nothing to recommend it, which is the unit the Long Path is built from. So today\'s command treats the ordinary as the substance, governing the unremarkable hours with the same care a milestone day would receive.',
     lineagePassageId: 'aurelius-7-29-present',
     openingLine: 'The ordinary day is where the practice lives or dies.',
     teachingBody:
@@ -657,7 +632,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, treat the ordinary as the substance. Rule it as such.',
     practice: 'Govern the small things today with the same care you would give a milestone day.',
     forgeChallenge: 'Take the most ordinary stretch of today and bring full presence to it. Notice what happens.',
-    journalPrompt: 'Which ordinary days have I been treating as filler? What would treating them as substance change?',
     eveningAccount: 'Did I rule today, even though it was ordinary?',
     seal: 'The kingdom is held by ordinary days well-ruled.',
     contentStatus: 'final',
@@ -668,10 +642,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-87', dayNumber: 87, arcNumber: 9, arcTitle: 'The Crown',
     title: 'Teach Without Preaching', theme: 'witness, quiet example, not proselytizing',
-    season: 'the_integrated_man', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man whose changed life teaches more than any sermon he could give.',
+    season: 'the_integrated_man', archetype: 'arch-87',
+    invocation: 'Today you walk as the Exemplar: a man whose changed life teaches more than any sermon he could give.',
     archetypeExpression:
-      "The Brother governs today because his loyalty is warm presence, not recruitment — and preaching from a fresh success often signals fragility, the need to convince others to confirm his own conviction. He lives the practice visibly, answers briefly and honestly when asked, and makes no effort to grow a movement. So today's command is restraint: when tempted to explain, live it instead, and be present to someone in a way that communicates without arguing.",
+      'The Exemplar governs today because the example does the work that argument cannot — and preaching from a fresh success often signals fragility, the need to convince others to confirm his own conviction. He lives the practice visibly, answers briefly and honestly when asked, and makes no effort to grow a movement. So today\'s command is restraint: when tempted to explain, live it instead, and be present to someone in a way that communicates without arguing.',
     lineagePassageId: 'synthesis-teach-by-example',
     openingLine: 'The crowned man does not preach. He is present in a way that speaks.',
     teachingBody:
@@ -682,7 +656,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, refuse to preach. Let presence do whatever teaching is needed.',
     practice: 'When tempted to explain the practice to someone today, restrain it. Live it instead.',
     forgeChallenge: 'Be quietly present to someone today in a way that communicates without arguing.',
-    journalPrompt: 'Where have I been tempted to preach? What was the temptation actually asking for?',
     eveningAccount: 'Did I preach today, or did I simply live what I have built?',
     seal: 'Presence teaches what preaching cannot.',
     contentStatus: 'final',
@@ -693,10 +666,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-88', dayNumber: 88, arcNumber: 9, arcTitle: 'The Crown',
     title: 'Carry the Fire Quietly', theme: 'quiet strength, fire without announcement',
-    season: 'the_integrated_man', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: a man who carries the fire as a matter of course, with nothing left to prove.',
+    season: 'the_integrated_man', archetype: 'arch-88',
+    invocation: 'Today you walk as the Fire-Bearer: a man who carries the fire as a matter of course, with nothing left to prove.',
     archetypeExpression:
-      "The Sovereign governs today because the early triumphalism has settled into the undivided calm that was always the point — the fire is the ally, and an ally being used needs no display. His shadow is the spiritual ego that still wants the world to know; he answers it by moving the fire into form: real work, real training, real service. So today's command carries it quietly, completing one substantial Forge act and telling no one.",
+      'The Fire-Bearer governs today because the early triumphalism has settled into the undivided calm that was always the point — the fire is the ally, and an ally being used needs no display. The spiritual ego still wants the world to know; he answers it by moving the fire into form: real work, real training, real service. So today\'s command carries it quietly, completing one substantial Forge act and telling no one.',
     lineagePassageId: 'synthesis-work-receives-fire',
     openingLine: 'The fire that is used does not need to be displayed.',
     teachingBody:
@@ -707,7 +680,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, carry the fire as a matter of course. No display.',
     practice: 'Use the fire on real work, real training, real service. Do not announce the use.',
     forgeChallenge: 'Do one substantial Forge act today and tell no one about it.',
-    journalPrompt: 'What has the fire become in me at this point? How do I carry it?',
     eveningAccount: 'Was the fire used today, quietly?',
     seal: 'Carry the fire. Do not announce it.',
     contentStatus: 'final',
@@ -719,10 +691,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-89', dayNumber: 89, arcNumber: 9, arcTitle: 'The Crown',
     title: 'The Final Gate', theme: 'penultimate day, last preparation',
-    season: 'the_integrated_man', archetype: 'guardian',
-    invocation: 'Today you walk as the Guardian: a man who holds the final gate with the same discipline as the first.',
+    season: 'the_integrated_man', archetype: 'arch-89',
+    invocation: 'Today you walk as the Final Sentinel: a man who holds the last gate with the same discipline as the first.',
     archetypeExpression:
-      "The Guardian governs this penultimate day because his vigilance does not relax when the milestone looks essentially achieved — treating the last day as ceremonial is the compulsion's last good argument. He keeps the gate as if many more days were coming, because they are; the crown is the cumulative integrity of every guarded day, including this one. So today's command holds the gate as though forty days lay ahead, performing every element with full attention, no coasting.",
+      'The Final Sentinel governs this penultimate day because his vigilance does not relax when the milestone looks essentially achieved — treating the last day as ceremonial is the compulsion\'s last good argument. He keeps the gate as if many more days were coming, because they are; the crown is the cumulative integrity of every guarded day, including this one. So today\'s command holds the gate as though forty days lay ahead, performing every element with full attention, no coasting.',
     lineagePassageId: 'synthesis-guard-the-doors',
     openingLine: 'One more day of preparation. The crown is earned by what you do today, not tomorrow.',
     teachingBody:
@@ -733,7 +705,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Today, hold the gate as if there were forty more days ahead. There are. They just start in a different way.',
     practice: 'Perform every element of the day with full attention. Today is one of the many days, not a special one.',
     forgeChallenge: 'Complete one Forge act today equal in intensity to the early arc 6 days. No coasting.',
-    journalPrompt: 'What does today require of me that has nothing to do with the milestone tomorrow?',
     eveningAccount: 'Was today held with the same attention as day five, day twenty, day fifty?',
     seal: 'The final gate is kept by the same discipline as the first.',
     contentStatus: 'final',
@@ -744,10 +715,10 @@ export const days61to90: readonly DailyPathContentInput[] = [
   {
     id: 'day-90', dayNumber: 90, arcNumber: 9, arcTitle: 'The Crown',
     title: 'The Crown of Command', theme: 'ninety-day milestone, crown received',
-    season: 'the_integrated_man', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign, and the crown is yours: a man undivided, formed enough to be trusted with what comes next.',
+    season: 'the_integrated_man', archetype: 'arch-90',
+    invocation: 'Today you walk as the Crowned, and the crown is yours: a man undivided, formed enough to be trusted with what comes next.',
     archetypeExpression:
-      "The Sovereign governs this final day because the whole rite has been moving toward his nature — not the man without desire, but the man who holds the whole without fracture, appetite and spirit and reason aligned around one center. The crown is not a trophy and not a promise of permanent victory; it is the recognition that a chosen word has been held under live conditions for ninety days, the proof that a man can be formed. So today's command is to receive it and then begin the Long Path with the same discipline that produced it: strength shared, fire directed, the compulsion known, the man undivided.",
+      'The Crowned governs this final day because the whole rite has been moving toward this — not the man without desire, but the man who holds the whole without fracture, appetite and spirit and reason aligned around one center. The crown is not a trophy and not a promise of permanent victory; it is the recognition that a chosen word has been held under live conditions for ninety days, the proof that a man can be formed. So today\'s command is to receive it and then begin the Long Path with the same discipline that produced it: strength shared, fire directed, the compulsion known, the man undivided.',
     lineagePassageId: 'tao-33-self-mastery',
     openingLine: 'Ninety days does not make a man finished. It proves he can be formed.',
     teachingBody:
@@ -758,7 +729,6 @@ export const days61to90: readonly DailyPathContentInput[] = [
     command: 'Receive the crown. Then begin the Long Path with the same discipline that produced it.',
     practice: 'Read the Crown Rite. Acknowledge what has been formed. Begin the Long Path tomorrow.',
     forgeChallenge: 'Complete one substantial act today worthy of a man wearing a crown that is commission, not reward.',
-    journalPrompt: 'What man is being crowned today? Who was the man on day one? What is the difference?',
     eveningAccount: 'Was today honored? Is the man who held this rite ready for what comes after?',
     seal: 'Ninety days proves the man can be formed. The crown is responsibility.',
     contentStatus: 'final',

@@ -6,6 +6,13 @@ export interface DayQuestSignals {
   secretRevealed: boolean;
   forgeActsToday: number;
   pausesToday: number;
+  /**
+   * True when the day was already marked completed (persisted). A completed day is
+   * finished, so it stays cleared regardless of today's transient forge/pause
+   * counts — those are scoped to the current calendar day and must not retro-mark
+   * a past day incomplete.
+   */
+  dayCompleted: boolean;
 }
 
 export interface ObjectiveResult {
@@ -50,12 +57,14 @@ export function evaluateDayQuest(
     kind: obj.kind,
     label: obj.label,
     optional: obj.optional ?? false,
-    complete: isObjectiveMet(obj.kind, signals),
+    // A completed day is finished — every objective reads as met (the day was
+    // cleared when it was completed; don't re-litigate it against today's signals).
+    complete: signals.dayCompleted || isObjectiveMet(obj.kind, signals),
   }));
 
-  const cleared = objectives
-    .filter((o) => !o.optional)
-    .every((o) => o.complete);
+  const cleared =
+    signals.dayCompleted ||
+    objectives.filter((o) => !o.optional).every((o) => o.complete);
 
   return {
     trial,

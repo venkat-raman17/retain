@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-import { archetypeSchema } from './archetype.schema';
-
 export const PATH_SEASONS = [
   'the_vow',
   'guard_the_gates',
@@ -63,7 +61,8 @@ export const dailyPathContentSchema = z.object({
   arcNumber: z.number().int().min(1).max(9).default(1),
   arcTitle: z.string().default(''),
   theme: z.string().default(''),
-  archetype: archetypeSchema,
+  /** Slug of this day's unique archetype (`arch-01`…`arch-90`); resolves in the archetype catalog. */
+  archetype: z.string().min(1),
   /** Second-person investiture: "Today you walk as the {Archetype}…". */
   invocation: z.string().default(''),
   /** Why THIS archetype today + how it bends the day's command/practice. */
@@ -77,7 +76,6 @@ export const dailyPathContentSchema = z.object({
   command: z.string().min(1),
   practice: z.string().min(1),
   forgeChallenge: z.string().min(1),
-  journalPrompt: z.string().min(1),
   eveningAccount: z.string().min(1),
   seal: z.string().min(1),
   /** A phrase or concept added to the user's Codex on completion. */

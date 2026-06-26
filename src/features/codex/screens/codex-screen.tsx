@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import {
-  archetypeProfiles,
   arcs,
   getAllRituals,
   getPrinciples,
@@ -15,13 +14,11 @@ import {
   AppButton,
   AppCard,
   AppChip,
-  AppDivider,
   AppHero,
   AppQuoteBlock,
   AppScreen,
   AppText,
   ArcSeal,
-  ArchetypeSigil,
   FadeInRise,
   PillarsSigil,
   RiteMedallion,
@@ -33,13 +30,12 @@ import { useSurfaceTone, type SurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { Routes } from '@/navigation';
 
-type CodexTab = 'path' | 'principles' | 'rituals' | 'archetypes' | 'studies' | 'rites';
+type CodexTab = 'path' | 'principles' | 'rituals' | 'studies' | 'rites';
 
 const TABS: { id: CodexTab; label: string }[] = [
   { id: 'path', label: 'Daily Path' },
   { id: 'principles', label: 'Principles' },
   { id: 'rituals', label: 'Rituals' },
-  { id: 'archetypes', label: 'Archetypes' },
   { id: 'studies', label: 'Studies' },
   { id: 'rites', label: 'Rites' },
 ];
@@ -198,76 +194,6 @@ function RitualsTab() {
   );
 }
 
-// ── Tab: Archetypes ───────────────────────────────────────────────────────────
-// Compact list: name, essence, daily command. Full detail expands on tap.
-
-function ArchetypesTab() {
-  const { colors, archetype: archetypeColors } = useTheme();
-  const [expanded, setExpanded] = useState<string | null>(null);
-  return (
-    <View style={styles.list}>
-      {archetypeProfiles.map((archetype) => {
-        const isOpen = expanded === archetype.id;
-        const tone = archetypeColors[archetype.id as keyof typeof archetypeColors] ?? colors.textMuted;
-        return (
-          <AppCard
-            key={archetype.id}
-            tone={isOpen ? 'raised' : 'overlay'}
-            onPress={() => setExpanded(isOpen ? null : archetype.id)}
-          >
-            <View style={styles.archetypeHeader}>
-              <AppText variant="subheading" style={styles.archetypeName}>{archetype.name}</AppText>
-              <ArchetypeSigil archetype={archetype.id} size={30} color={tone} strokeWidth={symbolStroke(30)} />
-            </View>
-            <AppText variant="caption" color="secondary" style={styles.body}>
-              {archetype.essence}
-            </AppText>
-            {isOpen ? (
-              <FadeInRise>
-                <View style={styles.archetypeGlyph}>
-                  <SealArt source={{ kind: 'archetype', archetype: archetype.id }} size={96} color={tone} halo />
-                </View>
-                <AppDivider />
-                <AppText variant="caption" color="muted" uppercase>
-                  Light
-                </AppText>
-                <AppText variant="body" color="secondary">
-                  {archetype.light}
-                </AppText>
-                <AppText variant="caption" color="muted" uppercase style={styles.spacing}>
-                  Shadow
-                </AppText>
-                <AppText variant="body" color="secondary">
-                  {archetype.shadow}
-                </AppText>
-                <AppText variant="caption" color="muted" uppercase style={styles.spacing}>
-                  Discipline
-                </AppText>
-                <AppText variant="body" color="secondary">
-                  {archetype.discipline}
-                </AppText>
-                <AppText variant="caption" color="muted" uppercase style={styles.spacing}>
-                  Daily command
-                </AppText>
-                <AppText variant="label" color="energy">
-                  {archetype.dailyCommand}
-                </AppText>
-                <AppText variant="caption" color="energy" style={styles.spacing}>
-                  {archetype.retainLine}
-                </AppText>
-              </FadeInRise>
-            ) : (
-              <AppText variant="caption" color="accent" style={styles.body}>
-                {`Command: ${archetype.dailyCommand}`}
-              </AppText>
-            )}
-          </AppCard>
-        );
-      })}
-    </View>
-  );
-}
-
 // ── Tab: Studies ──────────────────────────────────────────────────────────────
 
 function StudiesTab() {
@@ -281,27 +207,27 @@ function StudiesTab() {
           variant="ghost"
           onPress={() => setSelected(null)}
         />
-        {/* Study detail is a warm parchment reading layout. */}
-        <AppCard tone="parchment">
+        {/* Study detail — dark reading surfaces, consistent with the Rites tab and chamber. */}
+        <AppCard tone="raised">
           <AppChip label={selected.lineage.replace(/_/g, ' ')} tone="accent" selected />
-          <AppText variant="title" color="ink" style={styles.body}>
+          <AppText variant="title" color="primary" style={styles.body}>
             {selected.title}
           </AppText>
-          <AppText variant="body" color="ink">
+          <AppText variant="body" color="secondary">
             {selected.summary}
           </AppText>
         </AppCard>
 
-        <AppCard tone="parchment">
-          <AppText variant="caption" color="inkMuted" uppercase>
+        <AppCard tone="overlay">
+          <AppText variant="caption" color="muted" uppercase>
             Historical context
           </AppText>
-          <AppText variant="body" color="ink" style={styles.body}>
+          <AppText variant="body" color="secondary" style={styles.body}>
             {selected.historicalFrame}
           </AppText>
         </AppCard>
 
-        <AppCard tone="overlay">
+        <AppCard tone="overlay" border="ember">
           <AppText variant="caption" color="accent" uppercase>
             Manforge principle
           </AppText>
@@ -310,11 +236,11 @@ function StudiesTab() {
           </AppText>
         </AppCard>
 
-        <AppCard tone="parchment">
-          <AppText variant="caption" color="inkMuted" uppercase>
+        <AppCard tone="overlay">
+          <AppText variant="caption" color="muted" uppercase>
             Practice
           </AppText>
-          <AppText variant="body" color="ink" style={styles.body}>
+          <AppText variant="body" color="secondary" style={styles.body}>
             {selected.practice}
           </AppText>
         </AppCard>
@@ -432,7 +358,6 @@ const SECTION_META: Record<CodexTab, { count: number; unit: string; eyebrow: str
   path: { count: arcs.length, unit: 'arcs', eyebrow: 'Codex · Daily Path', title: 'Nine arcs, ninety chambers', subtitle: 'The shape of the rite.' },
   principles: { count: getPrinciples().length, unit: 'entries', eyebrow: 'Codex · Principles', title: 'The laws of the practice', subtitle: 'What holds when the fire rises.' },
   rituals: { count: getAllRituals().length, unit: 'rituals', eyebrow: 'Codex · Rituals', title: 'The daily rhythms', subtitle: 'Anchor the morning, the night, and the hard hour.' },
-  archetypes: { count: archetypeProfiles.length, unit: 'archetypes', eyebrow: 'Codex · Archetypes', title: 'The twelve modes', subtitle: 'Faces of the formed man.' },
   studies: { count: studies.length, unit: 'studies', eyebrow: 'Codex · Studies', title: 'Lineages of restraint', subtitle: 'Inspiration, not authority.' },
   rites: { count: rites.length, unit: 'rites', eyebrow: 'Codex · Rites', title: 'The milestone ceremonies', subtitle: 'Marks along the ninety days.' },
 };
@@ -441,8 +366,6 @@ function heroArt(tab: CodexTab, tone: SurfaceTone): ReactNode {
   switch (tab) {
     case 'path':
       return <SealArt source={{ kind: 'arc', arcNumber: 1 }} size={84} color={tone.text} />;
-    case 'archetypes':
-      return <SealArt source={{ kind: 'archetype', archetype: 'sovereign' }} size={84} color={tone.text} />;
     case 'rites':
       return <SealArt source={{ kind: 'rite', day: 90 }} size={84} color={tone.text} />;
     default:
@@ -459,7 +382,6 @@ export function CodexScreen() {
     path: useSurfaceTone({ kind: 'arc', arcNumber: 1 }),
     principles: useSurfaceTone({ kind: 'semantic', name: 'primary' }),
     rituals: useSurfaceTone({ kind: 'semantic', name: 'accent' }),
-    archetypes: useSurfaceTone({ kind: 'archetype', id: 'sovereign' }),
     studies: useSurfaceTone({ kind: 'semantic', name: 'accent' }),
     rites: useSurfaceTone({ kind: 'semantic', name: 'gold' }),
   };
@@ -495,7 +417,6 @@ export function CodexScreen() {
         {activeTab === 'path' && <DailyPathTab />}
         {activeTab === 'principles' && <PrinciplesTab />}
         {activeTab === 'rituals' && <RitualsTab />}
-        {activeTab === 'archetypes' && <ArchetypesTab />}
         {activeTab === 'studies' && <StudiesTab />}
         {activeTab === 'rites' && <RitesTab />}
       </View>
@@ -512,9 +433,7 @@ const styles = StyleSheet.create({
   disclaimer: { marginTop: theme.spacing.xs },
   arcHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   arcLabel: { flex: 1 },
-  archetypeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   archetypeName: { flex: 1 },
-  archetypeGlyph: { alignItems: 'center', paddingVertical: theme.spacing.sm },
   riteHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   riteDetailHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   ritualStep: { flexDirection: 'row', gap: theme.spacing.sm, marginTop: theme.spacing.sm },

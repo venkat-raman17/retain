@@ -44,6 +44,7 @@ export class QuestService {
       secretRevealed: progress?.status === 'revealed' || progress?.status === 'completed',
       forgeActsToday,
       pausesToday,
+      dayCompleted: progress?.status === 'completed',
     };
 
     return evaluateDayQuest(trial, signals, this.clock);

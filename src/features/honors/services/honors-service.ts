@@ -7,7 +7,11 @@ import type { Achievement, Station } from '@/content/schemas';
 import type { EarnedAchievement, Repositories } from '@/db';
 import type { Clock } from '@/shared/lib';
 
-import { evaluateAchievements, type AchievementSignals } from '../domain/achievement-evaluation';
+import {
+  evaluateAchievements,
+  isAchievementApplicable,
+  type AchievementSignals,
+} from '../domain/achievement-evaluation';
 import {
   arcsCleared as calcArcsCleared,
   embersForCompletedDays,
@@ -15,11 +19,14 @@ import {
 
 export interface HonorsSummary {
   earned: EarnedAchievement[];
+  /** The achievements applicable to this man's journey (unreachable ones hidden). */
   catalog: readonly Achievement[];
   station: Station | undefined;
   totalEmbers: number;
   arcsCleared: number;
   completedDays: number[];
+  /** Days skipped before the man's first in-app day (0 = started at day 1). */
+  startDayOffset: number;
 }
 
 type HonorsRepos = Pick<
@@ -40,14 +47,15 @@ export class HonorsService {
       this.repos.profile.get(),
     ]);
 
-    const catalog = getAllAchievements();
+    const startDayOffset = profile.startDayOffset;
+    const catalog = getAllAchievements().filter((a) => isAchievementApplicable(a, startDayOffset));
     const trials = getAllTrials();
     const crownReceived = Boolean(profile.crownReceivedAt);
     const cleared = calcArcsCleared(completedDays);
     const totalEmbers = embersForCompletedDays(trials, completedDays, crownReceived);
     const station = getStationForArcsCleared(cleared);
 
-    return { earned, catalog, station, totalEmbers, arcsCleared: cleared, completedDays };
+    return { earned, catalog, station, totalEmbers, arcsCleared: cleared, completedDays, startDayOffset };
   }
 
   /** Evaluate, persist newly-earned, return the newly-earned Achievement objects. */

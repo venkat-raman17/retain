@@ -40,6 +40,8 @@ export {
 export { DaySigil, daySigilParams } from './day-sigil';
 export type { DaySigilParams, DaySigilProps, DayAccentStyle } from './day-sigil';
 
+export { ProceduralSigil, sigilSeedFromKey } from './procedural-sigil';
+
 export {
   MonkSigil,
   WarriorSigil,

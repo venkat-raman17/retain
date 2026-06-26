@@ -14,8 +14,6 @@ import {
   AppText,
   AppTextInput,
   type SelectOption,
-  Bento,
-  BentoItem,
   EmberSigil,
   FadeInRise,
   FORGE_GLYPHS,
@@ -63,21 +61,13 @@ const DURATION_CHIPS: { label: string; value: number | 'custom' }[] = [
   { label: 'Custom', value: 'custom' },
 ];
 
-function cap(s: string): string {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 function formatDate(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
-function actCountLabel(count: number): string {
-  return count === 1 ? '1 act' : `${count} acts`;
-}
-
 export function ForgeScreen() {
-  const { acts, categoryCounts, loading, logAct } = useForge();
+  const { acts, loading, logAct } = useForge();
   const { checkAndAward } = useHonors();
   const { objective, refresh: refreshObjective } = useTodaysObjective();
   const { colors } = useTheme();
@@ -293,36 +283,6 @@ export function ForgeScreen() {
           onPress={() => setShowForm(true)}
         />
 
-        {acts.length > 0 ? (
-          <>
-            <AppText variant="caption" color="muted" uppercase>
-              Category distribution
-            </AppText>
-            <Bento>
-              {FORGE_CATEGORIES.map((cat) => {
-                const count = categoryCounts.find((c) => c.category === cat)?.count ?? 0;
-                const Glyph = FORGE_GLYPHS[cat];
-                const active = count > 0;
-                return (
-                  <BentoItem key={cat}>
-                    <AppCard tone={active ? 'raised' : 'overlay'} style={styles.catTile}>
-                      {Glyph ? (
-                        <Glyph size={26} color={active ? tone.text : colors.textMuted} strokeWidth={symbolStroke(26)} />
-                      ) : null}
-                      <AppText variant="label" color={active ? 'primary' : 'muted'}>
-                        {cap(cat)}
-                      </AppText>
-                      <AppText variant="caption" color={active ? 'energy' : 'muted'}>
-                        {actCountLabel(count)}
-                      </AppText>
-                    </AppCard>
-                  </BentoItem>
-                );
-              })}
-            </Bento>
-          </>
-        ) : null}
-
         {loading ? (
           <LoadingCard />
         ) : acts.length === 0 ? (
@@ -378,7 +338,6 @@ export function ForgeScreen() {
 const styles = StyleSheet.create({
   container: { gap: theme.spacing.lg },
   nav: { gap: theme.spacing.sm },
-  catTile: { gap: theme.spacing.xs, alignItems: 'flex-start' },
   list: { gap: theme.spacing.sm },
   actCard: { gap: theme.spacing.xs },
   actCategoryRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },

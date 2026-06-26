@@ -4,10 +4,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-16', dayNumber: 16, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'The Urge Is an Impression', theme: 'Stoic assent, impression vs command',
-    season: 'body_must_be_included', archetype: 'sage',
-    invocation: 'Today you walk as the Sage: a man who studies the impulse instead of obeying it.',
+    season: 'body_must_be_included', archetype: 'arch-16',
+    invocation: 'Today you walk as the Witness: a man who watches the impression rise and refuses to mistake it for a command.',
     archetypeExpression:
-      'The Sage sees the shape of his own compulsion without drama, asking not only what happened but what keeps happening. Today that discernment governs the day, because the work is to catch the urge while it is still only an impression and refuse it your assent. Know the pattern, and the spell loses its authority.',
+      'The Witness stands one step back from his own mind, naming the urge as an appearance rather than an order. Today that watchfulness governs everything, because the whole work is to catch the impulse while it is still only an impression and withhold your assent. The man who can observe the urge without obeying it has already broken its claim of authority.',
     lineagePassageId: 'epictetus-ench-5-opinions',
     openingLine: 'The impulse arrives. The assent is yours.',
     teachingBody:
@@ -18,7 +18,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'When the urge arrives today, name it as an impression. Say internally: "This is an impression. I do not have to agree."',
     practice: 'Use the four-step assent drill: (1) This is an impression. (2) It is not yet a command. (3) I do not have to agree. (4) I choose the next act.',
     forgeChallenge: 'Ride one strong urge all the way to its natural peak and watch it pass without acting on it.',
-    journalPrompt: 'Where in today did I confuse an impression with a command? What would the pause have looked like?',
     eveningAccount: 'How many impressions today did I treat as optional rather than obligatory?',
     seal: 'You are not the urge. You are the one who chooses.',
     relatedStudyIds: ['brahmacharya-vow-and-attention'],
@@ -29,10 +28,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-17', dayNumber: 17, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'No Negotiation in Darkness', theme: 'night discipline, pre-decision',
-    season: 'body_must_be_included', archetype: 'king',
-    invocation: 'Today you walk as the King: a man who governs the small kingdom of his evening before the dark can govern him.',
+    season: 'body_must_be_included', archetype: 'arch-17',
+    invocation: 'Today you walk as the Gatekeeper of the Night: a man who decides the shape of his evening in the clear light of morning.',
     archetypeExpression:
-      'The King rules himself before he rules anything else, setting order in the room, the schedule, and the hour while he still has the judgment to do it. Today that rule means deciding the shape of the night in the clear light of morning, not negotiating with the fire at eleven. Self-command is the first kingdom; lay the gate before the temptation hour arrives.',
+      'The Gatekeeper of the Night knows the dark has its own physics and refuses to negotiate inside it. Today that foresight is the command: set the gate while your judgment is full, before fatigue lowers every threshold and the compulsion turns the late hours into a rigged contest. The man who plans the evening in the morning is never caught improvising in the dark.',
     lineagePassageId: 'tao-33-self-mastery',
     openingLine: 'The night has its own physics. Decisions made in the dark rarely look the same in the morning.',
     teachingBody:
@@ -43,7 +42,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Tonight, have your structure in place before the hour when you are weakest.',
     practice: 'This morning, plan the last two hours of your evening: what you will do, where the phone will sleep, what time the day ends.',
     forgeChallenge: 'Go to sleep thirty minutes earlier than usual tonight. Rest is a boundary.',
-    journalPrompt: 'What does my typical late evening look like? What structure would make it less dangerous?',
     eveningAccount: 'Did I govern the night, or did I improvise it?',
     seal: 'Govern the evening in the morning. By evening it is too late to plan.',
     relatedStudyIds: [], relatedPrincipleIds: ['guard-the-gates'],
@@ -53,10 +51,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-18', dayNumber: 18, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Hunger, Anger, Loneliness, Fatigue', theme: 'vulnerability states, HALT',
-    season: 'body_must_be_included', archetype: 'healer',
-    invocation: 'Today you walk as the Healer: a man who tends the state beneath the urge instead of fighting the urge alone.',
+    season: 'body_must_be_included', archetype: 'arch-18',
+    invocation: 'Today you walk as the Steward of the Body: a man who tends the state beneath the urge instead of fighting the urge alone.',
     archetypeExpression:
-      'The Healer repairs what he can and then moves, treating the body\'s signals as information rather than an identity. Today that mercy turns inward: hunger, anger, loneliness, and fatigue are not excuses but wounds to dress before the temptation hour finds them open. Repair what you can — eat, walk it off, reach out, rest — and you give the compulsion less to work with.',
+      'The Steward of the Body reads its signals as information rather than identity, knowing hunger, anger, loneliness, and fatigue each thin a man\'s capacity to hold the pause. Today that care turns inward as maintenance, not excuse: dress the open wound before the temptation hour finds it. Eat, walk it off, reach out, rest — and the compulsion has far less to work with.',
     lineagePassageId: 'synthesis-halt',
     openingLine: 'The states that precede a lapse are almost always the same. They are not mysterious.',
     teachingBody:
@@ -67,7 +65,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Check your state before the urge arrives, not after.',
     practice: 'Today, notice which of the four states you are in at any given hour. Address the state directly when you find it.',
     forgeChallenge: 'Identify the state you are most prone to neglecting. Today, address it proactively — not reactively.',
-    journalPrompt: 'In the hour before my last lapse or near-lapse, which state was I in? Was I attending to it?',
     eveningAccount: "Did I treat my body's signals as information today, or ignore them until they became demands?",
     seal: 'Address the state, not just the urge.',
     relatedStudyIds: [], relatedPrincipleIds: ['lapse-is-information'],
@@ -76,10 +73,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-19', dayNumber: 19, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Make Something Real', theme: 'craft, transmutation through making',
-    season: 'body_must_be_included', archetype: 'craftsman',
-    invocation: 'Today you walk as the Craftsman: a man who turns the urge into a finished thing instead of a fantasy.',
+    season: 'body_must_be_included', archetype: 'arch-19',
+    invocation: 'Today you walk as the Maker: a man who turns the urge into a finished thing instead of a fantasy.',
     archetypeExpression:
-      'The Craftsman starts before he is ready and finds his flow in the making, knowing energy becomes noble when it enters the hands. Today the command is not to plan or to think but to produce, moving the pull into craft before it can peak. The quality of the output is not the point; the quality of the attention is the transmutation.',
+      'The Maker begins before he is ready and finds his flow inside the work, knowing energy becomes clean when it enters the hands. Today the command is not to plan or to think but to produce, moving the pull into craft before it can peak. The quality of the output is never the point; the quality of the attention given to it is the whole transmutation.',
     lineagePassageId: 'dhammapada-145-fashion',
     openingLine: 'Desire becomes clean when it enters the hands.',
     teachingBody:
@@ -90,7 +87,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Today, make something real. Not plan. Not think. Make.',
     practice: 'Spend thirty uninterrupted minutes on a creative or skill-based act. Minimize the output, maximize the attention.',
     forgeChallenge: 'Turn your strongest urge today into your most ambitious creative or productive act this week.',
-    journalPrompt: 'What do I want to build or make that keeps being postponed? What small step could happen today?',
     eveningAccount: 'Did I create anything today? Even ten minutes of genuine making?',
     seal: 'The Craftsman knows that energy becomes noble when it enters the hands.',
     relatedStudyIds: ['the-inner-forge-transmutation'],
@@ -100,10 +96,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-20', dayNumber: 20, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: "The Brother's Hand", theme: 'brotherhood, isolation breaks the man',
-    season: 'body_must_be_included', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man who reaches out before isolation can rot the practice.',
+    season: 'body_must_be_included', archetype: 'arch-20',
+    invocation: 'Today you walk as the Kinsman: a man who reaches out before isolation can rot the practice.',
     archetypeExpression:
-      'The Brother does not disappear; he sends the message before pride makes the cost too high. Today that loyalty becomes the command, because isolation is the compulsion\'s natural habitat and one honest conversation breaks the circuit. Reach one man not to confess or perform, but to reconnect — a brother\'s hand is sometimes the difference between a lapse and a return.',
+      'The Kinsman refuses to disappear, sending the message before pride makes the cost too high. Today that loyalty is the command, because isolation is the compulsion\'s natural habitat and one honest conversation breaks the circuit. Reach one man not to confess or perform but simply to reconnect — a kinsman\'s hand is sometimes the difference between a lapse and a return.',
     lineagePassageId: 'aurelius-8-59-one-another',
     openingLine: "Isolation is the compulsion's natural habitat.",
     teachingBody:
@@ -115,7 +111,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Do not disappear. Reach one man today with honesty.',
     practice: 'Send a message or make a call to someone you trust — not to perform your discipline, but to simply be present with another human voice.',
     forgeChallenge: 'Offer genuine help to someone today — not advice, not information, but actual presence or service.',
-    journalPrompt: 'Who do I trust enough to tell the truth to about my struggles? Have I been honest with them lately?',
     eveningAccount: 'Was I connected to anyone genuinely today? Or did I spend the day performing or hiding?',
     seal: "A brother's hand is sometimes the difference between a lapse and a return.",
     relatedStudyIds: [], relatedPrincipleIds: ['man-is-never-enemy'],
@@ -124,10 +119,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-21', dayNumber: 21, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'The Forge Opens', theme: 'milestone, groove deepened, arc 3 opens',
-    season: 'body_must_be_included', archetype: 'craftsman',
-    invocation: 'Today you walk as the Craftsman: a man who recognizes the groove his own hands have worn over three weeks.',
+    season: 'body_must_be_included', archetype: 'arch-21',
+    invocation: 'Today you walk as the Forgemaster: a man who recognizes the groove his own hands have worn over three weeks.',
     archetypeExpression:
-      'The Craftsman knows that excellence is the residue of repetition, of ordinary acts done with extraordinary attention. Today that patience meets a milestone: twenty-one days have cut a new groove of the pause beside the old groove of the compulsion, and the work is to keep walking the new one until the old overgrows. The forge opens not with ceremony but with the quiet recognition of what the hands have already built.',
+      'The Forgemaster knows that a new shape is the residue of repetition, of ordinary acts done under intentional heat. Today that patience meets a milestone: twenty-one days have cut a fresh groove of the pause beside the old groove of the compulsion, and the work is to keep walking the new one until the old overgrows. The forge opens not with ceremony but with the quiet recognition of what the hands have already built.',
     lineagePassageId: 'synthesis-forge-the-fire',
     openingLine: 'Three weeks of choosing direction over default. The forge is real now.',
     teachingBody:
@@ -139,7 +134,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Enter the next three weeks knowing you have already changed something that cannot be taken back.',
     practice: 'Read the milestone rite. Account honestly. Renew the vow.',
     forgeChallenge: 'Complete your most demanding Forge act yet. Longer, harder, or more meaningful than anything in the past three weeks.',
-    journalPrompt: 'What is different in me after three weeks? Name something specific.',
     eveningAccount: 'Did I recognize today what I have already built, without needing to exaggerate it?',
     seal: 'Twenty-one days of choosing direction over compulsion. The Forge is open.',
     relatedStudyIds: ['the-inner-forge-transmutation'],
@@ -149,10 +143,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-22', dayNumber: 22, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'Appetite Is Not King', theme: "Platonic soul, inner order",
-    season: 'discipline_of_assent', archetype: 'king',
-    invocation: 'Today you walk as the King: a man who keeps reason on the throne and appetite in its proper place below.',
+    season: 'discipline_of_assent', archetype: 'arch-22',
+    invocation: 'Today you walk as the Charioteer: a man who holds the reins of appetite and spirit so reason can steer.',
     archetypeExpression:
-      'The King governs the small kingdom first, and his first kingdom is his own attention. Today that order is the whole lesson: appetite has force and spirit has courage, but neither was made to rule, and the pause is reason reclaiming the throne. Rule yourself before you rule anything else, and let no hunger crown itself king.',
+      'The Charioteer drives the two horses of the soul — the hunger of appetite, the courage of spirit — and neither was made to hold the reins. Today that mastery is the whole lesson: when the urge speaks, it is appetite pulling, and the pause is reason taking the reins back. Steer the team; let no single horse run the chariot off the road.',
     lineagePassageId: 'synthesis-reason-rules',
     openingLine: "Plato described the soul as a kingdom. The question is who holds the throne.",
     teachingBody:
@@ -163,7 +157,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'When appetite speaks today, ask reason what it thinks before responding.',
     practice: 'At each significant decision today, name which part is speaking: appetite, spirit, or reason. Let reason have the last word.',
     forgeChallenge: 'Complete one act today that appetite would not choose but reason endorses.',
-    journalPrompt: 'What does appetite want right now? What does reason say about it?',
     eveningAccount: 'Who held the throne today?',
     seal: 'Appetite has force. Reason must give direction.',
     relatedStudyIds: [], relatedPrincipleIds: ['compulsion-is-enemy'],
@@ -173,10 +166,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-23', dayNumber: 23, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'The Spirited Part', theme: 'thumos, courage, worthy indignation',
-    season: 'discipline_of_assent', archetype: 'warrior',
-    invocation: 'Today you walk as the Warrior: a man who refuses the urge from self-respect, not from fear.',
+    season: 'discipline_of_assent', archetype: 'arch-23',
+    invocation: 'Today you walk as the Champion: a man who refuses the urge from self-respect, not from fear.',
     archetypeExpression:
-      'The Warrior moves before he negotiates and carries his fire into the contest instead of into fantasy. Today that courage trains the spirited part — thumos — to serve reason, meeting the urge with dignified defiance rather than white-knuckled suppression. Give the spirit a worthy cause: the body to train, the work to finish, the man you are building to defend.',
+      'The Champion carries his fire into the contest instead of into fantasy, and his weapon is trained thumos — the spirited part bent to serve reason. Today that courage meets the urge with dignified defiance rather than white-knuckled suppression. Give the spirit a worthy cause: the body to train, the work to finish, the man you are building to defend.',
     lineagePassageId: 'dhammapada-103-conquer-self',
     openingLine: 'The spirit that becomes rage without reason becomes tyranny. Trained, it becomes courage.',
     teachingBody:
@@ -187,7 +180,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Let your spirit work for reason today, not against it.',
     practice: 'Find one place today where courage — not just willpower — is required. Act from there.',
     forgeChallenge: 'Do one difficult, courageous act today that you have been avoiding because it costs something.',
-    journalPrompt: 'Where does my anger or pride most often work against me? Where could that same energy work for me?',
     eveningAccount: 'Did I use my spirit for something worthy today, or did I spend it on something small?',
     seal: 'Spirit trained to serve reason becomes courage. Spirit on its own becomes fire without direction.',
     relatedStudyIds: [], relatedPrincipleIds: ['energy-is-ally'],
@@ -196,10 +188,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-24', dayNumber: 24, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'Reason Must Rule', theme: 'sovereignty, inner throne, daily practice',
-    season: 'discipline_of_assent', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: a man who holds appetite, spirit, and reason in order without fracture.',
+    season: 'discipline_of_assent', archetype: 'arch-24',
+    invocation: 'Today you walk as the Lawgiver: a man who hands reason one clear act and lets it rule by example.',
     archetypeExpression:
-      'The Sovereign is not desireless; he is undivided, governing consistently rather than ruling perfectly. Today reason must earn the throne again through one clear act chosen over comfort, because the inner kingdom is not won once but governed daily. Remain governable by the good, and let nothing be suppressed and nothing indulged without question.',
+      'The Lawgiver knows reason does not rule by knowing the right thing; it rules by being practiced into authority through repeated acts of choosing it. Today reason must earn the throne again with one clear act chosen over comfort, because the inner kingdom is not won once but governed daily. Suppress nothing, indulge nothing without question — give appetite and spirit a worthy law to live under.',
     lineagePassageId: 'aurelius-7-29-present',
     openingLine: 'The inner throne belongs to reason — but reason must earn it daily.',
     teachingBody:
@@ -210,7 +202,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Give reason one clear action today that appetite and spirit would not have chosen without it.',
     practice: 'Morning: what would reason say about today? Evening: did I live by it?',
     forgeChallenge: 'Make one long-term decision today — about a boundary, a goal, a commitment — that reason endorses and appetite resists.',
-    journalPrompt: 'What would today look like if reason held the throne completely? What would change?',
     eveningAccount: 'Was I governed by reason, spirit, or appetite today? Who won the later hours?',
     seal: 'The inner kingdom is not won once. It is governed daily.',
     relatedStudyIds: [], relatedPrincipleIds: ['pause-is-where-manhood-begins'],
@@ -219,10 +210,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-25', dayNumber: 25, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'Ritual Shapes Desire', theme: 'rhythm, Confucian li, groove over willpower',
-    season: 'discipline_of_assent', archetype: 'monk',
-    invocation: 'Today you walk as the Monk: a man who lets a chosen form, not raw willpower, carry him through.',
+    season: 'discipline_of_assent', archetype: 'arch-25',
+    invocation: 'Today you walk as the Ritualist: a man who lets a chosen form, not raw willpower, carry him through.',
     archetypeExpression:
-      'The Monk draws depth from quiet and guards the inner room with restraint that has become structure. Today that stillness takes the shape of ritual: the same act, in the same order, at the same time, repeated until desire itself begins to move toward discipline. The form reaches back and pulls the tired man through — not by force, but by groove.',
+      'The Ritualist trusts structure over mood, building the same act, in the same order, at the same time, until the form itself begins to shape desire. Today that rhythm is the lesson, because ritual is strongest not when willpower is high but when it is depleted: the rite repeated for weeks reaches back and pulls the tired man through. Not by force — by groove.',
     lineagePassageId: 'synthesis-stillness',
     openingLine: 'Without ritual, desire invents the day.',
     teachingBody:
@@ -233,7 +224,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Today, perform your morning ritual before anything else, and see what it opens.',
     practice: 'Formalize your morning rite: stand, breathe, read the vow, name the command, anticipate the likely temptation.',
     forgeChallenge: 'Add one evening ritual that closes the day with the same intentionality the morning opens it.',
-    journalPrompt: 'What small ritual has already shaped my desire in these twenty-five days?',
     eveningAccount: 'Did my rituals serve me today, or did I skip them when they were most needed?',
     seal: 'A ritual is a chosen form that trains wild energy.',
     relatedStudyIds: [], relatedPrincipleIds: ['guard-the-gates', 'return-to-order'],
@@ -243,10 +233,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-26', dayNumber: 26, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'Return Without Shame', theme: 'lapse as information, clean return',
-    season: 'discipline_of_assent', archetype: 'pilgrim',
-    invocation: 'Today you walk as the Pilgrim: a man who keeps the road after the stumble, without theater.',
+    season: 'discipline_of_assent', archetype: 'arch-26',
+    invocation: 'Today you walk as the Wayfarer: a man who keeps the road after the stumble, without theater.',
     archetypeExpression:
-      'The Pilgrim is not the man who never falls; he is the man who keeps walking after imperfection. Today his medicine is brutally simple — stand up, name the lesson, repair one thing, and begin again, refusing to dramatize the fall as a way to avoid the return. A lapse is information, not a verdict; return without theater and you will return every time.',
+      'The Wayfarer is not the man who never falls; he is the man who keeps walking after imperfection. Today his medicine is brutally simple — stand up, name the lesson, repair one thing, and begin again, refusing to dramatize the fall as a way to avoid the road. A lapse is information, not a verdict; return without theater and you will return every time.',
     lineagePassageId: 'aurelius-6-11-return',
     openingLine: 'The fall does not disqualify the man. The drama made of the fall disqualifies the practice.',
     teachingBody:
@@ -257,7 +247,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'If you have fallen, or when you do: stand up, name what happened, repair one thing, and continue.',
     practice: 'Write down the last time you returned from a setback. What did the return look like? What made it clean or difficult?',
     forgeChallenge: 'Identify one thing that needs repair right now — a lapse, a broken boundary, a neglected commitment. Begin the repair today.',
-    journalPrompt: 'What does my shame voice say after a lapse? Is it useful? Is it honest?',
     eveningAccount: 'Did I return from anything today — a slip, a mood, an old pattern — without making a religion of it?',
     seal: 'A lapse ends a streak. It does not end the practice.',
     relatedStudyIds: [],
@@ -268,10 +257,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-27', dayNumber: 27, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'Service Burns Fog', theme: 'service, outward attention, brotherhood',
-    season: 'discipline_of_assent', archetype: 'brother',
-    invocation: 'Today you walk as the Brother: a man who turns his attention outward and lets service quiet the fog.',
+    season: 'discipline_of_assent', archetype: 'arch-27',
+    invocation: 'Today you walk as the Almsgiver: a man who turns his attention outward and lets service quiet the fog.',
     archetypeExpression:
-      'The Brother reaches out and does not disappear, knowing isolation makes the urge louder and connection gives the man back his name. Today that loyalty becomes service — concrete, costly, uncredited — directed at someone else\'s real need. The compulsion is self-directed; the moment genuine attention turns toward another, the circuit it feeds on has nowhere to run.',
+      'The Almsgiver interrupts self-absorption with concrete, costly, uncredited work directed at someone else\'s real need. Today that outward turn is the command, because the compulsion is inherently self-directed — it runs on my appetite, my relief, my comfort. The moment genuine attention lands on another\'s reality, the circuit it feeds on has nowhere to run.',
     lineagePassageId: 'analects-15-23-reciprocity',
     openingLine: 'A man absorbed in strengthening someone else has less room for the compulsion.',
     teachingBody:
@@ -282,7 +271,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Help someone today with the energy you would otherwise spend on yourself.',
     practice: 'Identify one person in your life who needs something concrete. Offer it today.',
     forgeChallenge: 'Perform one act of genuine service today — without mentioning it, recording it, or receiving credit for it.',
-    journalPrompt: 'When did I last strengthen another person? What did it cost me? What did it return?',
     eveningAccount: 'Did I look outward today, or was the whole day spent looking inward?',
     seal: 'Isolation makes the urge louder. Brotherhood gives the man back his name.',
     relatedStudyIds: [], relatedPrincipleIds: ['refine-the-fire'],
@@ -291,10 +279,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-28', dayNumber: 28, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'The Quiet Room', theme: 'silence, interior life, noise as avoidance',
-    season: 'discipline_of_assent', archetype: 'monk',
-    invocation: 'Today you walk as the Monk: a man who can sit in silence without reaching for the screen.',
+    season: 'discipline_of_assent', archetype: 'arch-28',
+    invocation: 'Today you walk as the Hermit: a man who can sit in silence without reaching for the screen.',
     archetypeExpression:
-      'The Monk is able to be alone without leaking, drawing depth from quiet rather than fleeing it. Today the practice is ten real minutes of silence — no phone, no music, no content — because the urge speaks loudest when everything else is loud and grows legible when the noise stops. Guard the inner room; this is not avoidance but the maintenance the interior life requires.',
+      'The Hermit can be alone without leaking, drawing depth from quiet rather than fleeing it into noise. Today the practice is ten real minutes of silence — no phone, no music, no content — because the urge speaks loudest when everything else is loud and grows legible when the noise stops. This is not avoidance but the plain maintenance the interior life requires.',
     lineagePassageId: 'synthesis-stillness',
     openingLine: 'The man who cannot tolerate silence has made noise a necessity. The compulsion lives there.',
     teachingBody:
@@ -305,7 +293,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Today, give silence ten real minutes. Not meditation theater — just quiet, with no phone.',
     practice: 'Sit in silence for ten minutes at some point today. No phone, no music, no content.',
     forgeChallenge: 'Spend thirty minutes this evening with no screen, no audio, and no fantasy. Be present with your own mind.',
-    journalPrompt: 'What happens in my mind when the noise stops? What do I hear?',
     eveningAccount: 'Did I give myself any genuine silence today?',
     seal: 'The practice lives in what happens when the noise stops.',
     relatedStudyIds: ['brahmacharya-vow-and-attention'],
@@ -315,10 +302,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-29', dayNumber: 29, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'One Promise Kept', theme: 'Aristotelian character, repetition as virtue',
-    season: 'discipline_of_assent', archetype: 'craftsman',
-    invocation: 'Today you walk as the Craftsman: a man who builds character one kept promise at a time.',
+    season: 'discipline_of_assent', archetype: 'arch-29',
+    invocation: 'Today you walk as the Keeper of the Word: a man who builds character one kept promise at a time.',
     archetypeExpression:
-      'The Craftsman finds excellence not in a single great act but in ordinary acts done with extraordinary attention. Today that patience meets Aristotle\'s insight: we become disciplined by doing disciplined acts, so the command is to state one small promise and keep it. Each kept word is a repetition that becomes disposition, and the man who keeps small promises reliably has begun to trust himself.',
+      'The Keeper of the Word finds character not in a single great act but in ordinary words honored with exact attention. Today that fidelity meets Aristotle\'s insight: we become disciplined by doing disciplined acts, so the command is to state one small promise and keep it. Each kept word is a repetition that hardens into disposition, and the man who keeps small promises reliably has begun to trust himself.',
     lineagePassageId: 'analects-1-8-faults',
     openingLine: 'Virtue is not a feeling. It is a trained disposition — built by repetition, not by intention.',
     teachingBody:
@@ -329,7 +316,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Make one promise to yourself today and keep it.',
     practice: 'Name the one promise you most need to keep today. State it in the morning. Keep it.',
     forgeChallenge: 'Complete an act of craft or skill that you have been postponing. Finish something.',
-    journalPrompt: 'What character trait am I building by repeated action in this practice? Can I name it specifically?',
     eveningAccount: 'What repetition did I add to my character today?',
     seal: 'Character is carved by repetitions too small for the ego to celebrate.',
     relatedStudyIds: [],
@@ -339,10 +325,10 @@ export const days16to30: readonly DailyPathContentInput[] = [
   {
     id: 'day-30', dayNumber: 30, arcNumber: 3, arcTitle: 'The Body Must Be Included',
     title: 'The Oath Renewed', theme: 'thirty-day milestone, arc 3 completion',
-    season: 'discipline_of_assent', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: a man who renews the oath knowing now what it costs.',
+    season: 'discipline_of_assent', archetype: 'arch-30',
+    invocation: 'Today you walk as the Oathkeeper: a man who renews the vow knowing now exactly what it costs.',
     archetypeExpression:
-      'The Sovereign is not desireless but undivided, and his discipline is the daily account taken without shame and without exaggeration. Today thirty days stand behind the oath, which is no longer a sentence but a spine the man has tested under resistance and probably under one return. Account honestly, renew the word, and carry that knowledge of your own backbone into the next arc.',
+      'The Oathkeeper measures the vow not by how it felt on day one but by what it has survived since — the resistance stood in, the probable single return. Today thirty days stand behind the oath, which is no longer a sentence but a spine the man has tested under load. Account honestly without shame and without exaggeration, renew the word, and carry that knowledge of your own backbone into the next arc.',
     lineagePassageId: 'analects-12-4-within',
     openingLine: 'Thirty days is not the summit. It is the proof that the man can live by a chosen word.',
     teachingBody:
@@ -354,7 +340,6 @@ export const days16to30: readonly DailyPathContentInput[] = [
     command: 'Stand at thirty days and account without shame and without exaggeration.',
     practice: 'Read the milestone rite. Audit honestly. Renew the vow.',
     forgeChallenge: 'Complete one difficult act before any pleasure today. Let the day be authored by the man you have become.',
-    journalPrompt: 'What has the practice cost me that was worth the price? What has it returned?',
     eveningAccount: 'Who held the throne today?',
     seal: 'The oath is not a sentence. It is a spine.',
     relatedStudyIds: [],

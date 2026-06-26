@@ -25,7 +25,7 @@ import {
   SplitRow,
   useCountUp,
 } from '@/shared/components';
-import { theme, type ArchetypeTone } from '@/shared/design';
+import { theme } from '@/shared/design';
 import { useDayTheme, type SurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { haptics } from '@/shared/lib';
@@ -74,7 +74,6 @@ export function DailyChamberScreen() {
   // per day — so consecutive days, even of one archetype, look distinct.
   const tone = useDayTheme({
     day: dayNumber,
-    archetype: (content?.archetype ?? 'monk') as ArchetypeTone,
     arcNumber: content?.arcNumber ?? 1,
   });
   const { colors } = useTheme();

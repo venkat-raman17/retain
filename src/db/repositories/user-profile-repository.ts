@@ -21,6 +21,7 @@ interface ProfileRow {
   custom_vow: string | null;
   path_started_at: string | null;
   current_path_started_at: string | null;
+  start_day_offset: number | null;
   app_content_version: number;
   preferred_teaching_tone: string;
   notification_style: string;
@@ -39,6 +40,7 @@ function toProfile(row: ProfileRow): UserProfile {
     customVow: row.custom_vow,
     pathStartedAt: row.path_started_at,
     currentPathStartedAt: row.current_path_started_at,
+    startDayOffset: row.start_day_offset ?? 0,
     appContentVersion: row.app_content_version,
     preferredTeachingTone: row.preferred_teaching_tone,
     notificationStyle: row.notification_style,
@@ -63,10 +65,10 @@ export class SqliteUserProfileRepository implements UserProfileRepository {
     await this.db.run(
       `INSERT OR IGNORE INTO user_profile
          (id, created_at, updated_at, onboarding_completed, selected_vow, custom_vow,
-          path_started_at, current_path_started_at, app_content_version,
+          path_started_at, current_path_started_at, start_day_offset, app_content_version,
           preferred_teaching_tone, notification_style, app_lock_enabled,
           current_path_phase, crown_received_at, long_path_started_at)
-       VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+       VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
       [
         now, now,
         bit(seeded.onboardingCompleted),
@@ -74,6 +76,7 @@ export class SqliteUserProfileRepository implements UserProfileRepository {
         seeded.customVow,
         seeded.pathStartedAt,
         seeded.currentPathStartedAt,
+        seeded.startDayOffset,
         seeded.appContentVersion,
         seeded.preferredTeachingTone,
         seeded.notificationStyle,
@@ -96,7 +99,7 @@ export class SqliteUserProfileRepository implements UserProfileRepository {
     await this.db.run(
       `UPDATE user_profile SET
          updated_at = ?, onboarding_completed = ?, selected_vow = ?, custom_vow = ?,
-         path_started_at = ?, current_path_started_at = ?, app_content_version = ?,
+         path_started_at = ?, current_path_started_at = ?, start_day_offset = ?, app_content_version = ?,
          preferred_teaching_tone = ?, notification_style = ?, app_lock_enabled = ?,
          current_path_phase = ?, crown_received_at = ?, long_path_started_at = ?
        WHERE id = 1;`,
@@ -107,6 +110,7 @@ export class SqliteUserProfileRepository implements UserProfileRepository {
         next.customVow,
         next.pathStartedAt,
         next.currentPathStartedAt,
+        next.startDayOffset,
         next.appContentVersion,
         next.preferredTeachingTone,
         next.notificationStyle,

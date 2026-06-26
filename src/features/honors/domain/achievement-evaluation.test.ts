@@ -1,6 +1,10 @@
 import { fixedClock } from '@/shared/lib/clock';
 
-import { evaluateAchievements, type AchievementSignals } from './achievement-evaluation';
+import {
+  evaluateAchievements,
+  isAchievementApplicable,
+  type AchievementSignals,
+} from './achievement-evaluation';
 import type { Achievement } from '@/content/schemas';
 
 const CLOCK = fixedClock(new Date('2026-01-01T08:00:00Z'));
@@ -137,5 +141,49 @@ describe('evaluateAchievements', () => {
   it('earns all achievements with full signals', () => {
     const earned = evaluateAchievements(catalog, allSignals, CLOCK);
     expect(earned).toHaveLength(catalog.length);
+  });
+});
+
+describe('isAchievementApplicable', () => {
+  const arc = (n: number): Achievement => ({
+    id: `gate-${n}`, title: 'x', description: 'x', sealSource: 'arc', sealId: String(n),
+    criteria: { kind: 'arc_cleared', params: { arcNumber: n } },
+  });
+  const daysAch = (count: number): Achievement => ({
+    id: `days-${count}`, title: 'x', description: 'x', sealSource: 'arc', sealId: '1',
+    criteria: { kind: 'days_completed', params: { count } },
+  });
+  const pauseAch: Achievement = {
+    id: 'pause', title: 'x', description: 'x', sealSource: 'semantic', sealId: 'support',
+    criteria: { kind: 'pause_logged', params: { count: 1 } },
+  };
+  const crownAch: Achievement = {
+    id: 'crown', title: 'x', description: 'x', sealSource: 'arc', sealId: '9',
+    criteria: { kind: 'crown_received', params: {} },
+  };
+
+  it('keeps every honor when started at day 1 (offset 0)', () => {
+    for (let n = 1; n <= 9; n++) expect(isAchievementApplicable(arc(n), 0)).toBe(true);
+    expect(isAchievementApplicable(daysAch(30), 0)).toBe(true);
+    expect(isAchievementApplicable(crownAch, 0)).toBe(true);
+  });
+
+  it('hides arcs entirely before a day-30 start, keeps later arcs', () => {
+    // startDayOffset 29 → first walked day is 30. Arcs 1–3 (first days 1/11/21) are unreachable.
+    expect(isAchievementApplicable(arc(1), 29)).toBe(false);
+    expect(isAchievementApplicable(arc(2), 29)).toBe(false);
+    expect(isAchievementApplicable(arc(3), 29)).toBe(false);
+    expect(isAchievementApplicable(arc(4), 29)).toBe(true); // first day 31
+    expect(isAchievementApplicable(arc(9), 29)).toBe(true);
+  });
+
+  it('hides day-count honors that exceed the remaining days', () => {
+    expect(isAchievementApplicable(daysAch(30), 29)).toBe(true); // 30 <= 61 remaining
+    expect(isAchievementApplicable(daysAch(70), 29)).toBe(false); // 70 > 61 remaining
+  });
+
+  it('keeps activity-based and crown honors for a mid-path starter', () => {
+    expect(isAchievementApplicable(pauseAch, 29)).toBe(true);
+    expect(isAchievementApplicable(crownAch, 29)).toBe(true);
   });
 });

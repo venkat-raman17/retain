@@ -10,21 +10,19 @@ import {
   AppIconButton,
   AppQuoteBlock,
   AppScreen,
-  AppStatCard,
   AppText,
   FadeInRise,
   PathPulse,
   SealArt,
   SectionBand,
 } from '@/shared/components';
-import { theme, type ArchetypeTone } from '@/shared/design';
+import { theme } from '@/shared/design';
 import { useDayTheme, useSurfaceTone } from '@/shared/hooks';
 import { useTheme } from '@/shared/hooks/use-theme';
 import { Routes } from '@/navigation';
 import { ThemePickerModal } from '@/features/settings';
 
 import { usePath } from '../hooks/use-path';
-import { usePathProgress } from '../hooks/use-path-progress';
 import { useDailyPath } from '../hooks/use-daily-path';
 import { useDailyBrief } from '../hooks/use-daily-brief';
 import { useDayQuest } from '@/features/quest/hooks/use-day-quest';
@@ -34,7 +32,6 @@ export function PathScreen() {
   const router = useRouter();
   const { colors } = useTheme();
   const { currentDay, isRunning, vow, loading, beginPath, profile, refresh: refreshPath } = usePath();
-  const { summary, refresh: refreshProgress } = usePathProgress();
   const { isCrownUnlocked: checkCrownUnlocked } = useDailyPath();
   const { brief, refresh: refreshBrief } = useDailyBrief();
   const [themePickerOpen, setThemePickerOpen] = useState(false);
@@ -51,11 +48,10 @@ export function PathScreen() {
   useFocusEffect(
     useCallback(() => {
       refreshPath();
-      refreshProgress();
       refreshBrief();
       refreshQuest();
       refreshHonors();
-    }, [refreshPath, refreshProgress, refreshBrief, refreshQuest, refreshHonors]),
+    }, [refreshPath, refreshBrief, refreshQuest, refreshHonors]),
   );
 
   const isCrownUnlocked = profile ? checkCrownUnlocked(profile, currentDay) : false;
@@ -66,7 +62,7 @@ export function PathScreen() {
   const arcNumber = isRunning && brief ? brief.arcNumber : 1;
   const archetypeLed = Boolean(isRunning && brief && !brief.isLongPath && brief.archetype);
   const arcSurfaceTone = useSurfaceTone({ kind: 'arc', arcNumber });
-  const dayTone = useDayTheme({ day, archetype: (brief?.archetype ?? 'monk') as ArchetypeTone, arcNumber });
+  const dayTone = useDayTheme({ day, arcNumber });
   const tone = archetypeLed ? dayTone : arcSurfaceTone;
 
   const hasMilestone = Boolean(brief?.milestoneRiteId);
@@ -249,18 +245,6 @@ export function PathScreen() {
               </>
             ) : null}
 
-            {/* Compact stat band — Day lives in the pulse; lead with practice and
-                return (a lapse never reads as zero), not the streak. Embers (the
-                game currency) lives in the Hall. */}
-            {summary ? (
-              <View style={styles.statsGrid}>
-                <AppStatCard label={copy.path.stats.practiceDays} value={summary.totalPracticeDays.toString()} style={styles.stat} />
-                <AppStatCard label={copy.path.stats.returns} value={summary.returnsRecorded.toString()} style={styles.stat} />
-                <AppStatCard label={copy.path.stats.urges} value={summary.urgesObserved.toString()} style={styles.stat} />
-                <AppStatCard label={copy.path.stats.forge} value={summary.forgeActs.toString()} style={styles.stat} />
-              </View>
-            ) : null}
-
             {/* Secondary actions */}
             <AppButton label={copy.path.logForge} variant="secondary" fullWidth onPress={() => router.push(Routes.forge)} />
             <AppButton label={copy.path.viewMap} variant="ghost" fullWidth onPress={() => router.push(Routes.pathMap)} />
@@ -355,8 +339,6 @@ const styles = StyleSheet.create({
   topBar: { flexDirection: 'row', justifyContent: 'flex-end', gap: theme.spacing.xs },
   gearIcon: { fontSize: 16, lineHeight: 20 },
   section: { gap: theme.spacing.sm },
-  statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm },
-  stat: { flexBasis: '47%', flexGrow: 1, minWidth: 0 },
   stationRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
   paletteIcon: { flexDirection: 'row', gap: 3, alignItems: 'center' },
   paletteDot: { width: 5, height: 5, borderRadius: 2.5 },

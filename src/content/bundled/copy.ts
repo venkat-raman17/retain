@@ -128,15 +128,6 @@ export const copy = {
       begin: 'Begin the practice',
     },
     vowAttribution: 'Your vow',
-    stats: {
-      day: 'Day',
-      streak: 'Streak',
-      urges: 'Urges met',
-      forge: 'Forge',
-      embers: 'Embers',
-      practiceDays: 'Practice days',
-      returns: 'Returns',
-    },
     crown: {
       label: 'The Crown is earned',
       body: 'Ninety days. You have been formed. Receive the Crown.',
@@ -341,6 +332,7 @@ export const copy = {
 
   honorsHall: {
     label: 'The honors hall',
+    embers: 'Embers',
     arcCleared: 'Arc cleared',
     arcsCleared: 'Arcs cleared',
     keys: 'Milestone keys',

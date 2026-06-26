@@ -2,7 +2,6 @@ export {
   archetypeSchema,
   archetypeProfileSchema,
   archetypeProfilesSchema,
-  ARCHETYPES,
 } from './archetype.schema';
 export type { Archetype, ArchetypeProfile } from './archetype.schema';
 export {

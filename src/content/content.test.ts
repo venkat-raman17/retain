@@ -47,7 +47,7 @@ function collectStrings(value: unknown, out: string[]): void {
 describe('bundled content — basic counts', () => {
   it('loads every collection', () => {
     expect(principles).toHaveLength(10);
-    expect(archetypeProfiles).toHaveLength(12);
+    expect(archetypeProfiles).toHaveLength(90);
     expect(codexDays).toHaveLength(7);
     expect(dailyPath.length).toBe(90);
     expect(studies).toHaveLength(11);
@@ -98,7 +98,7 @@ describe('bundled content — loaders', () => {
     expect(getAllStudies()).toBe(studies);
   });
 
-  it('getArchetypeProfile finds all 12 archetypes', () => {
+  it('getArchetypeProfile finds every archetype', () => {
     const ids = archetypeProfiles.map((a) => a.id);
     for (const id of ids) {
       expect(getArchetypeProfile(id)).toBeDefined();
@@ -174,9 +174,26 @@ describe('bundled content — structural integrity', () => {
     }
   });
 
-  it('all 12 archetypes have a retain line', () => {
+  it('all archetypes have a retain line', () => {
     for (const archetype of archetypeProfiles) {
       expect(archetype.retainLine.trim().length).toBeGreaterThan(0);
+    }
+  });
+
+  it('has 90 archetypes with unique ids and unique names', () => {
+    const ids = archetypeProfiles.map((a) => a.id);
+    const names = archetypeProfiles.map((a) => a.name);
+    expect(new Set(ids).size).toBe(90);
+    expect(new Set(names).size).toBe(90);
+  });
+
+  it('every path day maps 1:1 to its own unique archetype', () => {
+    const dayArchetypes = dailyPath.map((d) => d.archetype);
+    // 90 days, 90 distinct archetype slugs — no archetype repeats across days.
+    expect(new Set(dayArchetypes).size).toBe(dailyPath.length);
+    const validIds = new Set(archetypeProfiles.map((a) => a.id));
+    for (const slug of dayArchetypes) {
+      expect(validIds.has(slug)).toBe(true);
     }
   });
 

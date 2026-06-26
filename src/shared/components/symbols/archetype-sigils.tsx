@@ -1,6 +1,8 @@
 import type { FC } from 'react';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
 
+import { ProceduralSigil, sigilSeedFromKey } from './procedural-sigil';
+
 type SymbolProps = { size?: number; color?: string; strokeWidth?: number };
 type SymbolFC = FC<SymbolProps>;
 
@@ -203,13 +205,18 @@ const ARCHETYPE_SIGIL_MAP: Record<string, SymbolFC> = {
   sovereign: SovereignSigil,
 };
 
-/** Lookup component — renders the sigil for the given archetype id. */
+/**
+ * Lookup component — renders the curated sigil for a known archetype id, or a
+ * deterministic {@link ProceduralSigil} for any other key (the 90 per-day
+ * archetype slugs have no hand-drawn mark, so they get a generated one).
+ */
 export function ArchetypeSigil({
   archetype,
   size,
   color,
   strokeWidth,
 }: SymbolProps & { archetype: string }) {
-  const Sigil = ARCHETYPE_SIGIL_MAP[archetype] ?? SovereignSigil;
-  return <Sigil size={size} color={color} strokeWidth={strokeWidth} />;
+  const Sigil = ARCHETYPE_SIGIL_MAP[archetype];
+  if (Sigil) return <Sigil size={size} color={color} strokeWidth={strokeWidth} />;
+  return <ProceduralSigil seed={sigilSeedFromKey(archetype)} size={size} color={color} strokeWidth={strokeWidth} />;
 }

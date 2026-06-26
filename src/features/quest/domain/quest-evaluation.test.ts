@@ -24,6 +24,7 @@ const emptySignals: DayQuestSignals = {
   secretRevealed: false,
   forgeActsToday: 0,
   pausesToday: 0,
+  dayCompleted: false,
 };
 
 describe('evaluateDayQuest', () => {
@@ -81,9 +82,20 @@ describe('evaluateDayQuest', () => {
       secretRevealed: true,
       forgeActsToday: 1,
       pausesToday: 1,
+      dayCompleted: false,
     };
     const result = evaluateDayQuest(allKindsTrial, signals, CLOCK);
     expect(result.cleared).toBe(true);
     expect(result.objectives.map((o) => o.complete)).toEqual([true, true, true]);
+  });
+
+  it('a completed day stays cleared regardless of today\'s signals', () => {
+    // Reproduces the bug: a day cleared earlier must not revert to incomplete the
+    // next day just because today's forge/pause counts are zero.
+    const signals: DayQuestSignals = { ...emptySignals, dayCompleted: true };
+    const result = evaluateDayQuest(baseTrial, signals, CLOCK);
+    expect(result.cleared).toBe(true);
+    expect(result.embers).toBe(25);
+    expect(result.objectives.every((o) => o.complete)).toBe(true);
   });
 });

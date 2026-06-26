@@ -72,3 +72,34 @@ export function evaluateAchievements(
     )
     .map((a) => a.id);
 }
+
+/**
+ * Whether an achievement can still be earned given how many days the man skipped
+ * before his first in-app day (`startDayOffset`; 0 = started at day 1). Honors
+ * tied to arcs or day-counts entirely before his first day are unreachable — he
+ * never walked those days — and should be hidden. Activity-based honors (pauses,
+ * forge acts, returns, crown) are always applicable.
+ */
+export function isAchievementApplicable(achievement: Achievement, startDayOffset: number): boolean {
+  const { kind, params } = achievement.criteria;
+  switch (kind) {
+    case 'arc_cleared': {
+      const arcNumber = params['arcNumber'] ?? 1;
+      // The arc is reachable only if its first day falls within the man's journey.
+      return (arcNumber - 1) * 10 + 1 > startDayOffset;
+    }
+    case 'arcs_cleared': {
+      let available = 0;
+      for (let arc = 1; arc <= 9; arc++) {
+        if ((arc - 1) * 10 + 1 > startDayOffset) available++;
+      }
+      return (params['count'] ?? 1) <= available;
+    }
+    case 'days_completed':
+      return (params['count'] ?? 1) <= 90 - startDayOffset;
+    case 'crown_received':
+      return startDayOffset < 90;
+    default:
+      return true;
+  }
+}

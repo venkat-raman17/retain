@@ -4,10 +4,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-01', dayNumber: 1, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Vow', theme: 'beginning, identity, intention',
-    season: 'the_vow', archetype: 'pilgrim',
-    invocation: 'Today you walk as the Pilgrim: a man who begins not because the road is clear, but because he has chosen it.',
+    season: 'the_vow', archetype: 'arch-01',
+    invocation: 'Today you walk as the Vowkeeper: a man who binds himself to a word he chose while clear and means to carry while clouded.',
     archetypeExpression:
-      'The Pilgrim does not wait for the perfect morning; he takes the step in front of him. Today that step is your vow — spoken plainly, before the conditions feel ready. Let his patience with the long road steady you: you are not finishing anything today, only beginning, and beginning is enough.',
+      'The Vowkeeper governs this day because the vow is the whole task: not a feeling, but a word held past the mood that follows. He does not wait for the perfect morning; he speaks the commitment before conditions feel ready, then keeps it when it costs him. Let his fidelity bend today\'s command — choose the word and mean it, knowing the keeping matters most in the weak hour.',
     lineagePassageId: 'tao-64-single-step',
     openingLine: 'A man begins not when conditions are perfect, but when he chooses a word and means it.',
     teachingBody:
@@ -18,7 +18,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Choose your word and speak it — aloud if you are alone, inwardly if not.',
     practice: 'Write or recite your vow once this morning, before the phone.',
     forgeChallenge: 'Complete one act of discipline today that costs you comfort and earns you nothing visible.',
-    journalPrompt: 'What is driving me to begin this practice? Name the real reason, not the flattering one.',
     eveningAccount: 'Did I live today from intention or from habit?',
     seal: 'A man begins the day he stops waiting to begin.',
     contentStatus: 'final',
@@ -28,10 +27,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-02', dayNumber: 2, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Fire Is Not the Enemy', theme: 'energy, direction, misdirection',
-    season: 'the_vow', archetype: 'healer',
-    invocation: 'Today you walk as the Healer: a man who tends the fire rather than wages war on it.',
+    season: 'the_vow', archetype: 'arch-02',
+    invocation: 'Today you walk as the Fire-Tender: a man who keeps the flame alive and aimed rather than waging war on it.',
     archetypeExpression:
-      'The Healer knows that what is alive in you is not a wound to be cut out. He meets desire without contempt and asks where it can go, never how to kill it. Let his refusal to hate the body keep you from the oldest mistake — splitting yourself in two and calling half of you the enemy.',
+      'The Fire-Tender governs today because the day\'s lesson is that the energy is the ally, never the wound to be cut out. He meets desire without contempt and asks where it can go, not how to kill it. This bends the command away from war and toward stewardship: do not fight what you feel — name it, then decide where the fire enters, refusing the oldest mistake of splitting yourself in two.',
     lineagePassageId: 'synthesis-watch-the-cloud',
     openingLine: 'What you are learning to govern is the same force that builds men, fills art, and founds families.',
     teachingBody:
@@ -42,7 +41,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Today, do not fight what you feel. Name it, and then decide where it goes.',
     practice: 'When desire rises today, pause for thirty seconds and ask: "Where could this go if I give it direction?"',
     forgeChallenge: 'Find one hour of sustained work — physical, creative, or service — and give it the energy that would otherwise be spent.',
-    journalPrompt: 'What do I believe about desire? Is it something to be hated or something to be led?',
     eveningAccount: 'Did I treat the energy as enemy or ally today?',
     seal: 'The fire is neutral. What matters is what it enters.',
     contentStatus: 'final',
@@ -53,10 +51,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-03', dayNumber: 3, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The First Pause', theme: 'pause, the gap, command',
-    season: 'the_vow', archetype: 'sovereign',
-    invocation: 'Today you walk as the Sovereign: the one who governs the gap between the urge and the act.',
+    season: 'the_vow', archetype: 'arch-03',
+    invocation: 'Today you walk as the Gap-Keeper: the one who governs the half-second between the urge arriving and the act following.',
     archetypeExpression:
-      'The Sovereign does not deny that the impulse arrives; he denies that it rules. His authority lives in the half-second of assent that is always his to give or withhold. Today, find that half-second and take the throne inside it — the urge may speak first, but it does not get the last word.',
+      'The Gap-Keeper governs today because the whole practice begins in the pause — the space between impression and assent. He does not deny that the impulse arrives; he denies that it rules, because the assent is always his to give or withhold. This bends the command toward the smallest discipline: when the first urge appears, hold one breath inside the gap and take the throne there, letting the urge speak first but never last.',
     lineagePassageId: 'epictetus-ench-5-opinions',
     openingLine: 'The pause is not a moment of weakness. It is the moment when the man is most fully himself.',
     teachingBody:
@@ -67,7 +65,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'When the first urge appears today, pause for one breath before responding to it.',
     practice: 'Practice deliberate delay: when you want to reach for the phone, pause for sixty seconds first. See what the urge does.',
     forgeChallenge: 'Take one strong urge today and redirect it within five minutes into a Forge act. Record it.',
-    journalPrompt: 'What does the urge feel like in the body? Where does it live? What does it say?',
     eveningAccount: 'How many times today did I pause before I acted? Even once counts.',
     seal: 'Manhood begins in the pause between urge and action.',
     contentStatus: 'final',
@@ -78,10 +75,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-04', dayNumber: 4, arcNumber: 1, arcTitle: 'The Vow',
     title: 'Guard the Eyes', theme: 'visual attention, first spark',
-    season: 'the_vow', archetype: 'guardian',
-    invocation: 'Today you walk as the Guardian: the keeper of the first gate, the eye.',
+    season: 'the_vow', archetype: 'arch-04',
+    invocation: 'Today you walk as the Eye-Warden: the keeper of the first gate, where attention is captured before the body ever moves.',
     archetypeExpression:
-      'The Guardian wins early or not at all. He does not fight the flame at its height; he catches the spark at the threshold and turns it away. Today, guard the gaze — not from hatred of beauty, but because attention is the ground on which every siege begins.',
+      'The Eye-Warden governs today because the eye is the first gate, and most battles are decided there long before the wall. He wins early or not at all — not fighting the flame at its height, but catching the spark at the threshold and turning it away. This bends the command toward the deliberate look-away: guard the gaze not from hatred of beauty, but because attention is the ground on which every siege begins.',
     lineagePassageId: 'tao-12-five-colours',
     openingLine: 'Most battles are won or lost long before the moment of temptation.',
     teachingBody:
@@ -92,7 +89,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Today, practice one deliberate "look away." Notice the first spark and redirect before it becomes a flame.',
     practice: 'Audit your first thirty minutes online today. Where did your eyes go that they did not need to go?',
     forgeChallenge: 'Remove or block one source of visual temptation from your environment today.',
-    journalPrompt: 'What do my eyes seek when I am restless or lonely? What are they actually asking for?',
     eveningAccount: 'Where was the first gate tonight? Did I hold it or did I let the army in?',
     seal: 'The first victory is often looking away.',
     contentStatus: 'final',
@@ -104,10 +100,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-05', dayNumber: 5, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Body Must Move', theme: 'physical energy, outlet, training',
-    season: 'the_vow', archetype: 'warrior',
-    invocation: 'Today you walk as the Warrior: a man who carries the fire into the contest instead of into fantasy.',
+    season: 'the_vow', archetype: 'arch-05',
+    invocation: 'Today you walk as the Stormrider: a man who carries the rising energy into hard motion instead of into fantasy.',
     archetypeExpression:
-      'The Warrior does not store pressure in a vessel with no outlet. He trains. He gives the restless body something hard to do before the mind can bargain its way back to the easy thing. Today, let the energy move through muscle first — move before you negotiate.',
+      'The Stormrider governs today because the body must move — pressure stored in a vessel with no outlet becomes compulsion in the mind. He gives the restless body something hard to do before the mind can bargain its way back to the easy thing. This bends the practice toward speed: when the fire rises, let it move through muscle first, riding the surge into work or training before you ever sit down to negotiate.',
     lineagePassageId: 'dhammapada-103-conquer-self',
     openingLine: 'A disordered body will ask for false comfort. A trained body asks for something harder.',
     teachingBody:
@@ -118,7 +114,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Today, move the body before you entertain any strong urge.',
     practice: 'Complete one demanding physical act today — not for appearance, but for the feeling of energy well-spent.',
     forgeChallenge: 'Train for at least twenty minutes at an intensity that requires focus.',
-    journalPrompt: 'What does my body need when I am restless — what would movement actually address?',
     eveningAccount: 'Did the body serve me today, or did I leave it agitated and unspent?',
     seal: "The warrior's body is a partner, not a problem.",
     contentStatus: 'final',
@@ -129,10 +124,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-06', dayNumber: 6, arcNumber: 1, arcTitle: 'The Vow',
     title: "The Lie of 'Just Once'", theme: 'bargaining, the compulsion voice',
-    season: 'the_vow', archetype: 'sage',
-    invocation: 'Today you walk as the Sage: the one who knows the voice by its hour, not its argument.',
+    season: 'the_vow', archetype: 'arch-06',
+    invocation: 'Today you walk as the Voice-Namer: the one who knows the compulsion\'s whisper by its hour, not its argument.',
     archetypeExpression:
-      'The Sage studies the pattern instead of arguing with it. He hears "just once" and sees a mechanism, not a reason — and a mechanism, once named, loses its spell. Today, name the voice the moment it speaks. Understanding is the discipline that ends the bargain.',
+      'The Voice-Namer governs today because the day\'s task is to expose the lie of "just once." He studies the pattern instead of arguing with it, hearing the bargain and seeing a mechanism rather than a reason — and a mechanism, once named, loses its spell. This bends the command toward recognition over debate: when the voice speaks, say inwardly "I know this voice," because understanding is the discipline that ends the bargain.',
     lineagePassageId: 'analects-2-17-knowledge',
     openingLine: "The compulsion has one argument it repeats with every face: 'Just this once will not matter.'",
     teachingBody:
@@ -143,7 +138,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: "When you hear 'just once' today, name it. Say inwardly: 'I know this voice.'",
     practice: 'Identify the three hours when you are most vulnerable to this argument. Name them. Plan for them.',
     forgeChallenge: "Tonight, when the lie arrives — and it may — refuse not by fighting it but by beginning a Forge act before it can finish speaking.",
-    journalPrompt: "What does 'just once' cost me beyond the act itself? What does it cost in terms of the man I am building?",
     eveningAccount: "Did the voice speak tonight? What did it say? Did I know it by its style?",
     seal: 'Know the voice. Not by its argument — by its hour.',
     contentStatus: 'final',
@@ -154,10 +148,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-07', dayNumber: 7, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The First Gate', theme: 'milestone, proof, deepening',
-    season: 'the_vow', archetype: 'guardian',
-    invocation: 'Today you stand as the Guardian at the first gate, accounting for a week held.',
+    season: 'the_vow', archetype: 'arch-07',
+    invocation: 'Today you stand as the Gate-Reckoner: a man who accounts honestly for a week held and names what it proved.',
     archetypeExpression:
-      'The Guardian does not boast at the threshold; he takes stock. Seven days has cut a groove in a new direction — not a finished character, but a proof. Today his task is reckoning, not celebration: name what the week proved, then walk into day eight with the intention of day one.',
+      'The Gate-Reckoner governs today because the first gate is reached, and the task is reckoning, not celebration. He does not boast at the threshold; he takes stock, knowing seven days has cut a groove in a new direction — not a finished character, but a proof that the practice is possible. This bends the command toward an honest accounting: name what the week proved without shame or exaggeration, then walk into day eight carrying the intention of day one.',
     lineagePassageId: 'dhammapada-33-straighten',
     openingLine: 'Seven days. The pause is real. The gate is real. You are real.',
     teachingBody:
@@ -168,7 +162,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Stand at the end of this week and account for it without shame and without exaggeration.',
     practice: 'Read the rite. Do the audit. Renew the vow. Then begin day eight with the same intention as day one.',
     forgeChallenge: 'Complete a physical or creative act of discipline today that marks the week as real.',
-    journalPrompt: 'What surprised me about this week? What do I know now that I did not know on day one?',
     eveningAccount: 'What did the first week teach me about where my battle actually is?',
     seal: 'The gate is real. The man who guards it is being made.',
     contentStatus: 'final',
@@ -179,10 +172,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-08', dayNumber: 8, arcNumber: 1, arcTitle: 'The Vow',
     title: 'Desire Is Energy Seeking Form', theme: 'transmutation, the builder',
-    season: 'guard_the_gates', archetype: 'builder',
-    invocation: 'Today you walk as the Builder: a man who gives the fire a furnace instead of an exit.',
+    season: 'guard_the_gates', archetype: 'arch-08',
+    invocation: 'Today you walk as the Forgewright: a man who gives the fire a furnace and a shape instead of an exit.',
     archetypeExpression:
-      'The Builder does not ask how to be rid of desire; he asks what desire could become. He hands the restless energy a project before it finds the default. Today, name one thing worth building and give the fire its destination — lead is not wasted in the forge, it is transmuted.',
+      'The Forgewright governs today because desire is energy seeking form, and his trade is transmutation — lead is not wasted in the forge, it is refined. He does not ask how to be rid of desire; he asks what it could become, handing the restless energy a project before it finds the default. This bends the command toward making: name one thing worth building and give the fire its destination today, refusing to let it wait for the easier discharge.',
     lineagePassageId: 'synthesis-forge-the-fire',
     openingLine: 'Raw desire is not asking to be satisfied. It is asking to be shaped.',
     teachingBody:
@@ -193,7 +186,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Find the form today. Do not let desire wait. Give it a project.',
     practice: 'Name one thing you want to build this month. Today, spend thirty minutes beginning it.',
     forgeChallenge: 'Give a strong urge today its most creative possible outlet. What did you make?',
-    journalPrompt: 'What wants to be built in me that keeps being postponed by the easier option?',
     eveningAccount: 'Did desire find a worthy form today, or did it go to the default?',
     seal: 'The fire does not need to be killed. It needs a destination.',
     contentStatus: 'final',
@@ -204,10 +196,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-09', dayNumber: 9, arcNumber: 1, arcTitle: 'The Vow',
     title: 'The Phone Is a Gate', theme: 'attention architecture, structural discipline',
-    season: 'guard_the_gates', archetype: 'guardian',
-    invocation: 'Today you walk as the Guardian of the gate you carry in your pocket.',
+    season: 'guard_the_gates', archetype: 'arch-09',
+    invocation: 'Today you walk as the Gatewright: a man who redesigns the gate he carries in his pocket rather than out-fighting it at the door.',
     archetypeExpression:
-      'The Guardian does not trust raw willpower against an architecture built to capture it. He removes the temptation from his kingdom rather than out-fighting it at the door. Today, redesign the gate: the phone is a tool to be used with intention, not a companion to be reached for.',
+      'The Gatewright governs today because the phone is a gate engineered to capture attention, and he does not trust raw willpower against an architecture built to defeat it. He removes the temptation from his kingdom by building structure — the strongest gate is the one closed before the knock. This bends the command toward design over discipline: make the phone a tool used with intention, reclaim the opening hour, and close the specific behavior most linked to your pattern.',
     lineagePassageId: 'synthesis-guard-the-doors',
     openingLine: "The most dangerous gate in most men's lives has a screen and a notification.",
     teachingBody:
@@ -218,7 +210,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Today, the phone is a tool, not a companion. Use it with intention, not as a default reach.',
     practice: 'For the first thirty minutes of your morning, do not look at the phone. Reclaim the opening hour.',
     forgeChallenge: 'Identify and close the specific phone behavior most linked to your temptation pattern.',
-    journalPrompt: 'When do I reach for the phone? What am I actually seeking in those moments?',
     eveningAccount: 'Was the phone a gate I guarded today or a gate I left open?',
     seal: 'The first gate is the one you carry in your pocket.',
     contentStatus: 'final',
@@ -229,10 +220,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-10', dayNumber: 10, arcNumber: 1, arcTitle: 'The Vow',
     title: 'Solitude Without Fantasy', theme: 'loneliness, solitude, structure',
-    season: 'guard_the_gates', archetype: 'monk',
-    invocation: 'Today you walk as the Monk: a man whose solitude has a shape.',
+    season: 'guard_the_gates', archetype: 'arch-10',
+    invocation: 'Today you walk as the Hermit-Architect: a man who gives his solitude a shape so it cannot drift into the compulsion.',
     archetypeExpression:
-      'The Monk knows the difference between solitude that feeds the practice and solitude that feeds the compulsion, and the difference is structure. Today, give every empty hour a form before the restlessness arrives — the cell is kept bare so that what fills it is chosen, not stumbled into.',
+      'The Hermit-Architect governs today because solitude is a forge or a trap, and structure is the difference. He knows the empty hour without a form drifts toward fantasy, so he designs the cell before the restlessness arrives — every quiet hour given a ritual, a task, a planned presence. This bends the command toward foresight: build the structure of your evening solitude before you need it, so what fills the silence is chosen, not stumbled into.',
     lineagePassageId: 'synthesis-stillness',
     openingLine: 'A man can be completely alone and still not be present.',
     teachingBody:
@@ -243,7 +234,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Today, give every moment of solitude a structure before it becomes drift.',
     practice: 'When you are alone this evening, have a planned activity ready before the restlessness arrives.',
     forgeChallenge: 'Take thirty minutes of solitude tonight with no phone, no screen, and no fantasy. Sit, breathe, and be present with your own mind.',
-    journalPrompt: 'When does solitude become dangerous for me? What structure prevents the drift?',
     eveningAccount: 'Was I present in my solitude today, or did I disappear into my own entertainment?',
     seal: 'Solitude is a forge or a trap. What makes the difference is structure.',
     contentStatus: 'final',
@@ -254,10 +244,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-11', dayNumber: 11, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'The Fire as Messenger', theme: 'reading the urge, deeper need',
-    season: 'guard_the_gates', archetype: 'sage',
-    invocation: 'Today you walk as the Sage: the one who reads the fire instead of obeying it.',
+    season: 'guard_the_gates', archetype: 'arch-11',
+    invocation: 'Today you walk as the Fire-Reader: the one who reads the urge as a messenger instead of obeying it as a command.',
     archetypeExpression:
-      'The Sage does not take the urge at its word. He asks what hunger it is translating — body, solitude, work, or connection — and answers that instead. Today, stop at the first interpretation and ask for the truer one beneath it.',
+      'The Fire-Reader governs today because the fire is a messenger — it often translates a deeper hunger into its own language before the man can ask a better question. He does not take the urge at its word, but asks what unfed part is speaking: body, solitude, work, or connection. This bends the command away from the first interpretation: when desire rises, read it before you answer, then meet the real need rather than the surface demand.',
     lineagePassageId: 'synthesis-halt',
     openingLine: 'The urge is not always asking for release. Sometimes it is announcing unused life.',
     teachingBody:
@@ -268,7 +258,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Do not obey the first interpretation of the urge.',
     practice: 'When desire rises today, ask: "What is this energy really asking me to build, face, clean, move, or repair?"',
     forgeChallenge: 'Turn one urge today into twenty minutes of physical movement or meaningful work.',
-    journalPrompt: 'What need hides beneath my strongest urges?',
     eveningAccount: 'Did I treat the fire as command, enemy, or messenger today?',
     seal: 'The fire speaks. The man interprets.',
     contentStatus: 'final',
@@ -280,10 +269,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-12', dayNumber: 12, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Clean the Vessel', theme: 'order, environment, inner command',
-    season: 'guard_the_gates', archetype: 'king',
-    invocation: 'Today you walk as the King: a man whose inner rule shows in the order around him.',
+    season: 'guard_the_gates', archetype: 'arch-12',
+    invocation: 'Today you walk as the Vessel-Keeper: a man whose inner rule becomes visible in the order of the space he inhabits.',
     archetypeExpression:
-      'The King governs inward first, but the inward command becomes visible in the kingdom he keeps. A cleared desk and a made bed are not tidiness; they are sovereignty made plain. Today, govern one space and leave it better than you found it.',
+      'The Vessel-Keeper governs today because outer order is the visible shape of inner command — a disordered environment is a vote for a disordered interior. He governs inward first, but knows the inward rule expresses itself in the kingdom he keeps: a cleared desk and a made bed are not tidiness but sovereignty made plain. This bends the command toward the hands: govern one space today and leave it better than you found it.',
     lineagePassageId: 'synthesis-order-is-command',
     openingLine: 'A disordered environment is a vote for a disordered interior.',
     teachingBody:
@@ -294,7 +283,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Today, govern one space. Do not leave it in the state you found it.',
     practice: 'Spend fifteen minutes restoring one area of visible order.',
     forgeChallenge: 'Identify and remove one source of environmental temptation or disorder from your life today.',
-    journalPrompt: 'What does my physical environment say about my interior state right now?',
     eveningAccount: 'Did I leave the world I touched today in better or worse order?',
     seal: 'The outer order is a mirror of the inner command.',
     contentStatus: 'final',
@@ -305,10 +293,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-13', dayNumber: 13, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Beauty Without Consumption', theme: 'presence, reverence, non-grasping',
-    season: 'guard_the_gates', archetype: 'lover',
-    invocation: 'Today you walk as the Lover: a man fully alive to beauty without being captured by it.',
+    season: 'guard_the_gates', archetype: 'arch-13',
+    invocation: 'Today you walk as the Beholder: a man fully alive to beauty who reveres it without converting it into appetite.',
     archetypeExpression:
-      'The Lover sees deeply and reveres what he sees, but trains the second move: not grasping, not converting beauty into appetite. Today, behold one beautiful thing and let the reaching pass — appreciation without the transaction is its own kind of freedom.',
+      'The Beholder governs today because the day\'s discipline is the most subtle — to behold beauty without grasping it, which is its own freedom. He is not indifferent like the hermit; he sees deeply and reveres fully, but trains the second move: noticing the reach to possess and letting it pass. This bends the command toward presence over consumption: appreciate one beautiful thing today without trying to own or record it, resting in the sight rather than the transaction.',
     lineagePassageId: 'synthesis-behold-not-grasp',
     openingLine: 'There is a way of seeing that does not require owning.',
     teachingBody:
@@ -319,7 +307,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Today, appreciate one beautiful thing without trying to own or record it.',
     practice: 'When you notice something beautiful today — in nature, a person, a moment — stay with the appreciation for five seconds without immediately doing anything with it.',
     forgeChallenge: 'Find one act of genuine service or giving today — something that gives rather than takes.',
-    journalPrompt: 'What is the difference between love and appetite? Where do they overlap and where do they part?',
     eveningAccount: 'Did I behold anything today, or only consume?',
     seal: 'The Lover sees clearly because he is not trying to take.',
     contentStatus: 'final',
@@ -330,10 +317,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-14', dayNumber: 14, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'The Gatekeeper', theme: 'intelligence, structure, two-week milestone',
-    season: 'guard_the_gates', archetype: 'guardian',
-    invocation: 'Today you stand as the Guardian who now knows his enemy by name.',
+    season: 'guard_the_gates', archetype: 'arch-14',
+    invocation: 'Today you stand as the Gate-Cartographer: a man who has mapped his own battlefield and knows his enemy by name.',
     archetypeExpression:
-      'Two weeks in, the Guardian fights specifically, not in the abstract. He knows the hour, the mood, the gate the army uses — and positions the defense there with structure, not raw willpower. Today, name your known gate and meet it with a plan already made.',
+      'The Gate-Cartographer governs today because two weeks have turned theory into knowledge of a specific terrain — the hour, the mood, the gate the army uses. He fights specifically, not in the abstract, treating that map as intelligence rather than defeat, and positions the defense at the known gate with structure instead of raw willpower. This bends the command toward precision: name your most reliable trigger and meet it with a plan already made, a step ahead of the fire.',
     lineagePassageId: 'epictetus-ench-1-power',
     openingLine: 'After two weeks, a man begins to know his enemy by name.',
     teachingBody:
@@ -344,7 +331,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Stand at your known gate today with structure, not willpower.',
     practice: 'Read the milestone rite. Account for two weeks honestly.',
     forgeChallenge: 'Build one new specific boundary based on what these fourteen days revealed.',
-    journalPrompt: 'Which trigger has appeared most reliably? What structure — not willpower — would address it?',
     eveningAccount: 'Am I guarding gates or relying on willpower? What is the difference?',
     seal: 'The man who knows his gates is already a step ahead of the fire.',
     contentStatus: 'final',
@@ -355,10 +341,10 @@ export const days01to15: readonly DailyPathContentInput[] = [
   {
     id: 'day-15', dayNumber: 15, arcNumber: 2, arcTitle: 'Guard the Gates',
     title: 'Train the Animal', theme: 'physical discipline, body as ally',
-    season: 'body_must_be_included', archetype: 'warrior',
-    invocation: 'Today you walk as the Warrior: a man who makes the body an ally by training it.',
+    season: 'body_must_be_included', archetype: 'arch-15',
+    invocation: 'Today you walk as the Beast-Tamer: a man who fashions the untrained animal of the body into a partner that carries the fire.',
     archetypeExpression:
-      'The Warrior does not let an untrained body become a demanding master. He gives it hard, honest work so its restlessness has somewhere to go. Today, train — not for appearance, but to fashion the animal into a partner that carries the fire.',
+      'The Beast-Tamer governs today because an untrained body becomes a demanding master, and the practice must now include the animal deliberately, not drag it along behind the mind. He does not despise the body; he gives it hard, honest work so its restlessness has somewhere to go. This bends the command toward physiology over moralism: train, rest, and feed the body well today, fashioning it into an ally whose strength becomes a practiced will.',
     lineagePassageId: 'dhammapada-145-fashion',
     openingLine: 'The body is not the enemy. But an untrained body makes a demanding master.',
     teachingBody:
@@ -369,7 +355,6 @@ export const days01to15: readonly DailyPathContentInput[] = [
     command: 'Train the body today with the same intentionality you bring to the mind.',
     practice: 'Assess your physical state: sleep, food, movement. Address one area where you are working against the practice.',
     forgeChallenge: 'Complete a demanding physical training session — something that requires you to want to stop and choose not to.',
-    journalPrompt: 'When does my body become a vulnerability? What physical states make discipline easier or harder?',
     eveningAccount: 'Did I take the body seriously today as part of the practice?',
     seal: 'A trained body is a practiced will.',
     contentStatus: 'final',

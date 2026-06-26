@@ -4,6 +4,7 @@ import type { AppDatabase } from '../database';
 import { migration001 } from './001_initial';
 import { migration002 } from './002_crown_phase';
 import { migration003 } from './003_achievements';
+import { migration004 } from './004_path_start_offset';
 
 export interface Migration {
   readonly id: number;
@@ -15,7 +16,7 @@ export interface Migration {
  * Ordered, append-only migration list. Never edit a shipped migration — add a
  * new one. The runner applies each pending migration once, inside a transaction.
  */
-export const migrations: readonly Migration[] = [migration001, migration002, migration003];
+export const migrations: readonly Migration[] = [migration001, migration002, migration003, migration004];
 
 const log = createLogger('migrations');
 

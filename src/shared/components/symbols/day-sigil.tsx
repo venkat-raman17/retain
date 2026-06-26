@@ -3,7 +3,7 @@ import Svg, { Circle, Line, Path } from 'react-native-svg';
 
 import { daySeed } from '@/shared/lib';
 
-import { ArchetypeSigil } from './archetype-sigils';
+import { ProceduralSigil } from './procedural-sigil';
 
 /** A 48-unit canvas so the archetype sigil (24) has room for orbiting accents. */
 const VB = 48;
@@ -84,10 +84,10 @@ function accentMark(style: DayAccentStyle, x: number, y: number, color: string, 
 }
 
 export interface DaySigilProps extends SymbolProps {
-  /** 1–90 (or 91 for crown via the `crown` flag). Seeds the per-day accents. */
+  /** 1–90 (or 91 for crown via the `crown` flag). Seeds the per-day accents AND the centered focal glyph. */
   day: number;
-  /** Archetype id — selects the centered focal sigil. */
-  archetype: string;
+  /** Retained for source compatibility; the focal glyph is now seeded by `day`, not the archetype. */
+  archetype?: string;
   /** 1–9 — bands the ring count. Ignored when `crown`. */
   arcNumber: number;
   /** Optional second color for the orbiting accents (defaults to `color`). */
@@ -104,7 +104,6 @@ export interface DaySigilProps extends SymbolProps {
  */
 export function DaySigil({
   day,
-  archetype,
   arcNumber,
   size = 96,
   color = '#888',
@@ -131,7 +130,7 @@ export function DaySigil({
         ))}
         {accents}
       </Svg>
-      <ArchetypeSigil archetype={archetype} size={innerSize} color={color} strokeWidth={innerStroke} />
+      <ProceduralSigil seed={daySeed(day)} size={innerSize} color={color} strokeWidth={innerStroke} />
     </View>
   );
 }
